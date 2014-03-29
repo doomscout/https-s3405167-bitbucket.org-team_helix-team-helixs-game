@@ -5,7 +5,7 @@ using System.Collections;
 public class Transition {
 
 	private State target_state;
-	private Action action;
+	private Action action;						//Change this into a list if needed
 	public TriggerCondition trigger_condition;	//Made public since it's easier when using delegates
 
 	public Action Action{get;set;}

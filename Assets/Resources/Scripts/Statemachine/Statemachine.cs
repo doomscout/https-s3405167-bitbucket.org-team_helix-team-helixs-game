@@ -26,7 +26,6 @@ public class Statemachine {
 		Transition triggered_transition = null;
 		State target_state = null;
 
-
 		foreach (Transition possible_transition in current_state.Transitions) {
 			if (possible_transition.isTriggered()) {
 				triggered_transition = possible_transition;
