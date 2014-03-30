@@ -1,20 +1,32 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public class GameManager : MonoBehaviour {
+//GameManager handles the game state through a state machine.
+public class GameManager : MonoBehaviour{
+
+	Statemachine game_manager;
 
 	// Use this for initialization
 	void Start () {
-	
+		initSM();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		List<Action> tick_actions = game_manager.loop();
+		if (tick_actions == null) {
+			Debug.Log("No actions to perform");
+			return;
+		}
+		foreach (Action action in tick_actions) {
+			action();
+		}
 	}
 
 	//Initialise state machine
 	//Diagram in the Google drive as "Game_manager_state_machine".
+	//Hardcoded for now (Maybe file parsed in future).
 	void initSM() {
 		//Create the states for the state machine
 		State state_menu = new State();
@@ -23,7 +35,7 @@ public class GameManager : MonoBehaviour {
 		State state_win = new State();
 		State state_lose = new State();
 
-		//Create the transitions for the states
+		//Create the transitions
 		Transition menu2play = new Transition();
 		Transition play2paused = new Transition();
 		Transition play2win = new Transition();
@@ -33,21 +45,60 @@ public class GameManager : MonoBehaviour {
 		Transition win2play = new Transition();
 		Transition lose2menu = new Transition();
 
-		//Populate states with actions
-		state_play.addAction(new Action(actionRunningPlay));
+		//Give the transitions a target state
+		menu2play.Target_state = state_play;
+		play2paused.Target_state = state_paused;
+		play2win.Target_state = state_win;
+		play2lose.Target_state = state_lose;
+		paused2play.Target_state = state_play;
+		paused2menu.Target_state = state_menu;
+		win2play.Target_state = state_play;
+		lose2menu.Target_state = state_menu;
 
 		//populate transitions with conditions
-		menu2play.trigger_condition = new TriggerCondition(conditionClickedPlay);
-		play2paused.trigger_condition = new TriggerCondition(conditionPressedEsc);
-		play2win.trigger_condition = new TriggerCondition(conditionWin);
-		play2lose.trigger_condition = new TriggerCondition(conditionLose);
-		paused2play.trigger_condition = new TriggerCondition(conditionClickedResume);
-		paused2menu.trigger_condition = new TriggerCondition(conditionClickedQuit);
-		win2play.trigger_condition = new TriggerCondition(conditionClickedContinue);
-		play2lose.trigger_condition = new TriggerCondition(conditionLose);
-		lose2menu.trigger_condition = new TriggerCondition(conditionClickedOkay);
+		menu2play.Trigger_condition = new TriggerCondition(conditionClickedPlay);
+		play2paused.Trigger_condition = new TriggerCondition(conditionPressedEsc);
+		play2win.Trigger_condition = new TriggerCondition(conditionWin);
+		play2lose.Trigger_condition = new TriggerCondition(conditionLose);
+		paused2play.Trigger_condition = new TriggerCondition(conditionClickedResume);
+		paused2menu.Trigger_condition = new TriggerCondition(conditionClickedQuit);
+		win2play.Trigger_condition = new TriggerCondition(conditionClickedContinue);
+		play2lose.Trigger_condition = new TriggerCondition(conditionLose);
+		lose2menu.Trigger_condition = new TriggerCondition(conditionClickedOkay);
 
+		//give transition some actions
+		menu2play.Action = new Action(actionTransitionClickedPlay);
+		win2play.Action = new Action(actionTransitionClickedContinue);
+		lose2menu.Action = new Action(actionTransitionClickedOkay);
 
+		//give states the populated transitions
+		state_menu.addTransition(menu2play);
+		state_play.addTransition(play2paused);
+		state_play.addTransition(play2win);
+		state_play.addTransition(play2lose);
+		state_paused.addTransition(paused2menu);
+		state_paused.addTransition(paused2play);
+		state_win.addTransition(win2play);
+		state_lose.addTransition(lose2menu);
+
+		//Populate states with actions
+		state_menu.Entry_action = new Action(actionMenuEntry);
+		state_menu.addAction(new Action(actionMenuRunning));
+		state_menu.Exit_action = new Action(actionMenuExit);
+		state_play.addAction(new Action(actionPlayRunning));
+		state_paused.Entry_action = new Action(actionPausedEntry);
+		state_paused.Exit_action = new Action(actionPausedExit);
+		state_win.Entry_action = new Action(actionWinEntry);
+		state_win.addAction(actionWinRunning);
+		state_win.Exit_action = new Action(actionWinExit);
+		state_lose.Entry_action = new Action(actionLoseEntry);
+		state_lose.Exit_action = new Action(actionLoseExit);
+
+		//start state machine
+		game_manager = new Statemachine(state_menu);
+		if (state_menu.List_transitions == null) {
+			Debug.LogError("init transition null");
+		}
 	}
 
 	//-----------------------------
@@ -55,90 +106,109 @@ public class GameManager : MonoBehaviour {
 	//------------------------------
 
 	//dummy functions for actions for now
-	void actionEntryMenu() {
+	void actionMenuEntry() {
 		//Display Menu GUI
-		//Load next level (BONUS: this can be multi-threaded for responsive GUI)
+		Debug.Log("actionMenuEntry");
 	}
 
-	void actionExitMenu() {
+	void actionMenuRunning() {
+		//Remove previous level
+		//Load next level
+		Debug.Log("actionMenuRunning");
+	}
+
+	void actionMenuExit() {
 		//cleanup menu
+		Debug.Log("actionMenuExit");
 	}
 
 	void actionTransitionClickedPlay() {
 		//Reset play variables (SM, field values etc.)
+		Debug.Log("actionTransitionClickedPlay");
 	}
 
-	void actionRunningPlay() {
+	void actionPlayRunning() {
 		//insert ingame state machine here
+		Debug.Log("actionPlayRunning");
 	}
 
-	void actionEntryWin() {
+	void actionWinEntry() {
 		//Display Win GUI
-		//Destroy previous level	(This can be moved to an exit action)
-		//Load next level (BONUS: this can be multi-threaded for responsive GUI)
+		Debug.Log("actionWinEntry");
 	}
 
-	void actionExitWin() {
+	void actionWinRunning() {
+		//Remove previous level
+		//Load next level
+		Debug.Log("actionWinRunning");
+	}
+
+	void actionWinExit() {
 		//Cleanup menu
+		Debug.Log("actionWinExit");
 	}
 
 	void actionTransitionClickedContinue() {
 		//Reset play variables (SM, field values etc.)
+		Debug.Log("actionTransitionClickedContinue");
 	}
 
-	void actionEntryPaused() {
+	void actionPausedEntry() {
 		//Show paused GUI
+		Debug.Log("actionPausedEntry");
 	}
 
-	void actionExitPaused() {
+	void actionPausedExit() {
 		//cleanup pause menu
+		Debug.Log("actionPausedExit");
 	}
 
-	void actionTransitionClickedQuit() {
-		//Destroy previous level
-		//Save character?
-	}
-
-	void actionEntryLose() {
+	void actionLoseEntry() {
 		//Display Lose GUI
-		//Destroy previous level
+		Debug.Log("actionLoseEntry");
+	}
+
+	void actionLoseExit() {
+		//Hide GUI
+		Debug.Log("actionLoseExit");
 	}
 
 	void actionTransitionClickedOkay() {
 		//Kill character	(	Why here and not in the entry/exit of lose state?
 		//						If the player wants to keep the character, we can use a different transition).
+		Debug.Log("actionTransitionClickedOkay");
 	}
 	
 	//dummy functions for trigger_condition
 	bool conditionClickedPlay() {
-		return true;
+		return Input.GetKeyDown("right");
 	}
 	
 	bool conditionPressedEsc() {
-		return true;
+		return Input.GetKeyDown("up");
 	}
 
 	bool conditionClickedQuit() {
-		return true;
+		return Input.GetKeyDown("left");
 	}
 
 	bool conditionClickedOkay() {
-		return true;
+		return Input.GetKeyDown("left");
 	}
 
 	bool conditionClickedResume() {
-		return true;
+		return Input.GetKeyDown("down");
 	}
 
 	bool conditionClickedContinue() {
-		return true;
+		return Input.GetKeyDown("left");
 	}
 
 	bool conditionWin() {
-		return true;
+		return  Input.GetKeyDown("right");
 	}
 
 	bool conditionLose() {
-		return true;
+		return  Input.GetKeyDown("down");
 	}
 }

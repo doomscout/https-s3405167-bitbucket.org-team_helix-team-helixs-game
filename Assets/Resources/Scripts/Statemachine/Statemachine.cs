@@ -21,12 +21,23 @@ public class Statemachine {
 
 	//Update for statemachine
 	//This is NOT the monobehaviour update function.
-	public List<Action> update() {
+	public List<Action> loop() {
 		List<Action> actions = new List<Action>();
 		Transition triggered_transition = null;
 		State target_state = null;
 
-		foreach (Transition possible_transition in current_state.Transitions) {
+		if (current_state == null) {
+			Debug.LogError("current_state null");
+		}
+
+		if (current_state.List_transitions == null) {
+			Debug.LogError("current_state.List_transitions null");
+		}
+
+		foreach (Transition possible_transition in current_state.List_transitions) {
+			if (possible_transition == null) {
+				Debug.LogError("transition null");
+			}
 			if (possible_transition.isTriggered()) {
 				triggered_transition = possible_transition;
 				break;
@@ -48,6 +59,9 @@ public class Statemachine {
 
 			current_state = target_state;
 			return actions;
+		}
+		if (current_state.Running_actions == null) {
+			Debug.LogError("running actions null");
 		}
 		return current_state.Running_actions;
 	}

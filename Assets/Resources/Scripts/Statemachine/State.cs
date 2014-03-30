@@ -6,19 +6,14 @@ using System.Collections.Generic;
 //State class for statemachine
 public class State {
 
-	private List<Transition> transitions;
-	private Action entry_action;
-	private List<Action> running_actions;
-	private Action exit_action;
-
-	public List<Transition> Transitions {get;set;}
+	public List<Transition> List_transitions {get; private set;}
 	public Action Entry_action{get;set;}
-	public List<Action> Running_actions{get;set;}
+	public List<Action> Running_actions{get; private set;}
 	public Action Exit_action{get;set;}
 
 	public State() {
-		running_actions = new List<Action>();
-		transitions = new List<Transition>();
+		Running_actions = new List<Action>();
+		List_transitions = new List<Transition>();
 	}
 
 	public void addTransition(Transition new_transition) {
@@ -26,7 +21,7 @@ public class State {
 			UnityEngine.Debug.LogError("addTrasition - new_transition is null");
 			UnityEngine.Debug.LogError(System.Environment.StackTrace);
 		}
-		transitions.Add(new_transition);
+		List_transitions.Add(new_transition);
 	}
 
 	public void addAction(Action new_action) {
@@ -34,6 +29,6 @@ public class State {
 			UnityEngine.Debug.LogError("addAction - new_action is null");
 			UnityEngine.Debug.LogError(System.Environment.StackTrace);
 		}
-		running_actions.Add(new_action);
+		Running_actions.Add(new_action);
 	}
 }
