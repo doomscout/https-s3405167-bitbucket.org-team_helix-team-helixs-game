@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour{
 	void Update () {
 		List<Action> tick_actions = game_manager.loop();
 		if (tick_actions == null) {
-			Debug.Log("No actions to perform");
+			Debug.LogError("game_manager tick_actions is null");
 			return;
 		}
 		foreach (Action action in tick_actions) {
