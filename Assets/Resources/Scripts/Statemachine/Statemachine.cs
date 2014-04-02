@@ -21,7 +21,7 @@ public class Statemachine {
 
 	//Update for statemachine
 	//This is NOT the monobehaviour update function.
-	public List<Action> loop() {
+	public List<Action> calculateActions() {
 		List<Action> actions = new List<Action>();
 		Transition triggered_transition = null;
 		State target_state = null;

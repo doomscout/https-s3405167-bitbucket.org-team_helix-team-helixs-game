@@ -11,8 +11,8 @@ public class TurnManager {
         initSM();
     }
 
-    public void loop() {
-        List<Action> tick_actions = turn_manager.loop();
+    public void tick() {
+        List<Action> tick_actions = turn_manager.calculateActions();
         if (tick_actions == null) {
             Debug.LogError("tick_actions in TurnManager is null");
             return;
@@ -33,9 +33,9 @@ public class TurnManager {
         Transition animation2player = new Transition();
 
         player2animation.Trigger_condition = new TriggerCondition(conditionValidInput);
-        animation2enemy.Trigger_condition = new TriggerCondition(conditionFinishedAnimation);
+        animation2enemy.Trigger_condition = new TriggerCondition(conditionFinishedPlayerAnimation);
         enemy2animation.Trigger_condition = new TriggerCondition(conditionDeterminedActions);
-        animation2player.Trigger_condition = new TriggerCondition(conditionFinishedAnimation);
+        animation2player.Trigger_condition = new TriggerCondition(conditionFinishedEnemyAnimation);
 
         player2animation.Target_state = state_animation;
         animation2enemy.Target_state = state_enemy;
@@ -59,37 +59,46 @@ public class TurnManager {
     //Actions
     void actionPlayerRunning() {
         //listen to input handlers and verify
+        Debug.Log("actionPlayerRunning");
     }
 
     void actionPlayerExit() {
         turn_player = false;
         turn_enemy = true;
+        Debug.Log("actionPlayerExit");
     }
 
     void actionAnimationRunning() {
         //loop over units and display animations
         //perhaps use a bool value in the transitions to check which unit to animate
+        Debug.Log("actionAnimationRunning");
     }
 
     void actionEnemyEntry() {
         //Determine enemy actions
+        Debug.Log("actionEnemyEntry");
     }
 
     void actionEnemyExit() {
         turn_enemy = false;
         turn_player = true;
+        Debug.Log("actionEnemyExit");
     }
 
     //Conditions
     bool conditionValidInput() {
-        return true;
+        return Input.GetKeyDown("space");
     }
 
-    bool conditionFinishedAnimation() {
-        return true;
+    bool conditionFinishedPlayerAnimation() {
+        return Input.GetKeyDown("0") && turn_enemy;
+    }
+
+    bool conditionFinishedEnemyAnimation() {
+        return Input.GetKeyDown("0") && turn_player;
     }
 
     bool conditionDeterminedActions() {
-        return true;
+        return Input.GetKeyDown("9");
     }
 }

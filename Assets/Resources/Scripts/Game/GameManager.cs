@@ -6,15 +6,17 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour{
 
 	Statemachine game_manager;
+    TurnManager turn_manager;
 
 	// Use this for initialization
 	void Start () {
 		initSM();
+        turn_manager = new TurnManager();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		List<Action> tick_actions = game_manager.loop();
+		List<Action> tick_actions = game_manager.calculateActions();
 		if (tick_actions == null) {
 			Debug.LogError("game_manager tick_actions is null");
 			return;
@@ -130,6 +132,7 @@ public class GameManager : MonoBehaviour{
 	void actionPlayRunning() {
 		//insert ingame state machine here
 		Debug.Log("actionPlayRunning");
+        turn_manager.tick();
 	}
 
 	void actionWinEntry() {
