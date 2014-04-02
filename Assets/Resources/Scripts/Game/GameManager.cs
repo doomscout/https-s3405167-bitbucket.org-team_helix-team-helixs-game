@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour{
 			Debug.LogError("game_manager tick_actions is null");
 			return;
 		}
-		foreach (Action action in tick_actions) {
+		foreach (Action action in tick_actions) {   
 			action();
 		}
 	}
