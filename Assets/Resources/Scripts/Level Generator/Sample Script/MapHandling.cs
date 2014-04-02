@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class MapHandler : MonoBehaviour {
 
-	Random rand = new Random();
+	//Random rand = new Random();
 
 
 
@@ -128,7 +128,7 @@ public class MapHandler : MonoBehaviour {
 		{
 			for(column = 0; column < MapWidth; column++)
 			{
-				if(column = 0)
+				if(column == 0)
 				{
 					Map[column, row] = 1;
 				}
@@ -164,10 +164,13 @@ public class MapHandler : MonoBehaviour {
 
 	int RandomPercent(int percent)
 	{
-		if(percent >= rand.Next(1,101))
+
+		if(percent >= Random.Range (1,40))
 		{
 			return 1;
 		}
 		return 0;
+
 	}
+
 }
