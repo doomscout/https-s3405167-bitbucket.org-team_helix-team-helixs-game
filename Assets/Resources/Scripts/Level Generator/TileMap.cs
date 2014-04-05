@@ -105,5 +105,6 @@ public class TileMap : MonoBehaviour {
 		uv[0] = new Vector2(0,0);
 		uv[0] = new Vector2(1,0);
 
+	Random.Range (-0.1f, 0.1f)
 
  */
