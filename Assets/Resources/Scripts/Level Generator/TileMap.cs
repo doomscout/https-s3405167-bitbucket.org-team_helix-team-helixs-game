@@ -5,6 +5,7 @@ using System.Collections;
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshCollider))]
+
 public class TileMap : MonoBehaviour {
 	
 	public int size_x = 100;
@@ -15,6 +16,29 @@ public class TileMap : MonoBehaviour {
 	void Start () {
 		BuildMesh();
 	}
+
+	void BuildTexture(){
+
+		int texWidth = 10;
+		int texHeight = 10;
+		Texture2D texture = new Texture2D(texWidth, texHeight);
+
+
+		for(int y = 0; y < texHeight; y++){
+			for(int x = 0; x < texWidth; x++){
+				Color c = new Color(Random.Range (0f,1f), Random.Range (0f,1f), Random.Range (0f,1f));
+				texture.SetPixel (x, y, c);
+
+			}
+		}
+		texture.filterMode = FilterMode.Point;
+		texture.wrapMode = TextureWrapMode.Clamp;
+		texture.Apply ();
+		MeshRenderer mesh_renderer = GetComponent<MeshRenderer>();
+		mesh_renderer.sharedMaterials[0].mainTexture = texture;
+		Debug.Log ("Done Build Texture!");
+	}
+
 	
 	public void BuildMesh() {
 		
@@ -37,7 +61,7 @@ public class TileMap : MonoBehaviour {
 			for(x=0; x < vsize_x; x++) {
 				vertices[ z * vsize_x + x ] = new Vector3( x*tileSize, 0, z*tileSize );
 				normals[ z * vsize_x + x ] = Vector3.up;
-				uv[ z * vsize_x + x ] = new Vector2( (float)x / vsize_x, (float)z / vsize_z );
+				uv[ z * vsize_x + x ] = new Vector2( (float)x / size_x, (float)z / size_z );
 			}
 		}
 		Debug.Log ("Done Verts!");
@@ -73,7 +97,10 @@ public class TileMap : MonoBehaviour {
 		mesh_filter.mesh = mesh;
 		mesh_collider.sharedMesh = mesh;
 		Debug.Log ("Done Mesh!");
-		
+
+
+		BuildTexture();
+
 	}
 	
 	
