@@ -8,6 +8,10 @@ public class GameManager : MonoBehaviour{
 	Statemachine game_manager;
     TurnManager turn_manager;
 
+    GameObject main_menu;
+    bool Gameexit;
+    MainMenu temp;
+
 	// Use this for initialization
 	void Start () {
 		initSM();
@@ -36,6 +40,7 @@ public class GameManager : MonoBehaviour{
 		State state_paused = new State();
 		State state_win = new State();
 		State state_lose = new State();
+        State state_start = new State();
 
 		//Create the transitions
 		Transition menu2play = new Transition();
@@ -46,6 +51,7 @@ public class GameManager : MonoBehaviour{
 		Transition paused2menu = new Transition();
 		Transition win2play = new Transition();
 		Transition lose2menu = new Transition();
+        Transition start2menu = new Transition();
 
 		//Give the transitions a target state
 		menu2play.Target_state = state_play;
@@ -56,6 +62,7 @@ public class GameManager : MonoBehaviour{
 		paused2menu.Target_state = state_menu;
 		win2play.Target_state = state_play;
 		lose2menu.Target_state = state_menu;
+        start2menu.Target_state = state_menu;
 
 		//populate transitions with conditions
 		menu2play.Trigger_condition = new TriggerCondition(conditionClickedPlay);
@@ -67,6 +74,7 @@ public class GameManager : MonoBehaviour{
 		win2play.Trigger_condition = new TriggerCondition(conditionClickedContinue);
 		play2lose.Trigger_condition = new TriggerCondition(conditionLose);
 		lose2menu.Trigger_condition = new TriggerCondition(conditionClickedOkay);
+        start2menu.Trigger_condition = new TriggerCondition(conditionTrue);
 
 		//give transition some actions
 		menu2play.Action = new Action(actionTransitionClickedPlay);
@@ -82,6 +90,7 @@ public class GameManager : MonoBehaviour{
 		state_paused.addTransition(paused2play);
 		state_win.addTransition(win2play);
 		state_lose.addTransition(lose2menu);
+        state_start.addTransition(start2menu);
 
 		//Populate states with actions
 		state_menu.Entry_action = new Action(actionMenuEntry);
@@ -97,7 +106,7 @@ public class GameManager : MonoBehaviour{
 		state_lose.Exit_action = new Action(actionLoseExit);
 
 		//start state machine
-		game_manager = new Statemachine(state_menu);
+		game_manager = new Statemachine(state_start);
 		if (state_menu.List_transitions == null) {
 			Debug.LogError("init transition null");
 		}
@@ -111,16 +120,24 @@ public class GameManager : MonoBehaviour{
 	void actionMenuEntry() {
 		//Display Menu GUI
 		Debug.Log("actionMenuEntry");
+        main_menu = Instantiate(Resources.Load("Prefabs/MainMenuPrefab")) as GameObject;
+
 	}
 
 	void actionMenuRunning() {
 		//Remove previous level
 		//Load next level
 		Debug.Log("actionMenuRunning");
+        temp = main_menu.GetComponent<MainMenu>();
+        Gameexit = temp.exit;
+        if (Gameexit) {
+            Debug.Log("asdasdasd");
+        }
 	}
 
 	void actionMenuExit() {
 		//cleanup menu
+        Gameexit = false;
 		Debug.Log("actionMenuExit");
 	}
 
@@ -184,7 +201,7 @@ public class GameManager : MonoBehaviour{
 	
 	//dummy functions for trigger_condition
 	bool conditionClickedPlay() {
-		return Input.GetKeyDown("right");
+		return Gameexit;
 	}
 	
 	bool conditionPressedEsc() {
@@ -214,4 +231,8 @@ public class GameManager : MonoBehaviour{
 	bool conditionLose() {
 		return  Input.GetKeyDown("down");
 	}
+
+    bool conditionTrue() {
+        return true;
+    }
 }
