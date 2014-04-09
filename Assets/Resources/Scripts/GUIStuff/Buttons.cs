@@ -41,5 +41,10 @@ public class Buttons : MonoBehaviour {
 		if(GUI.Button(new Rect((size * 10 - 10),90,20,20), "->")) {
 			Mp += 10;
 		}
+
+        if (GUI.Button(new Rect(10, 135,120, 20), "Create Character"))
+        {
+            Application.LoadLevel("KeYiLevelTest");
+        }
 	}
 }

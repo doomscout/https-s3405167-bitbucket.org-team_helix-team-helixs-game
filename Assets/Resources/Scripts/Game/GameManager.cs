@@ -9,8 +9,11 @@ public class GameManager : MonoBehaviour{
     TurnManager turn_manager;
 
     GameObject main_menu;
+    GameObject pause_menu;
     bool Gameexit;
+    bool GamePaused;
     MainMenu temp;
+    Pause pauseTemp;
 
 	// Use this for initialization
 	void Start () {
@@ -175,11 +178,15 @@ public class GameManager : MonoBehaviour{
 
 	void actionPausedEntry() {
 		//Show paused GUI
+        pause_menu = Instantiate(Resources.Load("Prefabs/PausePrefab")) as GameObject;
+        GamePaused = false;
 		Debug.Log("actionPausedEntry");
 	}
 
+
 	void actionPausedExit() {
 		//cleanup pause menu
+       
 		Debug.Log("actionPausedExit");
 	}
 
@@ -205,7 +212,7 @@ public class GameManager : MonoBehaviour{
 	}
 	
 	bool conditionPressedEsc() {
-		return Input.GetKeyDown("up");
+		return Input.GetKeyDown("Esc");
 	}
 
 	bool conditionClickedQuit() {
@@ -217,7 +224,9 @@ public class GameManager : MonoBehaviour{
 	}
 
 	bool conditionClickedResume() {
-		return Input.GetKeyDown("down");
+        Debug.Log("conditionClickedResume");
+        pauseTemp =  pause_menu.GetComponent<Pause>();
+        return  pauseTemp.resume;
 	}
 
 	bool conditionClickedContinue() {
