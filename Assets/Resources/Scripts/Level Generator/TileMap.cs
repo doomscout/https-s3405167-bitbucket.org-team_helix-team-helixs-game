@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[ExecuteInEditMode]
+//[ExecuteInEditMode]
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshCollider))]
@@ -18,7 +18,7 @@ public class TileMap : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		BuildMesh();
+		//BuildMesh();
 	}
 
 	Color[][] ChopUpTiles(){

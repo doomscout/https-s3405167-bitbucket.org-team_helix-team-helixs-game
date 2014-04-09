@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour{
     GameObject main_menu;
     bool Gameexit;
     MainMenu temp;
-
+    TileMap map;
 	// Use this for initialization
 	void Start () {
 		initSM();
@@ -139,7 +139,12 @@ public class GameManager : MonoBehaviour{
 		//cleanup menu
         Gameexit = false;
 		Debug.Log("actionMenuExit");
-	}
+        //Temp placement of generate level
+        if (map == null) {
+            map = (Instantiate(Resources.Load("Prefabs/NewMap")) as GameObject).GetComponent<TileMap>();
+        }
+        map.BuildMesh();
+    }
 
 	void actionTransitionClickedPlay() {
 		//Reset play variables (SM, field values etc.)
