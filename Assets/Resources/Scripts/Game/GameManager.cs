@@ -215,7 +215,7 @@ public class GameManager : MonoBehaviour{
 	}
 	
 	bool conditionPressedEsc() {
-		return Input.GetKeyDown("Esc");
+		return Input.GetKeyDown("up");
 	}
 
 	bool conditionClickedQuit() {

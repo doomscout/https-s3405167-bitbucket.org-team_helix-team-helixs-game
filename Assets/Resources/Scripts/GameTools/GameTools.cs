@@ -7,6 +7,4 @@ using System.Collections.Generic;
 //e.g. List<Unit> GameTools.getInstance().Units or TileMap GameTools.getInstance().Map
 public static class GameTools {
 
-   
-
 }
