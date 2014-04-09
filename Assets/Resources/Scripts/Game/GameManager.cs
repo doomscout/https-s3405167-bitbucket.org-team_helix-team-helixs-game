@@ -13,7 +13,10 @@ public class GameManager : MonoBehaviour{
     bool Gameexit;
     bool GamePaused;
     MainMenu temp;
+
     Pause pauseTemp;
+
+    TileMap map;
 
 	// Use this for initialization
 	void Start () {
@@ -142,7 +145,7 @@ public class GameManager : MonoBehaviour{
 		//cleanup menu
         Gameexit = false;
 		Debug.Log("actionMenuExit");
-	}
+    }
 
 	void actionTransitionClickedPlay() {
 		//Reset play variables (SM, field values etc.)

@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Unit : MonoBehaviour {
+public class Unit {
+    public bool IsDead = false;
+    GameObject unit;
 
 	// Use this for initialization
 	void Start () {
@@ -12,4 +14,6 @@ public class Unit : MonoBehaviour {
 	void Update () {
 
 	}
+
+
 }

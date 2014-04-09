@@ -6,8 +6,12 @@ public class TurnManager {
 
     bool turn_player, turn_enemy;
     Statemachine turn_manager;
+    List<Unit> list_all_units;
+    List<Unit> list_kill_units;
 
     public TurnManager() {
+        list_kill_units = new List<Unit>();
+        list_all_units = new List<Unit>();
         initSM();
     }
 
@@ -20,6 +24,10 @@ public class TurnManager {
         foreach (Action action in tick_actions) {
             action();
         }
+    }
+
+    public void signalDeath(Unit unit) {
+        list_kill_units.Add(unit);
     }
 
     void initSM() {
