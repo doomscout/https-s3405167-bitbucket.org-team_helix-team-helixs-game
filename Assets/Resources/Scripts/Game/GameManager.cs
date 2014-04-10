@@ -143,9 +143,14 @@ public class GameManager : MonoBehaviour{
 
 	void actionMenuExit() {
 		//cleanup menu
-        Gameexit = false;
+		Gameexit = false;
 		Debug.Log("actionMenuExit");
-    }
+		//Temp placement of generate level
+		if (map == null) {
+			map = (Instantiate(Resources.Load("Prefabs/NewMap")) as GameObject).GetComponent<TileMap>();
+		}
+		map.BuildMesh();
+	}
 
 	void actionTransitionClickedPlay() {
 		//Reset play variables (SM, field values etc.)
