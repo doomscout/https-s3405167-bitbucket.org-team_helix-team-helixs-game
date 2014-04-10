@@ -3,8 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 
 //Singleton
-//You can access the gametools from anywhere in the code
-//e.g. List<Unit> GameTools.getInstance().Units or TileMap GameTools.getInstance().Map
+//You can access the gametools from anywhere in the game
+//e.g. List<Unit> GameTools.All_Units or TileMap GameTools.Map
 public static class GameTools {
 
+	public static List<Unit> All_Units{get;set;}
+	public static List<Unit> Dead_Units{get;set;}
+	public static TileMap Map{get;set;}
+
+	//Below are things still need to be implemented
+	/*
+	public static Player Player_One{get;set;}
+	*/
 }

@@ -7,11 +7,13 @@ public class TurnManager {
     bool turn_player, turn_enemy;
     Statemachine turn_manager;
     List<Unit> list_all_units;
-    List<Unit> list_kill_units;
+	List<Unit> list_kill_units;							//Remember to reset kill units after both sides' turns
 
     public TurnManager() {
         list_kill_units = new List<Unit>();
         list_all_units = new List<Unit>();
+		GameTools.All_Units = list_all_units;
+		GameTools.Dead_Units = list_kill_units;			
         initSM();
     }
 
