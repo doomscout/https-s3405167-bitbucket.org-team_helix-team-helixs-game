@@ -6,15 +6,19 @@ public class TurnManager {
 
     bool turn_player, turn_enemy;
     Statemachine turn_manager;
-    List<Unit> list_all_units;
-	List<Unit> list_kill_units;							//Remember to reset kill units after both sides' turns
+    List<Unit> list_live_units;
+	List<Unit> list_dead_units;							//Remember to reset kill units after both sides' turns
+
+	bool isAnimationDone;
+	bool hasRemovedUnits;
 
     public TurnManager() {
-        list_kill_units = new List<Unit>();
-        list_all_units = new List<Unit>();
-		GameTools.All_Units = list_all_units;
-		GameTools.Dead_Units = list_kill_units;			
+        list_live_units = new List<Unit>();
+		list_dead_units = new List<Unit>();
+		GameTools.All_Units = list_live_units;
+		GameTools.Dead_Units = list_dead_units;			
         initSM();
+		GameTools.TM = this;
     }
 
     public void tick() {
@@ -29,7 +33,7 @@ public class TurnManager {
     }
 
     public void signalDeath(Unit unit) {
-        list_kill_units.Add(unit);
+		list_dead_units.Add(unit);
     }
 
     void initSM() {
@@ -59,6 +63,7 @@ public class TurnManager {
 
         state_player.addAction(new Action(actionPlayerRunning));
         state_player.Exit_action = new Action(actionPlayerExit);
+		state_animation.Entry_action = new Action(actionAnimationEntry);
         state_animation.addAction(new Action(actionAnimationRunning));
         state_enemy.Entry_action = new Action(actionEnemyEntry);
         state_enemy.Exit_action = new Action(actionEnemyExit);
@@ -78,14 +83,45 @@ public class TurnManager {
         Debug.Log("actionPlayerExit");
     }
 
+	void actionAnimationEntry() {
+		isAnimationDone = false;
+		hasRemovedUnits = false;
+	}
+
     void actionAnimationRunning() {
         //loop over units and display animations
-        //perhaps use a bool value in the transitions to check which unit to animate
+        //perhaps use a bool value in the transitions to check which unit to animate - nah
+
+		//player.tick();
+		isAnimationDone = true;
+		foreach (Unit unit in list_live_units) {
+			unit.animation_tick();
+			if (!unit.FinishedAnimation) {
+				isAnimationDone = false;
+			}
+		}
+		foreach (Unit unit in list_dead_units) {
+			if (!hasRemovedUnits) {
+				list_live_units.Remove(unit);
+			}
+			unit.death_tick();
+			if (!unit.FinishedAnimation) {
+				isAnimationDone = false;
+			}
+		}
+		hasRemovedUnits = true;
         Debug.Log("actionAnimationRunning");
     }
 
+	void actionAnimationExit() {
+		list_dead_units = new List<Unit>();
+	}
+
     void actionEnemyEntry() {
         //Determine enemy actions
+		foreach (Unit unit in list_live_units) {
+			unit.determineNextMove();
+		}
         Debug.Log("actionEnemyEntry");
     }
 
@@ -97,15 +133,18 @@ public class TurnManager {
 
     //Conditions
     bool conditionValidInput() {
+		//listen to input handlers and verify
         return Input.GetKeyDown("space");
     }
 
     bool conditionFinishedPlayerAnimation() {
         return Input.GetKeyDown("0") && turn_enemy;
+		//return isAnimationDone && turn_enemy;
     }
 
     bool conditionFinishedEnemyAnimation() {
         return Input.GetKeyDown("0") && turn_player;
+		//return isAnimationDone && turn_enemy;
     }
 
     bool conditionDeterminedActions() {

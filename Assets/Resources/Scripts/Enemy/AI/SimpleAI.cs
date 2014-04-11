@@ -7,12 +7,10 @@ public class SimpleAI {
 
     //Each enemy unit will get a state machine
     Unit unit;
-    TurnManager turn_manager;
-    Statemachine simple_ai;
+	Statemachine simple_ai;
 
-    public SimpleAI(Unit enemy, TurnManager turn_manager) {
+    public SimpleAI(Unit enemy) {
         unit = enemy;
-        this.turn_manager = turn_manager;
     }
 
     public void tick() {
@@ -63,7 +61,6 @@ public class SimpleAI {
         //Set death animation (state_animation will take care of this)
         unit.IsDead = true;
         //Signal animation to do cleanup? instead of poll, maybe turn_manager.signalDeath(this)
-        turn_manager.signalDeath(unit);
     }
 
     bool transitionInRange() {

@@ -1,18 +1,81 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
+public enum Direction {None, Up, Down, Left, Right};
 
 public class Unit {
+	public bool FinishedAnimation = false;
     public bool IsDead = false;
-    GameObject unit;
+	public float moveSpeed = 0.5f;
+	public float health = 10f;
+	GameObject unit;
 
-	// Use this for initialization
-	void Start () {
+	List<Direction> list_directions = new List<Direction>();
+	Direction current_target = Direction.None;
+	SimpleAI brain;
+	float remainingDistance = 1f;
+
+	public Unit() {
+		brain = new SimpleAI(this);
+	}
+
+	public void determineNextMove() {
+	}
+
+	public void animation_tick() {
+		if (health <= 0) {
+			IsDead = true;
+			FinishedAnimation = true;
+			GameTools.TM.signalDeath(this);
+			return;
+		}
+		if (current_target == Direction.None) {
+			if (list_directions.Count > 0) {
+				current_target = list_directions[0];
+				list_directions.RemoveAt(0);
+				remainingDistance = 1.0f;
+				FinishedAnimation = false;
+			} else {
+				//there's no current target and there's no directions in the directions list
+				FinishedAnimation = true;
+				return;
+			}
+		}
+			
+		switch (current_target) {
+			case Direction.Up:
+				unit.transform.Translate(0, 0, moveSpeed * Time.deltaTime, null);
+				break;
+			case Direction.Down:
+				unit.transform.Translate(0, 0, -moveSpeed * Time.deltaTime, null);
+				break;
+			case Direction.Left:
+				unit.transform.Translate(moveSpeed * Time.deltaTime, 0, 0, null);
+				break;
+			case Direction.Right:
+				unit.transform.Translate(-moveSpeed * Time.deltaTime, 0, 0, null);
+				break;
+		}
+		remainingDistance -= moveSpeed * Time.deltaTime;
+		if (remainingDistance < 0) {
+			//We've arrived at our destination, but overshot a little bit
+			//correct overshooting
+			//unit.transform.position.x = Mathf.Round(unit.transform.position.x);
+			//unit.transform.position.z = Mathf.Round(unit.transform.position.z);
+			current_target = Direction.None;
+		}
 
 	}
-	
-	// Update is called once per frame
-	void Update () {
 
+	public void death_tick() {
+		//display death animation (if any)
+		FinishedAnimation = true;			//temp no animation, just return immediately
+		Debug.Log ("Death Tick");
+	}
+
+	public void addMove(Direction d) {
+		list_directions.Add(d);
 	}
 
 
