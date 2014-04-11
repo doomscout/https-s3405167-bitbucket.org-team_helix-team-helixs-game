@@ -12,6 +12,7 @@ public static class GameTools {
 	public static TileMap Map{get;set;}
 	public static GameManager GM{get;set;}
 	public static TurnManager TM{get;set;}
+	public static Player Player{get;set;}
 
 	//Below are things still need to be implemented
 	/*

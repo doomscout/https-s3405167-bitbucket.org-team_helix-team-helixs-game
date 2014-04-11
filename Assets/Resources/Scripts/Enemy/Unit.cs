@@ -5,10 +5,10 @@ using System.Collections.Generic;
 public enum Direction {None, Up, Down, Left, Right};
 
 public class Unit {
-	public bool FinishedAnimation = false;
-    public bool IsDead = false;
-	public float moveSpeed = 0.5f;
-	public float health = 10f;
+	public bool FinishedAnimation{get;set;}
+	//public bool IsDead{get; private set;}
+	public float MoveSpeed{get;set;}
+	public float Health{get;private set;}
 	GameObject unit;
 
 	List<Direction> list_directions = new List<Direction>();
@@ -18,14 +18,19 @@ public class Unit {
 
 	public Unit() {
 		brain = new SimpleAI(this);
+		unit = Object.Instantiate(Resources.Load("Prefabs/EnemyPrefab", typeof(GameObject))) as GameObject;
+		Health = 10f;
+		MoveSpeed = 10.0f;
 	}
 
 	public void determineNextMove() {
-	}
+		list_directions = new List<Direction>();
+		list_directions.Add (Direction.Up);
+	}	
 
 	public void animation_tick() {
-		if (health <= 0) {
-			IsDead = true;
+		if (Health <= 0) {
+			//IsDead = true;
 			FinishedAnimation = true;
 			GameTools.TM.signalDeath(this);
 			return;
@@ -45,19 +50,19 @@ public class Unit {
 			
 		switch (current_target) {
 			case Direction.Up:
-				unit.transform.Translate(0, 0, moveSpeed * Time.deltaTime, null);
+				unit.transform.Translate(0, 0, MoveSpeed * Time.deltaTime, null);
 				break;
 			case Direction.Down:
-				unit.transform.Translate(0, 0, -moveSpeed * Time.deltaTime, null);
+				unit.transform.Translate(0, 0, -MoveSpeed * Time.deltaTime, null);
 				break;
 			case Direction.Left:
-				unit.transform.Translate(moveSpeed * Time.deltaTime, 0, 0, null);
+				unit.transform.Translate(MoveSpeed * Time.deltaTime, 0, 0, null);
 				break;
 			case Direction.Right:
-				unit.transform.Translate(-moveSpeed * Time.deltaTime, 0, 0, null);
+				unit.transform.Translate(-MoveSpeed * Time.deltaTime, 0, 0, null);
 				break;
 		}
-		remainingDistance -= moveSpeed * Time.deltaTime;
+		remainingDistance -= MoveSpeed * Time.deltaTime;
 		if (remainingDistance < 0) {
 			//We've arrived at our destination, but overshot a little bit
 			//correct overshooting

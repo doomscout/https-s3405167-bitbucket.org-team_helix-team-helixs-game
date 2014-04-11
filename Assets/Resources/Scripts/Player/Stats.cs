@@ -6,6 +6,10 @@ public class Stats : MonoBehaviour {
 	private float damage;
 	private float healing;
 
+	public Stats() {
+
+	}
+
 	public void setHealth(float seed){
 		float stat = ((Random.Range(10, 50)) + (Random.Range(50, 100)/3) + seed);
 		Debug.Log ("HP = " + stat);

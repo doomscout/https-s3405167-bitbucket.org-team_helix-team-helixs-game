@@ -59,7 +59,7 @@ public class SimpleAI {
 
     void actionDieRunning() {
         //Set death animation (state_animation will take care of this)
-        unit.IsDead = true;
+        //unit.IsDead = true;
         //Signal animation to do cleanup? instead of poll, maybe turn_manager.signalDeath(this)
     }
 

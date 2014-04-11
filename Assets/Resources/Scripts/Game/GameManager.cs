@@ -147,10 +147,12 @@ public class GameManager : MonoBehaviour{
 		Gameexit = false;
 		Debug.Log("actionMenuExit");
 		//Temp placement of generate level
+		/* Disable this for now
 		if (map == null) {
 			map = (Instantiate(Resources.Load("Prefabs/NewMap")) as GameObject).GetComponent<TileMap>();
 		}
 		map.BuildMesh();
+		*/
 	}
 
 	void actionTransitionClickedPlay() {
@@ -248,6 +250,7 @@ public class GameManager : MonoBehaviour{
 
 	bool conditionLose() {
 		return  Input.GetKeyDown("down");
+		//return turn_manager.IsAnimationDone && turn_manager.IsPlayerDead
 	}
 
     bool conditionTrue() {

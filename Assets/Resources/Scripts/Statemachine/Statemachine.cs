@@ -12,7 +12,7 @@ public delegate bool TriggerCondition();
 public class Statemachine {
 
 	State initial_state;
-	State current_state;
+	public State current_state;
 
 	public Statemachine(State inital_state) {
 		this.initial_state = inital_state;
