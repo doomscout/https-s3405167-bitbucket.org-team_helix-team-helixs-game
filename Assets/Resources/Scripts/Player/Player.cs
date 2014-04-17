@@ -8,14 +8,15 @@ public class Player {
 	public Stats stats;
 	public Colour colour;
 	public Movement movement;
+    public int Map_position_x{ get; private set;}
+    public int Map_position_y{ get; private set;}
 
 	private string col;
 	private Vector3 dir;
 	private GameObject player_obect;
 	private Direction current_target = Direction.None;
 	private float remainingDistance = 1.0f;
-    private int player_map_position_x = 0;
-    private int player_map_position_y = 0;
+
 
 	public Player() {
 		stats = new Stats();
@@ -24,6 +25,9 @@ public class Player {
 		stats.setDamage(10);
 		stats.setHealth(10);
 		MoveSpeed = 10.0f;
+
+        Map_position_x = 0;
+        Map_position_y = 0;
 
 		col = colour.setColour();
 		Debug.Log ("Colour = " + col);
@@ -97,20 +101,20 @@ public class Player {
 			player_obect.transform.position = new Vector3(Mathf.Round(temp.x), temp.y, Mathf.Round(temp.z));
             switch (current_target) {
                 case Direction.Up:
-                    player_map_position_y++;
+                    Map_position_y++;
                     break;
                 case Direction.Down:
-                    player_map_position_y--;
+                    Map_position_y--;
                     break;
                 case Direction.Left: 
-                    player_map_position_x--;
+                    Map_position_x--;
                     break;
                 case Direction.Right:
-                    player_map_position_x++;
+                    Map_position_x++;
                     break;
             }
-            Debug.Log("Arrived at (" + player_map_position_x + ", " + player_map_position_y + ")");
-            Debug.Log("Number is" + GameTools.Map[player_map_position_y, player_map_position_x]);
+            Debug.Log("Arrived at (" + Map_position_x + ", " + Map_position_y + ")");
+            Debug.Log("Number is" + GameTools.Map[Map_position_y, Map_position_x]);
 			//reset values, ready for the next player's turn
 			current_target = Direction.None;
 			remainingDistance = 1.0f;

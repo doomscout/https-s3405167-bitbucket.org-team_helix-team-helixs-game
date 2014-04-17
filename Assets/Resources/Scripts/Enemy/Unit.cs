@@ -9,6 +9,8 @@ public class Unit {
 	//public bool IsDead{get; private set;}
 	public float MoveSpeed{get;set;}
 	public float Health{get;private set;}
+    public int Map_position_x { get; private set;}
+    public int Map_position_y { get; private set;}
 	GameObject unit;
 
 	List<Direction> list_directions = new List<Direction>();
@@ -16,10 +18,13 @@ public class Unit {
 	SimpleAI brain;
 	float remainingDistance = 1f;
 
+
 	public Unit() {
 		brain = new SimpleAI(this);
 		unit = Object.Instantiate(Resources.Load("Prefabs/EnemyPrefab", typeof(GameObject))) as GameObject;
-        unit.transform.position = new Vector3(Random.Range(2, 10), 0, Random.Range(2, 10));
+        Map_position_x = Random.Range(2, 10);
+        Map_position_y = Random.Range(2, 10);
+        unit.transform.position = new Vector3(Map_position_x, 0, Map_position_y);
 		Health = 10f;
 		MoveSpeed = 10.0f;
 	}
