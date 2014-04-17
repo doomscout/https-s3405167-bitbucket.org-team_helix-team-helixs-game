@@ -9,7 +9,7 @@ public static class GameTools {
 
 	public static List<Unit> All_Units{get;set;}
 	public static List<Unit> Dead_Units{get;set;}
-	public static TileMap Map{get;set;}
+	public static int[,] Map{get;set;}
 	public static GameManager GM{get;set;}
 	public static TurnManager TM{get;set;}
 	public static Player Player{get;set;}
