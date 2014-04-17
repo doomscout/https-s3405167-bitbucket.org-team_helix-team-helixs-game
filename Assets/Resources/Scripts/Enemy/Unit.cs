@@ -67,8 +67,8 @@ public class Unit {
 		if (remainingDistance < 0) {
 			//We've arrived at our destination, but overshot a little bit
 			//correct overshooting
-			//unit.transform.position.x = Mathf.Round(unit.transform.position.x);
-			//unit.transform.position.z = Mathf.Round(unit.transform.position.z);
+            Vector3 temp = unit.transform.position;
+            unit.transform.position = new Vector3(Mathf.Round(temp.x), temp.y, Mathf.Round(temp.z));
 			current_target = Direction.None;
 		}
 

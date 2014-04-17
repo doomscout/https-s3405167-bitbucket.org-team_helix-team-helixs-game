@@ -62,7 +62,7 @@ public class TileMap : MonoBehaviour {
 				int terrainTileoffset = Random.Range (0, 4) * tileResolution;
 				Color[] p = terrainTiles.GetPixels(terrainTileoffset, 0, tileResolution, tileResolution);
 				texture.SetPixels(x*tileResolution, y*tileResolution, tileResolution, tileResolution, p);
-				map[y,x] = terrainTileoffset;
+				map[y,x] = terrainTileoffset/tileResolution;
 			}
 		}
 		texture.filterMode = FilterMode.Point;

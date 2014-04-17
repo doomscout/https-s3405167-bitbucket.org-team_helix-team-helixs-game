@@ -14,6 +14,8 @@ public class Player {
 	private GameObject player_obect;
 	private Direction current_target = Direction.None;
 	private float remainingDistance = 1.0f;
+    private int player_map_position_x = 0;
+    private int player_map_position_y = 0;
 
 	public Player() {
 		stats = new Stats();
@@ -74,7 +76,6 @@ public class Player {
 		switch (current_target) {
 			case Direction.Up:
 				player_obect.transform.Translate(0, 0, MoveSpeed * Time.deltaTime, null);
-				
 				break;
 			case Direction.Down:
 				player_obect.transform.Translate(0, 0, -MoveSpeed * Time.deltaTime, null);
@@ -94,7 +95,22 @@ public class Player {
 			//We've arrived at our destination, but may have overshot, so lets correct it
 			Vector3 temp = player_obect.transform.position;
 			player_obect.transform.position = new Vector3(Mathf.Round(temp.x), temp.y, Mathf.Round(temp.z));
-
+            switch (current_target) {
+                case Direction.Up:
+                    player_map_position_y++;
+                    break;
+                case Direction.Down:
+                    player_map_position_y--;
+                    break;
+                case Direction.Left: 
+                    player_map_position_x--;
+                    break;
+                case Direction.Right:
+                    player_map_position_x++;
+                    break;
+            }
+            Debug.Log("Arrived at (" + player_map_position_x + ", " + player_map_position_y + ")");
+            Debug.Log("Number is" + GameTools.Map[player_map_position_y, player_map_position_x]);
 			//reset values, ready for the next player's turn
 			current_target = Direction.None;
 			remainingDistance = 1.0f;
