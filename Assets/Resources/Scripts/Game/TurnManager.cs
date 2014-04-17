@@ -10,6 +10,8 @@ public class TurnManager {
 	List<Unit> list_dead_units;							//Remember to reset kill units after both sides' turns
 	Player player;
 
+    private bool validInput = false;
+
 	public bool IsAnimationDone{get; private set;}
 	//bool hasRemovedUnits;								//BONUS: Do this
 
@@ -94,7 +96,7 @@ public class TurnManager {
 	                        
     void actionPlayerRunning() {
         //listen to input handlers and verify
-		player.listenInput();
+		validInput = player.listenInput();
         //Debug.Log("actionPlayerRunning");
     }
 
@@ -102,6 +104,7 @@ public class TurnManager {
         turn_player = false;
         turn_enemy = true;
 		player.FinishedAnimation = false;
+        validInput = false;
         //Debug.Log("actionPlayerExit");
     }
 
@@ -172,7 +175,8 @@ public class TurnManager {
     //Conditions
     bool conditionValidInput() {
 		//listen to input handlers and verify
-        return Input.GetKeyDown("space");
+        //return Input.GetKeyDown("space");
+        return validInput;
     }
 
     bool conditionFinishedPlayerAnimation() {

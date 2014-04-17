@@ -19,6 +19,7 @@ public class Unit {
 	public Unit() {
 		brain = new SimpleAI(this);
 		unit = Object.Instantiate(Resources.Load("Prefabs/EnemyPrefab", typeof(GameObject))) as GameObject;
+        unit.transform.position = new Vector3(Random.Range(2, 10), 0, Random.Range(2, 10));
 		Health = 10f;
 		MoveSpeed = 10.0f;
 	}

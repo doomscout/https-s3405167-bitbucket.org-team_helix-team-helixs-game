@@ -30,20 +30,25 @@ public class Player {
 		player_obect = Object.Instantiate(Resources.Load("Prefabs/PlayerPrefab", typeof(GameObject))) as GameObject;
 	}
 
-	public void listenInput() {/*
-		if (Input.GetKeyDown("w")) {
-			current_target = Direction.Up;
-		} else if (Input.GetKeyDown("a")) {
-			current_target = Direction.Left;		
-		} else if (Input.GetKeyDown("s")) {
-			current_target = Direction.Right;
-		} else if(Input.GetKeyDown("d"))
-			current_target = Direction.Down;
-		else {
+	public bool listenInput() {
+        bool validInput = false;
+        if (Input.GetKey("w")) {
+            validInput = true;
+            current_target = Direction.Up;
+        } else if (Input.GetKey("a")) {
+            current_target = Direction.Left;
+            validInput = true;
+        } else if (Input.GetKey("s")) {
+            current_target = Direction.Down;
+            validInput = true;
+        } else if (Input.GetKey("d")) {
+            current_target = Direction.Right;
+            validInput = true;
+        } else {
 			//Debug.log("Player None direction");
 			current_target = Direction.None;
-		}*/
-		current_target = Direction.Down;
+		}
+        return validInput;
 	}
 
 	public bool checkIfDead() {
@@ -75,10 +80,10 @@ public class Player {
 				player_obect.transform.Translate(0, 0, -MoveSpeed * Time.deltaTime, null);
 				break;
 			case Direction.Left:
-				player_obect.transform.Translate(MoveSpeed * Time.deltaTime, 0, 0, null);
+				player_obect.transform.Translate(-MoveSpeed * Time.deltaTime, 0, 0, null);
 				break;
 			case Direction.Right:
-				player_obect.transform.Translate(-MoveSpeed * Time.deltaTime, 0, 0, null);
+				player_obect.transform.Translate(MoveSpeed * Time.deltaTime, 0, 0, null);
 				break;
 			default:
 				Debug.Log ("player animation tick no direction!!");
