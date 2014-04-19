@@ -55,18 +55,20 @@ public class SimpleAI {
 
     void actionAttackRunning() {
         //Path finding
-        if (unit.Map_position_x + 1 > TileMap.size_x) {
+		/*
+        if (unit.Map_position_x + 1 > GameTools.Map.size_x) {
             //don't explore position_x + 1
         }
         if (unit.Map_position_x - 1 < 0) {
             //don't explore position_x -1
         }
-        if (unit.Map_position_y + 1 > TileMap.size_z) {
+        if (unit.Map_position_y + 1 > GameTools.Map.size_z) {
             //don't explore position_y + 1
         }
         if (unit.Map_position_y - 1 < 0) {
             //don't explore position_y - 1
         }
+        */
         //TODO: PRIORITY QUEUE to explore the next one in the open set
         //Set the next move from Up, Down, Left Right (state_animation will take care of this)
     }

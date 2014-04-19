@@ -113,8 +113,8 @@ public class Player {
                     Map_position_x++;
                     break;
             }
-            Debug.Log("Arrived at (" + Map_position_x + ", " + Map_position_y + ")");
-            Debug.Log("Number is" + GameTools.Map[Map_position_y, Map_position_x]);
+            //Debug.Log("Arrived at (" + Map_position_x + ", " + Map_position_y + ")");
+            //Debug.Log("Number is" + GameTools.Map[Map_position_y, Map_position_x]);
 			//reset values, ready for the next player's turn
 			current_target = Direction.None;
 			remainingDistance = 1.0f;

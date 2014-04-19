@@ -8,74 +8,65 @@ using System.Collections;
 
 public class TileMap : MonoBehaviour {
 	
-	static public int size_x = 10;
-	static public int size_z = 20;
+	public int size_x = 100;
+	public int size_z = 50;
 	public float tileSize = 1.0f;
-
-
+	
 	public Texture2D terrainTiles;
-	public int tileResolution = 16;
+	public int tileResolution;
 
-	public int[,] map;
-
+	public int[,] y_x;
 	// Use this for initialization
 	void Start () {
-		map = new int[size_z, size_x];
+		y_x = new int[size_z, size_x];
 		BuildMesh();
 		this.transform.position = new Vector3(-0.5f, 0.0f, -0.5f);
-		GameTools.Map = map;
+		GameTools.Map = this;
 	}
-
-	Color[][] ChopUpTiles(){
-		//tileResolution = terrainTiles.height;
+	
+	Color[][] ChopUpTiles() {
 		int numTilesPerRow = terrainTiles.width / tileResolution;
 		int numRows = terrainTiles.height / tileResolution;
-
+		
 		Color[][] tiles = new Color[numTilesPerRow*numRows][];
-
-		for(int y = 0; y < numRows; y++){
-			for(int x = 0; x < numTilesPerRow; x++){
-				tiles[ y * numTilesPerRow + x] = terrainTiles.GetPixels(x * tileResolution, y * tileResolution, tileResolution, tileResolution);
+		
+		for(int y=0; y<numRows; y++) {
+			for(int x=0; x<numTilesPerRow; x++) {
+				tiles[y*numTilesPerRow + x] = terrainTiles.GetPixels( x*tileResolution , y*tileResolution, tileResolution, tileResolution );
 			}
 		}
-
+		
 		return tiles;
-
 	}
-
-	void BuildTexture(){
-
-
-
+	
+	void BuildTexture() {
+		DataTileMap map1 = new DataTileMap(size_x, size_z);
+		
 		int texWidth = size_x * tileResolution;
 		int texHeight = size_z * tileResolution;
-		/*
-		int texWidth = 10;
-		int texHeight = 10;
-		*/
 		Texture2D texture = new Texture2D(texWidth, texHeight);
-
+		
 		Color[][] tiles = ChopUpTiles();
-
-		for(int y = 0; y < size_z; y++){
-			for(int x = 0; x < size_x; x++){
-				int terrainTileoffset = Random.Range (0, 4) * tileResolution;
-				Color[] p = terrainTiles.GetPixels(terrainTileoffset, 0, tileResolution, tileResolution);
+		
+		for(int y=0; y < size_z; y++) {
+			for(int x=0; x < size_x; x++) {
+				Color[] p = tiles[ map1.GetTileAt(x,y) ];
 				texture.SetPixels(x*tileResolution, y*tileResolution, tileResolution, tileResolution, p);
-				map[y,x] = terrainTileoffset/tileResolution;
+				//y_x[y,x] = terrainTileoffset/tileResolution;
 			}
 		}
+		
 		texture.filterMode = FilterMode.Point;
 		texture.wrapMode = TextureWrapMode.Clamp;
 		texture.Apply();
+		
 		MeshRenderer mesh_renderer = GetComponent<MeshRenderer>();
 		mesh_renderer.sharedMaterials[0].mainTexture = texture;
-		Debug.Log ("Done Build Texture!");
+		
+		Debug.Log ("Done Texture!");
 	}
-
 	
 	public void BuildMesh() {
-		
 		int numTiles = size_x * size_z;
 		int numTris = numTiles * 2;
 		
@@ -93,9 +84,9 @@ public class TileMap : MonoBehaviour {
 		int x, z;
 		for(z=0; z < vsize_z; z++) {
 			for(x=0; x < vsize_x; x++) {
-				vertices[ z * vsize_x + x ] = new Vector3( x*tileSize, 0, z*tileSize );
+				vertices[ z * vsize_x + x ] = new Vector3( x*tileSize, 0, -z*tileSize );
 				normals[ z * vsize_x + x ] = Vector3.up;
-				uv[ z * vsize_x + x ] = new Vector2( (float)x / size_x, (float)z / size_z );
+				uv[ z * vsize_x + x ] = new Vector2( (float)x / size_x, 1f - (float)z / size_z );
 			}
 		}
 		Debug.Log ("Done Verts!");
@@ -105,12 +96,12 @@ public class TileMap : MonoBehaviour {
 				int squareIndex = z * size_x + x;
 				int triOffset = squareIndex * 6;
 				triangles[triOffset + 0] = z * vsize_x + x + 		   0;
-				triangles[triOffset + 1] = z * vsize_x + x + vsize_x + 0;
-				triangles[triOffset + 2] = z * vsize_x + x + vsize_x + 1;
+				triangles[triOffset + 2] = z * vsize_x + x + vsize_x + 0;
+				triangles[triOffset + 1] = z * vsize_x + x + vsize_x + 1;
 				
 				triangles[triOffset + 3] = z * vsize_x + x + 		   0;
-				triangles[triOffset + 4] = z * vsize_x + x + vsize_x + 1;
-				triangles[triOffset + 5] = z * vsize_x + x + 		   1;
+				triangles[triOffset + 5] = z * vsize_x + x + vsize_x + 1;
+				triangles[triOffset + 4] = z * vsize_x + x + 		   1;
 			}
 		}
 		
@@ -125,18 +116,15 @@ public class TileMap : MonoBehaviour {
 		
 		// Assign our mesh to our filter/renderer/collider
 		MeshFilter mesh_filter = GetComponent<MeshFilter>();
-		MeshRenderer mesh_renderer = GetComponent<MeshRenderer>();
 		MeshCollider mesh_collider = GetComponent<MeshCollider>();
 		
 		mesh_filter.mesh = mesh;
 		mesh_collider.sharedMesh = mesh;
 		Debug.Log ("Done Mesh!");
-
-
+		
 		BuildTexture();
-
 	}
-	
+
 	
 }
 

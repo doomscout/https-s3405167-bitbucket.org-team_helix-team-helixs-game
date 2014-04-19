@@ -16,14 +16,14 @@ public class TileMapUpdate : MonoBehaviour {
 	public Texture2D terrainTiles;
 	public int tileResolution = 16;
 
-	public int[,] map;
+	public int[,] y_x;
 
 	// Use this for initialization
 	void Start () {
-		map = new int[size_z, size_x];
+		y_x = new int[size_z, size_x];
 		BuildMesh();
 		this.transform.position = new Vector3(-0.5f, 0.0f, -0.5f);
-		GameTools.Map = map;
+		//GameTools.Map = this;
 	}
 
 	Color[][] ChopUpTiles(){
@@ -62,7 +62,7 @@ public class TileMapUpdate : MonoBehaviour {
 				int terrainTileoffset = Random.Range (0, 4) * tileResolution;
 				Color[] p = terrainTiles.GetPixels(terrainTileoffset, 0, tileResolution, tileResolution);
 				texture.SetPixels(x*tileResolution, y*tileResolution, tileResolution, tileResolution, p);
-				map[y,x] = terrainTileoffset/tileResolution;
+				y_x[y,x] = terrainTileoffset/tileResolution;
 			}
 		}
 		texture.filterMode = FilterMode.Point;
