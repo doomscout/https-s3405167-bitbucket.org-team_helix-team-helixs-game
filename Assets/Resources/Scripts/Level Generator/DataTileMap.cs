@@ -3,21 +3,216 @@ using System.Collections.Generic;
 
 public class DataTileMap {
 	
-	/*protected class DTile {
-		bool isWalkable = false;
-		int tileGraphicId = 0;
-		string name = "Unknown";
+
+	//We using  AtomataDungeonGenerator algorithm
+	
+
+	//MapWidth
+	int Size_x {get;set;}
+	//MapHeight
+	int Size_y{get;set;}
+	//Percent for fill EmptyTile
+	int PercentAreEmpty{get;set;}
+	int[,] Map_data;
+
+	
+	/*
+	 * 0 = null or white
+	 * 1 = red
+	 * 2 = blue
+	 * 3 = Yellow
+	 * 4 = Green
+	 * 5 = Pink
+	 * 6 = Purple
+	 */
+	
+	public DataTileMap(int size_x, int size_y, int[,] map, int percentAreEmpty) {
+		this.Size_x = size_x;
+		this.Size_y = size_y;
+		this.Map_data = map;
+		this.PercentAreEmpty = percentAreEmpty;
+		//GetTileAt(size_x, size_y);
+		//MakeTile();
+		RandomFillMap();
+		MakeTile();
+		GeneratorColorTile();
+	}
+
+	public int GetTileAt(int x, int y) {
+			return Map_data[x,y];
+	}
+			
+
+	public void GeneratorColorTile()
+	{
+		for(int column = 0, row = 0; row <= Size_x -1; row++)
+		{
+			for(column = 0; column <= Size_y-1; column++)
+			{
+				int randomNumber = Random.Range(1,7);
+				if(Map_data[column, row] == 1)
+					Map_data[column, row] = randomNumber;
+			}
+		}
+	}
+
+
+	public void MakeTile()
+	{
+		for(int column = 0, row = 0; row <= Size_x -1; row++)
+		{
+			for(column = 0; column <= Size_y-1; column++)
+			{
+				Map_data[column, row] = PlaceEmptyLogic(column, row);
+			}
+		}
+		
+	}
+
+
+	public int PlaceEmptyLogic(int x, int y)
+	{
+		int numEdges = GetAdjacenEmpty(x, y, 1, 1);
+		
+		if(Map_data[x,y] == 0)
+		{
+			if(numEdges >= 4 )
+			{
+				return 0;
+			}
+			if(numEdges < 2)
+			{
+				return 1;
+			}
+		}
+		else
+		{
+			if(numEdges >= 5)
+			{
+				return 0;
+			}
+		}
+		return 1;
+	}
+
+	public int GetAdjacenEmpty(int x, int y, int scopeX, int scopeY)
+	{
+		int startX = x - scopeX;
+		int startY = y - scopeY;
+		int endX = x + scopeX;
+		int endY = y + scopeY;
+		
+		int iX = startX;
+		int iY = startY;
+		
+		int emptyCounter = 0;
+		
+		
+		for(iY = startY; iY <=endY; iY++)
+		{
+			for(iX = startX; iX <=endX; iX++)
+			{
+				if(!(iX==x && iY==y))
+				{
+					if(IsEmpty(iX,iY))
+					{
+						emptyCounter +=1;
+					}
+				}
+			}
+		}
+		return emptyCounter;
+	}
+
+	bool IsEmpty(int x, int y)
+	{
+		
+		if( IsOutOfBounds(x,y))
+		{
+			return true;
+		}
+		
+		if( Map_data[x,y] == 0)
+		{
+			return true;
+		}
+		
+		if( Map_data[x,y] == 1 )
+		{
+			return false;
+		}
+		return false;
 	}
 	
-	List<DTile> tileTypes;
+	bool IsOutOfBounds(int x, int y)
+	{
+		if(x < 0 || y < 0)
+		{
+			return true;
+		}
+		else if ( x > Size_x - 1 || y > Size_y - 1)
+		{
+			return true;
+		}
+		return false;
+	}
+
 	
-	void InitTiles() {
-		tileType[1].name = "Floor";
-		tileType[1].isWalkable = true;
-		tileType[1].tileGraphicId = 1;
-		tileType[1].damagePerTurn = 0;
-	}*/
-	
+	public void RandomFillMap()
+	{
+
+		Map_data = new int[Size_x, Size_y];
+		int mapMiddle = 0;
+		for(int column = 0, row = 0; row < Size_y; row++)
+		{
+			for(column = 0; column < Size_x; column++)
+			{
+				if(column == 0)
+				{
+					Map_data[column, row] = 0;
+				}
+				else if (row == 0)
+				{
+					Map_data[column, row] = 0;
+				}
+				else if (column == Size_x - 1)
+				{
+					Map_data[column, row] = 0;
+				}
+				else if (row == Size_y -1)
+				{
+					Map_data[column, row] = 0;
+				}
+				
+				else
+				{
+					mapMiddle = (Size_y / 2);
+					
+					if(row == mapMiddle)
+					{
+						Map_data[column, row] = 1;
+					}
+					else
+					{
+						Map_data[column, row] = RandomPercent(PercentAreEmpty);
+					}
+				}
+			}
+		}
+	}
+
+	int RandomPercent(int percent)
+	{
+		if(PercentAreEmpty >= Random.Range(1,100)){
+			return 1;
+		}
+		return 0;
+	}
+}
+
+/*
+
+
 	protected class DRoom {
 		public int left;
 		public int top;
@@ -60,28 +255,13 @@ public class DataTileMap {
 		
 		
 	}
+
+
+
+
+
+
 	
-	int size_x;
-	int size_y;
-	
-	int[,] map_data;
-	
-	List<DRoom> rooms;
-	
-	/*
-	 * 0 = unknown
-	 * 1 = floor
-	 * 2 = wall
-	 * 3 = stone
-	 */
-	
-	public DataTileMap(int size_x, int size_y) {
-		DRoom r;
-		this.size_x = size_x;
-		this.size_y = size_y;
-		
-		map_data = new int[size_x,size_y];
-		
 		for(int x=0;x<size_x;x++) {
 			for(int y=0;y<size_y;y++) {
 				map_data[x,y] = 3;
@@ -139,9 +319,7 @@ public class DataTileMap {
 		return false;
 	}
 	
-	public int GetTileAt(int x, int y) {
-		return map_data[x,y];
-	}
+
 	
 	void MakeRoom(DRoom r) {
 		
@@ -212,4 +390,4 @@ public class DataTileMap {
 		
 		return false;
 	}
-}
+
