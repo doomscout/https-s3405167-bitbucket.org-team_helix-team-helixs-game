@@ -7,23 +7,29 @@ using System.Collections;
 [RequireComponent(typeof(MeshCollider))]
 
 public class TileMap : MonoBehaviour {
-	
+
+	//Declare variable of Size of Map
 	public int size_x = 100;
 	public int size_z = 50;
 	public float tileSize = 1.0f;
-	
+	public int percentAreTile =90;
+	public int[,] map_data;
+
+
+	//Declare variable of Texture and texture resolution
 	public Texture2D terrainTiles;
 	public int tileResolution;
 
-	public int[,] y_x;
+
 	// Use this for initialization
 	void Start () {
-		y_x = new int[size_z, size_x];
+
 		BuildMesh();
-		this.transform.position = new Vector3(-0.5f, 0.0f, -0.5f);
-		GameTools.Map = this;
+
 	}
-	
+
+
+	//Function to determind texture file to idenfity tile.
 	Color[][] ChopUpTiles() {
 		int numTilesPerRow = terrainTiles.width / tileResolution;
 		int numRows = terrainTiles.height / tileResolution;
@@ -40,7 +46,8 @@ public class TileMap : MonoBehaviour {
 	}
 	
 	void BuildTexture() {
-		DataTileMap map1 = new DataTileMap(size_x, size_z);
+		map_data = new int[size_x, size_z];
+		DataTileMap map = new DataTileMap(size_x, size_z, map_data, percentAreTile);
 		
 		int texWidth = size_x * tileResolution;
 		int texHeight = size_z * tileResolution;
@@ -50,9 +57,9 @@ public class TileMap : MonoBehaviour {
 		
 		for(int y=0; y < size_z; y++) {
 			for(int x=0; x < size_x; x++) {
-				Color[] p = tiles[ map1.GetTileAt(x,y) ];
+				Color[] p = tiles[ map.GetTileAt(x,y) ];
 				texture.SetPixels(x*tileResolution, y*tileResolution, tileResolution, tileResolution, p);
-				//y_x[y,x] = terrainTileoffset/tileResolution;
+				//map[y,x] = terrainTileoffset/tileResolution;
 			}
 		}
 		
