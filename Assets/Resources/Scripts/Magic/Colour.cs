@@ -4,6 +4,7 @@ using System.Collections;
 public class Colour : MonoBehaviour {
 	private string weakness;
 	private string strength;
+	private string colour;
 
 	public string getWeakness(){
 		return weakness;
@@ -21,9 +22,8 @@ public class Colour : MonoBehaviour {
 		strength = colour;
 	}
 
-	public string setColour(){
+	public void setColour(){
 		int set = (int)Random.Range(1,6);
-		string colour = null;
 
 		if(set==1)
 			colour = "red";
@@ -37,7 +37,9 @@ public class Colour : MonoBehaviour {
 			colour = "purple";
 		else if(set==6)
 			colour = "pink";
+	}
 
+	public string getColour(){
 		return colour;
 	}
 }
