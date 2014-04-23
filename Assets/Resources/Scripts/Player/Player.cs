@@ -23,6 +23,10 @@ public class Player {
 
         Map_position_x = 0;
         Map_position_y = 0;
+		stats = new Stats();
+		stats.setHealth(10);
+		colour = (Colour)Random.Range(1, 6);
+		Debug.Log ("Player colour: " + colour);
 
 		IsDead = false;
 		player_obect = Object.Instantiate(Resources.Load("Prefabs/PlayerPrefab", typeof(GameObject))) as GameObject;

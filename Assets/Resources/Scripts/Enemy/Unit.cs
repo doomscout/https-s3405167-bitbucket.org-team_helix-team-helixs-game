@@ -22,24 +22,46 @@ public class Unit {
 	public Unit() {
 		brain = new SimpleAI(this);
 		unit = Object.Instantiate(Resources.Load("Prefabs/EnemyPrefab", typeof(GameObject))) as GameObject;
-		Map_position_x = Random.Range(-10, 10);
-		Map_position_y = Random.Range(-10, 10);
+		Map_position_x = Random.Range(1, 10);
+		Map_position_y = Random.Range(1, 10);
+
+		while (GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] != false ) {
+			Map_position_x = Random.Range(1, 10);
+			Map_position_y = Random.Range(1, 10);
+		}
+
+		GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = true;
         unit.transform.position = new Vector3(Map_position_x, 0, Map_position_y);
 		Health = 10f;
 		MoveSpeed = 10.0f;
+	}
+
+	public void printFreeSpots() {
+		int asd = 0;
+		for (int i = 0; i < GameTools.Map.size_x; i++) {
+			for (int j = 0; j < GameTools.Map.size_z; j++) {
+				if (GameTools.Map.map_unit_occupy[i,j]) {
+					asd++;
+				}
+			}
+		}
+		Debug.Log ("Bool count" + asd);
 	}
 
 	public void determineNextMove() {
 		Stack<Direction> stackOfDirections = findPath(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y);
 		list_directions = new List<Direction>();
 		if (stackOfDirections.Count == 0) {
-			Debug.LogError("StackOfDirections is 0");
+			Debug.Log("StackOfDirections is 0");
+			list_directions.Add(Direction.None);
+			printFreeSpots();
+			return;
 		}
 		Direction d = stackOfDirections.Pop();
 		if (d == Direction.None) {
 			Debug.Log ("Got the none direction");
 			if (stackOfDirections.Count == 0) {
-				Debug.LogError ("None direction and nothing else, something's wrong");
+				Debug.Log("None direction and nothing else, something's wrong");
 				return;
 			}
 			d = stackOfDirections.Pop ();
@@ -49,6 +71,7 @@ public class Unit {
 				Debug.Log ("It works i think");
 				//foreach (Direction a in stackOfDirections) {
 				GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = false;
+				int old_x = Map_position_x, old_y = Map_position_y;
 				list_directions.Add (d);
 				switch (d) {
 				case Direction.Up:
@@ -64,8 +87,23 @@ public class Unit {
 					Map_position_x++;
 					break;
 				}
+				if (Map_position_x == GameTools.Player.Map_position_x && Map_position_y == GameTools.Player.Map_position_y) {
+					Map_position_x = old_x;
+					Map_position_y = old_y;
+					list_directions.Remove(d);
+				}
+				foreach (Unit u in GameTools.All_Units) {
+					if (u != this) {
+						if (u.Map_position_x == Map_position_x && u.Map_position_y == Map_position_y) {
+							Map_position_x = old_x;
+							Map_position_y = old_y;
+							list_directions.Remove(d);
+							break;
+						}
+					}
+				}
 				GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = true;
-				//}
+
 
 			}
 		} else {
@@ -85,28 +123,49 @@ public class Unit {
 		float weight = 1.0f;	//let weight be 1 for now
 		int x = a.CoOrds[0], y = a.CoOrds[1];
 		AStarNode newNode;
-		//if (x - 1 >= 0/* && GameTools.Map.map.Map_data[x-1, y] != 0*/) {
-			newNode = new AStarNode(x - 1, y, a.getFScore() + weight, distFromPlayer(x - 1, y), Direction.Left);
-			newNode.Prev = a;
-			listOfNeighbours.Add (newNode);
-		//}
-		//if (x + 1 < GameTools.Map.size_x/* && GameTools.Map.map.Map_data[x+1, y] != 0*/) {
-			newNode = new AStarNode(x + 1, y, a.getFScore() + weight, distFromPlayer(x + 1, y), Direction.Right);
-			newNode.Prev = a;
-			listOfNeighbours.Add (newNode);
-		//}
-		//if (y - 1 >= 0/* && GameTools.Map.map.Map_data[x, y-1] != 0*/) {
+
+		weight = 1.0f;
+		if (x >= 0 && x + 1 < GameTools.Map.size_x && y >= 0 && y + 1 < GameTools.Map.size_z ) {
+			if (x - 1 >= 0 ) {
+				if (GameTools.Map.map_unit_occupy[x - 1, y]) {
+					weight = 4.0f;
+				}
+				newNode = new AStarNode(x - 1, y, a.getFScore() + weight, distFromPlayer(x - 1, y), Direction.Left);
+				newNode.Prev = a;
+				listOfNeighbours.Add (newNode);
+			}
+			if ( x + 1 < GameTools.Map.size_x ) {
+				weight = 1.0f;
+				if (GameTools.Map.map_unit_occupy[x + 1, y]) {
+					weight = 4.0f;
+				}
+				newNode = new AStarNode(x + 1, y, a.getFScore() + weight, distFromPlayer(x + 1, y), Direction.Right);
+				newNode.Prev = a;
+				listOfNeighbours.Add (newNode);
+			}
+		
+			weight = 1.0f;
+			if (y - 1 >= 0 && GameTools.Map.map_unit_occupy[x, y - 1]) {
+				weight = 4.0f;
+			}
 			newNode = new AStarNode(x, y - 1, a.getFScore() + weight, distFromPlayer(x, y - 1), Direction.Down);
 			newNode.Prev = a;
 			listOfNeighbours.Add (newNode);
-		//}
-		//if (y + 1 < GameTools.Map.size_z/* && GameTools.Map.map.Map_data[x, y+1] != 0*/) {
+
+			weight = 1.0f;
+			if (y + 1 < GameTools.Map.size_z && GameTools.Map.map_unit_occupy[x, y + 1]) {
+				weight = 4.0f;
+			}
 			newNode = new AStarNode(x, y + 1, a.getFScore() + weight, distFromPlayer(x, y + 1), Direction.Up);
 			newNode.Prev = a;
 			listOfNeighbours.Add (newNode);
-		//}
+		}
 		return listOfNeighbours;
 	}
+	//if (x - 1 >= 0 && GameTools.Map.map_unit_occupy[x - 1, y] != true /*GameTools.Map.map.Map_data[x-1, y] != 0*/) {
+	//if (x + 1 < GameTools.Map.size_x && GameTools.Map.map_unit_occupy[x + 1, y] != true /*x + 1 < GameTools.Map.size_x && GameTools.Map.map.Map_data[x+1, y] != 0*/) {
+	//if (y - 1 >= 0 && GameTools.Map.map_unit_occupy[x, y - 1] != true /*y - 1 >= 0 && GameTools.Map.map.Map_data[x, y-1] != 0*/) {
+	//if (y + 1 < GameTools.Map.size_z && GameTools.Map.map_unit_occupy[x, y + 1] != true/*y + 1 < GameTools.Map.size_z && GameTools.Map.map.Map_data[x, y+1] != 0*/) {
 	
 	Stack<Direction> findPath(int destinationX, int destinationY) {
 		IComparer comparer = new AStarComparer();
@@ -159,11 +218,11 @@ public class Unit {
 			}
 		}
 		if (openSet.length() == 0) {
-			Debug.LogError("The enemy is on top of the player, we need to fix this");
+			Debug.Log("Enemy no valid move");
 		}
 		Stack<Direction> path = new Stack<Direction>();
 		if (!found) {
-			Debug.LogError("Pathfinding hasn't found path to player");
+			Debug.Log("Pathfinding hasn't found path to player");
 		} else {
 			AStarNode pointer = nodeCurrentPosition;
 			int count = 0;
@@ -187,7 +246,7 @@ public class Unit {
 			return;
 		}
 		if (current_target == Direction.None) {
-			if (list_directions.Count > 0) {
+			if (list_directions.Count > 0 && list_directions[0] != Direction.None) {
 				current_target = list_directions[0];
 				list_directions.RemoveAt(0);
 				remainingDistance = 1.0f;
@@ -211,6 +270,9 @@ public class Unit {
 				break;
 			case Direction.Right:
 				unit.transform.Translate(MoveSpeed * Time.deltaTime, 0, 0, null);
+				break;
+			default:
+				Debug.Log ("Defaulted");
 				break;
 		}
 		remainingDistance -= MoveSpeed * Time.deltaTime;
