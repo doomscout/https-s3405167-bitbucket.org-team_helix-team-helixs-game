@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Spell : MonoBehaviour {
+public class Spell {
+	Shape shape = new Shape();
 
-	public void createSpell() {
+	public Spell () {
+		float dmg = Random.Range(1, 50);
+		int c = (int)Random.Range (1, 6);
 
-		float ran = Random.Range(0, 6);
+		shape.setShape();
+		string s = shape.getShape();
 
-		//Colour spell_col = Colour(ran);
-
-		Debug.Log (ran);
-
+		Debug.Log (dmg + ", " + c + ", " + s + "\n");
 	}
 
 }
