@@ -26,6 +26,7 @@ public class TileMapUpdate : MonoBehaviour {
 		//GameTools.Map = this;
 	}
 
+	//import and read image file and chop down each color for each tile.
 	Color[][] ChopUpTiles(){
 		//tileResolution = terrainTiles.height;
 		int numTilesPerRow = terrainTiles.width / tileResolution;
@@ -43,6 +44,7 @@ public class TileMapUpdate : MonoBehaviour {
 
 	}
 
+	//Loading Texture and build Texture on tiles
 	void BuildTexture(){
 
 
@@ -99,7 +101,9 @@ public class TileMapUpdate : MonoBehaviour {
 			}
 		}
 		Debug.Log ("Done Verts!");
-		
+
+
+	
 		for(z=0; z < size_z; z++) {
 			for(x=0; x < size_x; x++) {
 				int squareIndex = z * size_x + x;

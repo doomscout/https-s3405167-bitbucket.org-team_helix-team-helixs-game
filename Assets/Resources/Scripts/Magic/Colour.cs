@@ -23,19 +23,21 @@ public class Colour : MonoBehaviour {
 	}
 
 	public void setColour(){
-		int set = (int)Random.Range(1,6);
 
-		if(set==1)
+		int[] set;
+		set = new int[6]{1,2,3,4,5,6};
+
+		if(set[1]==1)
 			colour = "red";
-		else if(set==2)
+		else if(set[2]==2)
 			colour = "blue";
-		else if(set==3)
+		else if(set[3]==3)
 			colour = "green";
-		else if(set==4)
+		else if(set[4]==4)
 			colour = "yellow";
-		else if(set==5)
+		else if(set[5]==5)
 			colour = "purple";
-		else if(set==6)
+		else if(set[6]==6)
 			colour = "pink";
 	}
 
