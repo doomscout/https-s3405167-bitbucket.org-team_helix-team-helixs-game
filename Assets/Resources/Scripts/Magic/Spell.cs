@@ -2,31 +2,14 @@
 using System.Collections;
 
 public class Spell : MonoBehaviour {
-	public Stats stats;
-	public Colour colour;
-	public Shape shape;
 
+	public void createSpell() {
 
-	public Spell() {
-		stats = new Stats();
-		colour = new Colour();
-		shape = new Shape();
+		float ran = Random.Range(0, 6);
 
-		string spell_shape;
-		string spell_col;
-		float spell_dmg;
+		//Colour spell_col = Colour(ran);
 
-		shape.setShape();
-		colour.setColour();
-		stats.setDamage(10);
-
-		spell_shape = shape.getShape();
-		spell_col = colour.getColour();
-		spell_dmg = stats.getDamage();
-
-		Debug.Log ("Shape = " + spell_shape + "\n" +
-		           "Colour = " + spell_col + "\n" +
-		           "Damage = " + spell_dmg + "\n");
+		Debug.Log (ran);
 
 	}
 
