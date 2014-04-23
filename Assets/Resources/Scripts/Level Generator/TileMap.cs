@@ -23,7 +23,6 @@ public class TileMap : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
 		BuildMesh();
 
 	}

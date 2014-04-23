@@ -2,9 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
-//Singleton
 //You can access the gametools from anywhere in the game
 //e.g. List<Unit> GameTools.All_Units or TileMap GameTools.Map
+
+
 public static class GameTools {
 
 	public static List<Unit> All_Units{get;set;}

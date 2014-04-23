@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour{
 		initSM();
         turn_manager = new TurnManager();
 		GameTools.GM = this;
+
 	}
 	
 	// Update is called once per frame

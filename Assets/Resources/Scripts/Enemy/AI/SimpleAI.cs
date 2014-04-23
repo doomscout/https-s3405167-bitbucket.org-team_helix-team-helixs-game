@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -52,6 +52,29 @@ public class SimpleAI {
         return Mathf.Sqrt((GameTools.Player.Map_position_x - x) * (GameTools.Player.Map_position_x - x) + 
                           (GameTools.Player.Map_position_y - y) * (GameTools.Player.Map_position_y - y));
     }
+
+	void findNeighbours(AStarNode a) {
+		int x = a.CoOrds[0], y = a.CoOrds[1];
+		if (x - 1 < 0 || y - 1 < 0 ||
+		    x + 1 > GameTools.Map) {
+
+		}
+	}
+
+	void findPath() {
+		Heap<AStarNode> openSet = new Heap<AStarNode>(new AStarComparer());
+		HashSet<AStarNode> closedSet = new HashSet<AStarNode>();
+		bool found = false;
+
+		AStarNode currentPosition = new AStarNode(unit.Map_position_x, unit.Map_position_y);
+
+		openSet.insert(currentPosition);
+
+		while (!found) {
+			currentPosition = openSet.extract();
+		}
+
+	}
 
     void actionAttackRunning() {
         //Path finding
