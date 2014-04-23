@@ -89,7 +89,7 @@ public class TurnManager {
 		player = new Player();
 		GameTools.Player = player;						//and this
 		//populate map with enemies
-		for (i = 0; i < 3; i++) {
+		for (i = 0; i < 10; i++) {
 			list_live_units.Add(new Unit());
 		}
 	}

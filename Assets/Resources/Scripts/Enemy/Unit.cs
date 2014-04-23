@@ -39,16 +39,21 @@ public class Unit {
 		if (d == Direction.None) {
 			Debug.Log ("Got the none direction");
 			if (stackOfDirections.Count == 0) {
-				Debug.LogError ("That's it?");
+				Debug.LogError ("None direction and nothing else, something's wrong");
 				return;
 			}
 			d = stackOfDirections.Pop ();
 			if (d == Direction.None) {
-				Debug.LogError("Something's wrong");
+				Debug.LogError("Two Nones in a row, something's wrong");
 			} else {
 				Debug.Log ("It works i think");
-				list_directions.Add (d);
+				//foreach (Direction a in stackOfDirections) {
+					list_directions.Add (d);
+				//}
+
 			}
+		} else {
+			Debug.LogError("No initial none direction, something's wrong");
 		}
 	}
 	
@@ -105,7 +110,7 @@ public class Unit {
 		
 		while (openSet.length() > 0) {
 			debugCount++;
-			if (debugCount > 500) {
+			if (debugCount > 1000) {
 				Debug.LogError("findPath in infinite loop");
 				break;
 			}
@@ -141,7 +146,7 @@ public class Unit {
 			}
 		}
 		if (openSet.length() == 0) {
-			Debug.LogError("Open set is empty?");
+			Debug.LogError("The enemy is on top of the player, we need to fix this");
 		}
 		Stack<Direction> path = new Stack<Direction>();
 		if (!found) {

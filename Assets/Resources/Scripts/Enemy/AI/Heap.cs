@@ -3,10 +3,6 @@ using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
 
-// change < and > operators in 
-// - bubbleUp first while loop (line 53), 
-// - three return values in compareBoth (line 126, 128)
-// - getChild comparing temps (line 98)
 public class Heap<T> {
 	
 	private List<T> heap;
@@ -29,13 +25,6 @@ public class Heap<T> {
 		int pos = heap.Count - 1;
 		int parentPos = parent(pos);
 		bubbleUp(pos, parentPos, x);
-		/*
-		UnityEngine.Debug.Log("Start printing");
-		foreach (Object i in heap) {
-			UnityEngine.Debug.Log(((AStarNode)i).getFScore());
-		}
-		UnityEngine.Debug.Log("End printing");
-		*/
 	}
 	
 	public bool remove(T item) {
@@ -148,7 +137,7 @@ public class Heap<T> {
 		return heap[0];
 	}
 	
-	private int parent(int position){
+	private int parent(int position) {
 		int parentPos = -1;
 		if (heap.Count!= 0 && position != 0) {
 			parentPos = (position-1)/2;
