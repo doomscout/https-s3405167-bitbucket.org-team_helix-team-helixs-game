@@ -14,6 +14,7 @@ public class TileMap : MonoBehaviour {
 	public float tileSize = 1.0f;
 	public int percentAreTile =90;
 	public int[,] map_data;
+	public int[,] store_data;
 	public DataTileMap map;
 
 	//Declare variable of Texture and texture resolution
@@ -83,10 +84,11 @@ public class TileMap : MonoBehaviour {
 		
 		Debug.Log ("Done Texture!");
 
-	
+		store_data = new int[size_x, size_z];
 		for(int y = 0; y < size_z; y++) {
 			for(int x = 0; x < size_x; x++) {
-				//Debug.Log("col = " + (x+1) +" row = "+ (y+1) + " ColorNumber "+ map.Map_data[x, y]); 
+				store_data[x, y] = map.Map_data[x,y];
+				Debug.Log("col = " + (x+1) +" row = "+ (y+1) + " ColorNumber "+ store_data[x, y]); 
 			}
 		}
 
