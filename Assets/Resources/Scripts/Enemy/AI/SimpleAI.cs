@@ -48,52 +48,8 @@ public class SimpleAI {
         simple_ai = new Statemachine(state_halt);
     }
 
-    float distFromPlayer(float x, float y) {
-        return Mathf.Sqrt((GameTools.Player.Map_position_x - x) * (GameTools.Player.Map_position_x - x) + 
-                          (GameTools.Player.Map_position_y - y) * (GameTools.Player.Map_position_y - y));
-    }
-
-	void findNeighbours(AStarNode a) {
-		int x = a.CoOrds[0], y = a.CoOrds[1];
-		if (x - 1 < 0 || y - 1 < 0 ||
-		    x + 1 > GameTools.Map) {
-
-		}
-	}
-
-	void findPath() {
-		Heap<AStarNode> openSet = new Heap<AStarNode>(new AStarComparer());
-		HashSet<AStarNode> closedSet = new HashSet<AStarNode>();
-		bool found = false;
-
-		AStarNode currentPosition = new AStarNode(unit.Map_position_x, unit.Map_position_y);
-
-		openSet.insert(currentPosition);
-
-		while (!found) {
-			currentPosition = openSet.extract();
-		}
-
-	}
-
     void actionAttackRunning() {
-        //Path finding
-		/*
-        if (unit.Map_position_x + 1 > GameTools.Map.size_x) {
-            //don't explore position_x + 1
-        }
-        if (unit.Map_position_x - 1 < 0) {
-            //don't explore position_x -1
-        }
-        if (unit.Map_position_y + 1 > GameTools.Map.size_z) {
-            //don't explore position_y + 1
-        }
-        if (unit.Map_position_y - 1 < 0) {
-            //don't explore position_y - 1
-        }
-        */
-        //TODO: PRIORITY QUEUE to explore the next one in the open set
-        //Set the next move from Up, Down, Left Right (state_animation will take care of this)
+		//unit.determineNextMove();
     }
 
     void actionHaltRunning() {

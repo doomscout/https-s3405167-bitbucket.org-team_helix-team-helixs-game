@@ -24,7 +24,14 @@ public class TileMap : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		BuildMesh();
-		
+		GameTools.Map = this;/*
+		for (int i = 0; i < size_x; i++) {
+			for (int j = 0; j < size_z; j++) {
+				Debug.Log (map.Map_data[i,j]);
+			}
+		}
+		Debug.LogError("Done");
+		*/
 	}
 
 
@@ -79,7 +86,7 @@ public class TileMap : MonoBehaviour {
 	
 		for(int y = 0; y < size_z; y++) {
 			for(int x = 0; x < size_x; x++) {
-				Debug.Log("col = " + (x+1) +" row = "+ (y+1) + " ColorNumber "+ map.Map_data[x, y]); 
+				//Debug.Log("col = " + (x+1) +" row = "+ (y+1) + " ColorNumber "+ map.Map_data[x, y]); 
 			}
 		}
 

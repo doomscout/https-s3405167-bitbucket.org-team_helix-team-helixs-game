@@ -37,8 +37,10 @@ public class Colour : MonoBehaviour {
 			colour = "yellow";
 		else if(set[5]==5)
 			colour = "purple";
+		/*
 		else if(set[6]==6)
 			colour = "pink";
+			*/
 	}
 
 	public string getColour(){

@@ -1,57 +1,189 @@
+using System;
+using System.Diagnostics;
 using System.Collections;
+using System.Collections.Generic;
 
-//TODO: Change array into a list
+// change < and > operators in 
+// - bubbleUp first while loop (line 53), 
+// - three return values in compareBoth (line 126, 128)
+// - getChild comparing temps (line 98)
 public class Heap<T> {
 	
-	T[] heap;
-	IComparer comparer;
+	private List<T> heap;
+	private Dictionary<T, int> dictionary;
+	private IComparer comparer;
 	
-	public Heap(IComparer comparer) {
-		heap = new T[0];
+	public Heap(){
+		heap = new List<T>();
+		comparer = Comparer.Default;
+		dictionary = new Dictionary<T, int>();
+	}
+	
+	public Heap(IComparer comparer) : this() {
 		this.comparer = comparer;
 	}
 	
-	public int parent(int position){
+	public void insert(T x){
+		heap.Add(x);
+		dictionary.Add (x, heap.Count - 1);
+		int pos = heap.Count - 1;
+		int parentPos = parent(pos);
+		bubbleUp(pos, parentPos, x);
+		/*
+		UnityEngine.Debug.Log("Start printing");
+		foreach (Object i in heap) {
+			UnityEngine.Debug.Log(((AStarNode)i).getFScore());
+		}
+		UnityEngine.Debug.Log("End printing");
+		*/
+	}
+	
+	public bool remove(T item) {
+		if (!dictionary.ContainsKey(item)) {
+			//doesn't exist, can't remove
+			return false;
+		}
+		int pos = dictionary[item];
+		int rightLeafPos = rightMostLeaf(pos);
+		dictionary[heap[rightLeafPos]] = pos;
+		bool ans = dictionary.Remove(item);
+		heap[pos] = heap[rightLeafPos];
+		heap.RemoveAt(rightLeafPos);
+
+		if (!ans || (ans && dictionary.ContainsKey(item))) {
+			UnityEngine.Debug.Log ("(cannot)remove and does it have the key still in the dictionary?" + dictionary.ContainsKey(item));
+		}
+		//UnityEngine.Debug.Log("Removed");
+
+		if (rightLeafPos == pos) {
+			return true;
+		}
+		int[] childrenPos = children(pos);
+		int parentPos = parent(pos);
+		if (childrenPos[0] < 0) {
+			//have no children, check parents
+			while (comparer.Compare(heap[parentPos], heap[pos]) > 0) {
+				swapValuesInHeap(parentPos, pos);
+				pos = parentPos;
+				parentPos = parent(pos);
+			}
+		} else {
+			//have children, need to check if bubble up or down
+			if (compareBoth(heap[pos], childrenPos)) {
+				//children is smaller, so bubble down
+				while (compareBoth(heap[pos], childrenPos)) {
+					int child = getChild(childrenPos);
+					swapValuesInHeap(child, pos);
+					pos = child;
+					childrenPos = children(pos);
+					if (childrenPos[0] < 0) {
+						break;
+					}
+				}
+			} else if (comparer.Compare(heap[parentPos], heap[pos]) > 0) {
+				//current position is smaller then parents, need to move up
+				while (comparer.Compare(heap[parentPos], heap[pos]) > 0) {
+					swapValuesInHeap(parentPos, pos);
+					pos = parentPos;
+					parentPos = parent(pos);
+				}
+			}
+		}
+		return true;
+	}
+	
+	public T extract(){
+		if (heap.Count == 1) {
+			T e = heap[0];
+			heap.RemoveAt(0);
+
+			if (!dictionary.Remove(e)) {
+				UnityEngine.Debug.LogError("Unable to remove1");
+			}
+			return e;
+		}
+		T extracted = heap[0];
+		dictionary[heap[heap.Count - 1]] = 0;
+		dictionary.Remove(extracted);		
+		heap[0] = heap[heap.Count - 1];
+		heap.RemoveAt(heap.Count - 1);
+
+
+		int parent = 0;
+		int[] childrenPos = children(parent);
+		if (childrenPos[0] < 0) {
+			//do nothing
+		} else {
+			while (compareBoth(heap[parent], childrenPos)) {
+				int child = getChild(childrenPos);
+				swapValuesInHeap(child, parent);
+				parent = child;
+				childrenPos = children(parent);
+				if (childrenPos[0] < 0) {
+					break;
+				}
+			}
+		}
+		//UnityEngine.Debug.Log ("Extracted");
+		return extracted;
+	}
+
+	public bool contains(T item) {
+		return dictionary.ContainsKey(item);
+	}
+
+	//Hash codes may be the same, but the item is different
+	public T getItem(T item) {
+		return heap[dictionary[item]];
+	}
+
+	public int length(){
+		return heap.Count;
+	}
+	
+	public T peek(){
+		if (heap.Count < 1) {
+			return default(T);
+		}
+		return heap[0];
+	}
+	
+	private int parent(int position){
 		int parentPos = -1;
-		if (heap.Length != 0 && position != 0) {
+		if (heap.Count!= 0 && position != 0) {
 			parentPos = (position-1)/2;
 		}
 		return parentPos;
 	}
 	
-	public int[] children(int position){
+	private int[] children(int position){
 		position++;
 		int[] childrenPos = new int[2];
 		childrenPos[0] = -1;
 		childrenPos[1] = -1;
-		if (position * 2  < heap.Length) {
+		if (position * 2  <= heap.Count) {
 			childrenPos[0] = position * 2 - 1;
 		}
-		if (position * 2 + 1 < heap.Length) {
+		if (position * 2 + 1 <= heap.Count) {
 			childrenPos[1] = position * 2;
 		}
 		return childrenPos;
 	}
 	
-	public void insert(T x){
-		T[] temp = new T[heap.Length + 1];
-		for (int i = 0 ; i < heap.Length; i++) {
-			temp[i] = heap[i];
-		}
-		temp[heap.Length] = x;
-		int pos = heap.Length;
-		int parentPos = parent(pos);
-		bubbleUp(temp, pos, parentPos, x); 
-		heap = temp;
+	private bool hasChildren(int position) {
+		return (position + 1) * 2 <= heap.Count;
 	}
 	
-	public void bubbleUp(T[] temp, int pos, int parentPos, T x){
+	private int rightMostLeaf(int position) {
+		return heap.Count - 1;
+	}
+	
+	private void bubbleUp(int pos, int parentPos, T x){
 		if (parentPos < 0) {
 			return;
 		}
-		
-		while (comparer.Compare(temp[parentPos], x) > 0) {
-			temp = swap(temp, pos, parentPos);
+		while (comparer.Compare(heap[parentPos], x) > 0) {
+			swapValuesInHeap(pos, parentPos);
 			pos = parentPos;
 			parentPos = parent(pos);
 			if (parentPos < 0) {
@@ -60,109 +192,31 @@ public class Heap<T> {
 		}
 	}
 	
-	public T extract(){
-		if (heap.Length == 1) {
-			T e = heap[0];
-			heap = new T[0];
-			return e;
-		}
-		T extracted = heap[0];
-		T[] temp = new T[heap.Length - 1];
-		for (int i = 1; i < heap.Length - 1; i++) {
-			temp[i] = heap[i];
-		}
-		temp[0] = heap[heap.Length - 1];
-		int parent = 0;
-		int[] childrenPos = children(parent);
-		if (childrenPos[0] < 0) {
-			//do nothing
-		} else {
-			while (compareBoth(temp, temp[parent], childrenPos)) {
-				int child = getChild(temp, childrenPos);
-				swap(temp, child, parent);
-				parent = child;
-				childrenPos = children(parent);
-				if (childrenPos[0] < 0) {
-					break;
-				}
-			}
-		}
-		heap = temp;
-		return extracted;
-	}
-	
-	public int getChild(T[] temp, int[] children){
+	private int getChild(int[] children){
 		if (children[1] < 0) {
 			return children[0];
 		}
 		//swapped
-		if (comparer.Compare(temp[children[1]], temp[children[0]]) > 0){
+		if (comparer.Compare(heap[children[1]], heap[children[0]]) > 0){
 			return children[0];
 		} else {
 			return children[1];
 		}
 	}
 	
-	public void printAll(){
-		//System.out.println("Printing...");
-		for (int i = 0; i < heap.Length; i++) {
-			//System.out.println(heap[i].order);
-			//System.out.println(heap[i].item);
-		}
-	}
-	
-	public int length(){
-		return heap.Length;
-	}
-	
-	public T peek(){
-		if (heap.Length < 1) {
-			return default(T);
-		}
-		return heap[0];
-	}
-	
-	public bool compareBoth(T[] temp, T parentVal, int[] children) {
+	private bool compareBoth(T parentVal, int[] children) {
 		if (children[1] < 0) {
-			return comparer.Compare(parentVal, temp[children[0]]) > 0;
+			return comparer.Compare(parentVal, heap[children[0]]) > 0;
 		}
-		return (comparer.Compare(parentVal, temp[children[0]]) > 0) || (comparer.Compare(parentVal, temp[children[1]]) > 0); 
+		return (comparer.Compare(parentVal, heap[children[0]]) > 0) || (comparer.Compare(parentVal, heap[children[1]]) > 0); 
 	}
 	
-	public T[] swap (T[] array, int posX, int posY) {
-		T temp = array[posX];
-		array[posX] = array[posY];
-		array[posY] = temp;
-		return array;
+	private void swapValuesInHeap (int posX, int posY) {
+		T temp = heap[posX];
+		heap[posX] = heap[posY];
+		heap[posY] = temp;
+		dictionary[heap[posX]] = posX;
+		dictionary[heap[posY]] = posY;
 	}
-	/*
-	public boolean checkMin(){
-		if (heap.Length == 0) {
-			return true;
-		}
-		int x = heap[0];
-		boolean allGood = true;
-		for (int i = 0; i < heap.Length; i++) {
-			if (x > heap[i]) {
-				allGood = false;
-			}
-		}
-		return allGood;
-	}
-	
-	public boolean checkMax(){
-		if (heap.Length == 0) {
-			return true;
-		}
-		int x = heap[0];
-		boolean allGood = true;
-		for (int i = 0; i < heap.Length; i++) {
-			if (x < heap[i]) {
-				allGood = false;
-			}
-		}
-		return allGood;
-	}
-	*/
 	
 }

@@ -4,46 +4,63 @@ using System.Collections.Generic;
 
 public class AStarNode {
 
-	public float FScore {get;set;}		// G + H score
-	public float GScore {get;set;}		// Travelled so far
-	public float HScore {get;set;}		// Heuristic score
-	public Direction d {get;set;}
-	public int[] CoOrds {get;set;}
-	public AStarNode Next{get;set;}
+	private float GScore;					//Travelled so far
+	private float HScore;					//Heuristic
+	public Direction d {get; private set;}
+	public int[] CoOrds {get; private set;}
+	public AStarNode Prev{get;set;}
 
-	public AStarNode(int x, int y) {
-		FScore = 0.0f;
-		GScore = 0.0f;
-		HScore = 0.0f;
-		d = Direction.None;
+	public AStarNode (int x, int y) {
 		CoOrds = new int[2];
 		CoOrds[0] = x;
 		CoOrds[1] = y;
-		Next = null;
+		GScore = 0.0f;
+		HScore = 0.0f;
+		d = Direction.None;
 	}
 
-	public AStarNode(int[,] CoOrds) : this(){
-		this.CoOrds = CoOrds;
+	public AStarNode (int x, int y, float gscore, float hscore, Direction d) : this (x, y) {
+		this.GScore = gscore;
+		this.HScore = hscore;
+
+		this.d = d;
+		Prev = null;
 	}
-	
+
+	public float getFScore() {
+		return GScore + HScore;
+	}
+	/*
 	public static bool operator <(AStarNode a, AStarNode b) {
-		return a.FScore < b.FScore;
+		if (a == null || b == null) {
+			return false;
+		}
+		return a.getFScore() < b.getFScore();
 	}
 	
 	public static bool operator >(AStarNode a, AStarNode b) {
-		return a.FScore > b.FScore;
+		if (a == null || b == null) {
+			return false;
+		}
+		return a.getFScore() > b.getFScore();
 	}
 	
 	public static bool operator ==(AStarNode a, AStarNode b) {
-		return a.FScore == b.FScore;
+		if (a is null || b is null) {
+			return false;
+		}
+		return a.getFScore() == b.getFScore();
 	}
 	
 	public static bool operator !=(AStarNode a, AStarNode b) {
-		return a.FScore != b.FScore;
+		if (a == null || b == null) {
+			return false;
+		}
+		return a.getFScore() != b.getFScore();
 	}
-	
+	*/
 	public override string ToString () {
-		return "FScore: " + FScore + "GScore: " + GScore + "HScore: " + HScore + "CoOrds: " + CoOrds[0] + "," + CoOrds[1];
+		return "CoOrds: " + CoOrds[0] + "," + CoOrds[1];
 	}
 	
 	public override bool Equals (object obj) {
@@ -55,6 +72,7 @@ public class AStarNode {
 	}
 
 	public override int GetHashCode () {
+		//return ((CoOrds[0]<<8) | CoOrds[1]).GetHashCode();
 		return this.ToString().GetHashCode();
 	}
 
