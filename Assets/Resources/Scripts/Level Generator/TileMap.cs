@@ -77,9 +77,10 @@ public class TileMap : MonoBehaviour {
 		
 		Debug.Log ("Done Texture!");
 
-		for(int y=0; y < size_x; y++) {
-			for(int x=0; x < size_z; x++) {
-				Debug.Log("x = " + y +" z = "+ x + "ColorNumber "+ map.Map_data[x, y]); 
+	
+		for(int y = 0; y < size_z; y++) {
+			for(int x = 0; x < size_x; x++) {
+				Debug.Log("col = " + (x+1) +" row = "+ (y+1) + " ColorNumber "+ map.Map_data[x, y]); 
 			}
 		}
 
