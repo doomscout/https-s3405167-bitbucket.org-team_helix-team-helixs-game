@@ -13,8 +13,8 @@ public class DataTileMap {
 	int Size_y{get;set;}
 	//Percent for fill EmptyTile
 	int PercentAreEmpty{get;set;}
-	int[,] Map_data;
-
+	public int[,] Map_data;
+	//public int[,] Store_data;
 	
 	/*
 	 * 0 = null or white
@@ -36,6 +36,7 @@ public class DataTileMap {
 		RandomFillMap();
 		MakeTile();
 		GeneratorColorTile();
+//		PrintDebug();
 	}
 
 	public int GetTileAt(int x, int y) {
@@ -52,6 +53,7 @@ public class DataTileMap {
 				int randomNumber = Random.Range(1,7);
 				if(Map_data[column, row] == 1)
 					Map_data[column, row] = randomNumber;
+				//Debug.Log ("column = " + (column+1) + " row =  "+ (row+1) + " ColorNumber  "+ Map_data[column, row]);
 			}
 		}
 	}

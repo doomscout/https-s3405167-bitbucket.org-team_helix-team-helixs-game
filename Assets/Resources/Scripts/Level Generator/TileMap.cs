@@ -14,7 +14,7 @@ public class TileMap : MonoBehaviour {
 	public float tileSize = 1.0f;
 	public int percentAreTile =90;
 	public int[,] map_data;
-
+	public DataTileMap map;
 
 	//Declare variable of Texture and texture resolution
 	public Texture2D terrainTiles;
@@ -24,11 +24,14 @@ public class TileMap : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		BuildMesh();
-
+		
 	}
 
 
-	//Function to determind texture file to idenfity tile.
+	
+
+	//import and read image file and chop down each color for each tile.
+
 	Color[][] ChopUpTiles() {
 		int numTilesPerRow = terrainTiles.width / tileResolution;
 		int numRows = terrainTiles.height / tileResolution;
@@ -43,10 +46,12 @@ public class TileMap : MonoBehaviour {
 		
 		return tiles;
 	}
-	
+
+	//import and read image file and chop down each color for each tile.
+
 	void BuildTexture() {
 		map_data = new int[size_x, size_z];
-		DataTileMap map = new DataTileMap(size_x, size_z, map_data, percentAreTile);
+		map = new DataTileMap(size_x, size_z, map_data, percentAreTile);
 		
 		int texWidth = size_x * tileResolution;
 		int texHeight = size_z * tileResolution;
@@ -70,9 +75,20 @@ public class TileMap : MonoBehaviour {
 		mesh_renderer.sharedMaterials[0].mainTexture = texture;
 		
 		Debug.Log ("Done Texture!");
+
+	
+		for(int y = 0; y < size_z; y++) {
+			for(int x = 0; x < size_x; x++) {
+				Debug.Log("col = " + (x+1) +" row = "+ (y+1) + " ColorNumber "+ map.Map_data[x, y]); 
+			}
+		}
+
+
 	}
 	
 	public void BuildMesh() {
+
+
 		int numTiles = size_x * size_z;
 		int numTris = numTiles * 2;
 		
@@ -127,8 +143,9 @@ public class TileMap : MonoBehaviour {
 		mesh_filter.mesh = mesh;
 		mesh_collider.sharedMesh = mesh;
 		Debug.Log ("Done Mesh!");
-		
+
 		BuildTexture();
+		//PrintDebug();
 	}
 
 	

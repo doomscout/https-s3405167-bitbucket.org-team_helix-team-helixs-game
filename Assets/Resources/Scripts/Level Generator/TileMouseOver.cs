@@ -6,11 +6,12 @@ using System.Collections;
 
 	public class TileMouseOver : MonoBehaviour 
 	{
+
 	public Color highlightColor;
 	Color normalColor;
 
 	TileMap _tileMap;
-
+	//int colorNumber;
 	Vector3 currentTileCoord;
 
 	public Transform selectionCube;
@@ -30,8 +31,8 @@ using System.Collections;
 
 			int x = Mathf.FloorToInt ( hitInfo.point.x / _tileMap.tileSize);
 			int z = Mathf.FloorToInt ( hitInfo.point.z / _tileMap.tileSize);
-
-			Debug.Log ("Tile :" + x + ", " + z);
+			//colorNumber = 0;
+			//Debug.Log ("Tile :" + x + ", " + z + "Color: " + colorNumber);
 
 			currentTileCoord.x = x;
 			currentTileCoord.z = z;

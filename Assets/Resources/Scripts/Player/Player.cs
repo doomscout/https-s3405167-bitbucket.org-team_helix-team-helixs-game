@@ -24,12 +24,13 @@ public class Player {
 		stats.setHealing(10);
 		stats.setDamage(10);
 		stats.setHealth(10);
+		colour.setColour();
 		MoveSpeed = 10.0f;
 
         Map_position_x = 0;
         Map_position_y = 0;
 
-		col = colour.setColour();
+		col = colour.getColour();
 		Debug.Log ("Colour = " + col);
 
 		IsDead = false;
