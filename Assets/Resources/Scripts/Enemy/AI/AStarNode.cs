@@ -30,35 +30,8 @@ public class AStarNode {
 	public float getFScore() {
 		return GScore + HScore;
 	}
-	/*
-	public static bool operator <(AStarNode a, AStarNode b) {
-		if (a == null || b == null) {
-			return false;
-		}
-		return a.getFScore() < b.getFScore();
-	}
-	
-	public static bool operator >(AStarNode a, AStarNode b) {
-		if (a == null || b == null) {
-			return false;
-		}
-		return a.getFScore() > b.getFScore();
-	}
-	
-	public static bool operator ==(AStarNode a, AStarNode b) {
-		if (a is null || b is null) {
-			return false;
-		}
-		return a.getFScore() == b.getFScore();
-	}
-	
-	public static bool operator !=(AStarNode a, AStarNode b) {
-		if (a == null || b == null) {
-			return false;
-		}
-		return a.getFScore() != b.getFScore();
-	}
-	*/
+
+
 	public override string ToString () {
 		return "CoOrds: " + CoOrds[0] + "," + CoOrds[1];
 	}

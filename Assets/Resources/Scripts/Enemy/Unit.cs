@@ -48,7 +48,23 @@ public class Unit {
 			} else {
 				Debug.Log ("It works i think");
 				//foreach (Direction a in stackOfDirections) {
-					list_directions.Add (d);
+				GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = false;
+				list_directions.Add (d);
+				switch (d) {
+				case Direction.Up:
+					Map_position_y++;
+					break;
+				case Direction.Down:
+					Map_position_y--;
+					break;
+				case Direction.Left: 
+					Map_position_x--;
+					break;
+				case Direction.Right:
+					Map_position_x++;
+					break;
+				}
+				GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = true;
 				//}
 
 			}
@@ -61,9 +77,6 @@ public class Unit {
 	float distFromPlayer(float x, float y) {
 		float ans = Mathf.Sqrt((GameTools.Player.Map_position_x - x) * (GameTools.Player.Map_position_x - x) + 
 		                       (GameTools.Player.Map_position_y - y) * (GameTools.Player.Map_position_y - y));
-		if (ans < 0) {
-			Debug.LogError("Negative distance");
-		}
 		return ans;
 	}
 
@@ -206,20 +219,6 @@ public class Unit {
 			//correct overshooting
             Vector3 temp = unit.transform.position;
             unit.transform.position = new Vector3(Mathf.Round(temp.x), temp.y, Mathf.Round(temp.z));
-			switch (current_target) {
-			case Direction.Up:
-				Map_position_y++;
-				break;
-			case Direction.Down:
-				Map_position_y--;
-				break;
-			case Direction.Left: 
-				Map_position_x--;
-				break;
-			case Direction.Right:
-				Map_position_x++;
-				break;
-			}
 
 			current_target = Direction.None;
 		}

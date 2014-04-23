@@ -42,7 +42,6 @@ public class Heap<T> {
 		if (!ans || (ans && dictionary.ContainsKey(item))) {
 			UnityEngine.Debug.Log ("(cannot)remove and does it have the key still in the dictionary?" + dictionary.ContainsKey(item));
 		}
-		//UnityEngine.Debug.Log("Removed");
 
 		if (rightLeafPos == pos) {
 			return true;
@@ -113,7 +112,6 @@ public class Heap<T> {
 				}
 			}
 		}
-		//UnityEngine.Debug.Log ("Extracted");
 		return extracted;
 	}
 

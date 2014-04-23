@@ -139,11 +139,4 @@ public class Player {
 		Debug.Log("Direction = " + dir);
 		movement.tileJump(dir);
 	}
-
-	//current movement jumps the tile, but returns it because of the Vector3.zero in direction();
-	/* No longer using monobehaviour
-	void Update(){
-		direction();
-	}
-	*/
 }
