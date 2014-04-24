@@ -11,6 +11,7 @@ public class SimpleAI {
 
     public SimpleAI(Unit enemy) {
         unit = enemy;
+		initSM ();
     }
 
     public void tick() {
@@ -45,15 +46,19 @@ public class SimpleAI {
         state_attack.addTransition(attack2die);
         state_attack.addTransition(attack2halt);
 
-        simple_ai = new Statemachine(state_halt);
+		state_halt.addAction(new Action(actionHaltRunning));
+		state_attack.addAction(new Action(actionAttackRunning));
+		state_die.addAction(new Action(actionDieRunning));
+
+	    simple_ai = new Statemachine(state_halt);
     }
 
     void actionAttackRunning() {
-		//unit.determineNextMove();
+		unit.determineNextMove();
     }
 
     void actionHaltRunning() {
-        //return?
+        //do nothing? Maybe move closer
     }
 
     void actionDieRunning() {
@@ -63,15 +68,17 @@ public class SimpleAI {
     }
 
     bool transitionInRange() {
-        return true;
+		return AStar
+				.fromPosition(unit.Map_position_x, unit.Map_position_y)
+				.distanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) < 5.0f;
     }
 
     bool transitionOutRange() {
-        return true;
+        return false;
     }
 
     bool transitionDie() {
-        return true;
+        return false;
     }
 
 }

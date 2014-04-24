@@ -20,7 +20,6 @@ public class Player {
 
 	public Player() {
 		MoveSpeed = 10.0f;
-
         Map_position_x = 0;
         Map_position_y = 0;
 		stats = new Stats();
@@ -30,6 +29,8 @@ public class Player {
 
 		IsDead = false;
 		player_obect = Object.Instantiate(Resources.Load("Prefabs/PlayerPrefab", typeof(GameObject))) as GameObject;
+
+		GameTools.Player = this;
 	}
 
 	public bool listenInput() {

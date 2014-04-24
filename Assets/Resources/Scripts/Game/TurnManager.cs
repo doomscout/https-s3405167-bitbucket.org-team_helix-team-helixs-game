@@ -84,12 +84,9 @@ public class TurnManager {
     //Actions
 
 	void actionStartExit() {
-		int i;
-		//load things
 		player = new Player();
-		GameTools.Player = player;						//and this
 		//populate map with enemies
-		for (i = 0; i < 10; i++) {
+		for (int i = 0; i < 10; i++) {
 			list_live_units.Add(new Unit());
 		}
 	}
@@ -97,7 +94,6 @@ public class TurnManager {
     void actionPlayerRunning() {
         //listen to input handlers and verify
 		validInput = player.listenInput();
-        //Debug.Log("actionPlayerRunning");
     }
 
     void actionPlayerExit() {
@@ -105,7 +101,6 @@ public class TurnManager {
         turn_enemy = true;
 		player.FinishedAnimation = false;
         validInput = false;
-        //Debug.Log("actionPlayerExit");
     }
 
 	void actionAnimationEntry() {
@@ -150,26 +145,24 @@ public class TurnManager {
 				IsAnimationDone = false;
 			}
 		}
-        //Debug.Log("actionAnimationRunning");
     }
 
 	void actionAnimationExit() {
+		//Clear the dead units so we don't animate them again
 		list_dead_units = new List<Unit>();
 	}
 
     void actionEnemyEntry() {
         //Determine enemy actions
 		foreach (Unit unit in list_live_units) {
-			unit.determineNextMove();
+			unit.logic_tick();
 			unit.FinishedAnimation = false;
 		}
-        Debug.Log("actionEnemyEntry");
     }
 
     void actionEnemyExit() {
         turn_enemy = false;
         turn_player = true;
-        Debug.Log("actionEnemyExit");
     }
 
     //Conditions
