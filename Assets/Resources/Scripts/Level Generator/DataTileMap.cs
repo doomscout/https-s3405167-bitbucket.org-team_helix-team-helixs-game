@@ -13,7 +13,8 @@ public class DataTileMap {
 	int Size_y{get;set;}
 	//Percent for fill EmptyTile
 	int PercentAreEmpty{get;set;}
-	public int[,] Map_data;
+	public int[,] Map_data_passable;
+	public Colour[,] Map_data;
 	//public int[,] Store_data;
 	
 	/*
@@ -26,10 +27,11 @@ public class DataTileMap {
 	 * 6 = Purple
 	 */
 	
-	public DataTileMap(int size_x, int size_y, int[,] map, int percentAreEmpty) {
+	public DataTileMap(int size_x, int size_y, int percentAreEmpty) {
 		this.Size_x = size_x;
 		this.Size_y = size_y;
-		this.Map_data = map;
+		Map_data_passable = new int[size_x,size_y];
+		Map_data = new Colour[size_x,size_y];
 		this.PercentAreEmpty = percentAreEmpty;
 		//GetTileAt(size_x, size_y);
 		//MakeTile();
@@ -40,7 +42,7 @@ public class DataTileMap {
 	}
 
 	public int GetTileAt(int x, int y) {
-			return Map_data[x,y];
+			return (int)Map_data[x,y];
 	}
 			
 
@@ -50,9 +52,10 @@ public class DataTileMap {
 		{
 			for(column = 0; column <= Size_y-1; column++)
 			{
-				int randomNumber = Random.Range(1,7);
-				if(Map_data[column, row] == 1)
-					Map_data[column, row] = randomNumber;
+				//The range from Red, to the last colour in the enum
+				int randomNumber = Random.Range(1, System.Enum.GetNames(typeof(Colour)).Length - 1);
+				if(Map_data_passable[column, row] == 1)
+					Map_data[column, row] = (Colour)randomNumber;
 				//Debug.Log ("column = " + (column+1) + " row =  "+ (row+1) + " ColorNumber  "+ Map_data[column, row]);
 			}
 		}
@@ -65,7 +68,7 @@ public class DataTileMap {
 		{
 			for(column = 0; column <= Size_y-1; column++)
 			{
-				Map_data[column, row] = PlaceEmptyLogic(column, row);
+				Map_data_passable[column, row] = PlaceEmptyLogic(column, row);
 			}
 		}
 		
@@ -76,7 +79,7 @@ public class DataTileMap {
 	{
 		int numEdges = GetAdjacenEmpty(x, y, 1, 1);
 		
-		if(Map_data[x,y] == 0)
+		if(Map_data_passable[x,y] == 0)
 		{
 			if(numEdges >= 4 )
 			{
@@ -134,12 +137,12 @@ public class DataTileMap {
 			return true;
 		}
 		
-		if( Map_data[x,y] == 0)
+		if( Map_data_passable[x,y] == 0)
 		{
 			return true;
 		}
 		
-		if( Map_data[x,y] == 1 )
+		if( Map_data_passable[x,y] == 1 )
 		{
 			return false;
 		}
@@ -163,7 +166,7 @@ public class DataTileMap {
 	public void RandomFillMap()
 	{
 
-		Map_data = new int[Size_x, Size_y];
+		Map_data_passable = new int[Size_x, Size_y];
 		int mapMiddle = 0;
 		for(int column = 0, row = 0; row < Size_y; row++)
 		{
@@ -171,19 +174,19 @@ public class DataTileMap {
 			{
 				if(column == 0)
 				{
-					Map_data[column, row] = 0;
+					Map_data_passable[column, row] = 0;
 				}
 				else if (row == 0)
 				{
-					Map_data[column, row] = 0;
+					Map_data_passable[column, row] = 0;
 				}
 				else if (column == Size_x - 1)
 				{
-					Map_data[column, row] = 0;
+					Map_data_passable[column, row] = 0;
 				}
 				else if (row == Size_y -1)
 				{
-					Map_data[column, row] = 0;
+					Map_data_passable[column, row] = 0;
 				}
 				
 				else
@@ -192,11 +195,11 @@ public class DataTileMap {
 					
 					if(row == mapMiddle)
 					{
-						Map_data[column, row] = 1;
+						Map_data_passable[column, row] = 1;
 					}
 					else
 					{
-						Map_data[column, row] = RandomPercent(PercentAreEmpty);
+						Map_data_passable[column, row] = RandomPercent(PercentAreEmpty);
 					}
 				}
 			}

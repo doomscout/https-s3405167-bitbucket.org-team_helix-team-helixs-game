@@ -52,7 +52,11 @@ public class Unit {
 			return;
 		}
 		if (current_target == Direction.None) {
-			if (list_directions.Count > 0 && list_directions[0] != Direction.None) {
+			if (list_directions.Count > 0) {
+				if (list_directions[0] == Direction.None) {
+					determineNextMove();
+					return;
+				}
 				current_target = list_directions[0];
 				list_directions.RemoveAt(0);
 				remainingDistance = 1.0f;
@@ -163,23 +167,6 @@ public class Unit {
 		}
 	}
 
-	/* Debug methods */
-	public void printFreeSpots() {
-		int asd = 0;
-		for (int i = 0; i < GameTools.Map.size_x; i++) {
-			for (int j = 0; j < GameTools.Map.size_z; j++) {
-				if (GameTools.Map.map_unit_occupy[i,j]) {
-					asd++;
-				}
-			}
-		}
-		Debug.Log ("Bool count" + asd);
-	}
-
-	//if (x - 1 >= 0 && GameTools.Map.map_unit_occupy[x - 1, y] != true /*GameTools.Map.map.Map_data[x-1, y] != 0*/) {
-	//if (x + 1 < GameTools.Map.size_x && GameTools.Map.map_unit_occupy[x + 1, y] != true /*x + 1 < GameTools.Map.size_x && GameTools.Map.map.Map_data[x+1, y] != 0*/) {
-	//if (y - 1 >= 0 && GameTools.Map.map_unit_occupy[x, y - 1] != true /*y - 1 >= 0 && GameTools.Map.map.Map_data[x, y-1] != 0*/) {
-	//if (y + 1 < GameTools.Map.size_z && GameTools.Map.map_unit_occupy[x, y + 1] != true/*y + 1 < GameTools.Map.size_z && GameTools.Map.map.Map_data[x, y+1] != 0*/) {
 
 
 }

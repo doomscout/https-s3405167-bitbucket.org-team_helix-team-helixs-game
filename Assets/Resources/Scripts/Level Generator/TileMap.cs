@@ -13,15 +13,16 @@ public class TileMap : MonoBehaviour {
 	public int size_z = 50;
 	public float tileSize = 1.0f;
 	public int percentAreTile =90;
-	public int[,] map_data;
-	public int[,] store_data;
-	public DataTileMap map;
+	public Colour[,] store_data;
+
 
 	public bool[,] map_unit_occupy;
 
 	//Declare variable of Texture and texture resolution
 	public Texture2D terrainTiles;
 	public int tileResolution;
+
+	private DataTileMap map;
 
 
 	// Use this for initialization
@@ -36,6 +37,8 @@ public class TileMap : MonoBehaviour {
 		}
 		Debug.LogError("Done");
 		*/
+		this.transform.Translate(0, 0, size_z);
+		this.transform.Translate(-0.5f, 0f, -0.5f);
 	}
 
 
@@ -61,20 +64,19 @@ public class TileMap : MonoBehaviour {
 	//import and read image file and chop down each color for each tile.
 
 	void BuildTexture() {
-		map_data = new int[size_x, size_z];
-		map = new DataTileMap(size_x, size_z, map_data, percentAreTile);
+		map = new DataTileMap(size_x, size_z, percentAreTile);
 		
 		int texWidth = size_x * tileResolution;
 		int texHeight = size_z * tileResolution;
 		Texture2D texture = new Texture2D(texWidth, texHeight);
 		
 		Color[][] tiles = ChopUpTiles();
+
 		
 		for(int y=0; y < size_z; y++) {
 			for(int x=0; x < size_x; x++) {
 				Color[] p = tiles[ map.GetTileAt(x,y) ];
 				texture.SetPixels(x*tileResolution, y*tileResolution, tileResolution, tileResolution, p);
-				//map[y,x] = terrainTileoffset/tileResolution;
 			}
 		}
 		
@@ -87,11 +89,11 @@ public class TileMap : MonoBehaviour {
 		
 		Debug.Log ("Done Texture!");
 
-		store_data = new int[size_x, size_z];
+		store_data = new Colour[size_x, size_z];
 		for(int y = 0; y < size_z; y++) {
 			for(int x = 0; x < size_x; x++) {
 				store_data[x, y] = map.Map_data[x,y];
-				Debug.Log("col = " + (x+1) +" row = "+ (y+1) + " ColorNumber "+ store_data[x, y]); 
+				//Debug.Log("col = " + (x+1) +" row = "+ (y+1) + " ColorNumber "+ store_data[x, y]); 
 			}
 		}
 

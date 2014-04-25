@@ -11,7 +11,7 @@ using System.Collections;
 	Color normalColor;
 
 	TileMap _tileMap;
-	//int colorNumber;
+	Colour colorNumber;
 	Vector3 currentTileCoord;
 
 	public Transform selectionCube;
@@ -28,14 +28,14 @@ using System.Collections;
 		{
 
 			//Debug.Log (hitInfo.point - transform.point);
+			int x = Mathf.RoundToInt ( hitInfo.point.x / _tileMap.tileSize);
+			int z = Mathf.RoundToInt ( hitInfo.point.z / _tileMap.tileSize);
+			colorNumber = GameTools.Map.store_data[x, z];
 
-			int x = Mathf.FloorToInt ( hitInfo.point.x / _tileMap.tileSize);
-			int z = Mathf.FloorToInt ( hitInfo.point.z / _tileMap.tileSize);
-			//colorNumber = 0;
-			//Debug.Log ("Tile :" + x + ", " + z + "Color: " + colorNumber);
+			Debug.Log ("Map Position: (" + x + ", " + z + ") Color: " + colorNumber);
 
-			currentTileCoord.x = x;
-			currentTileCoord.z = z;
+			currentTileCoord.x = x - 0.5f;
+			currentTileCoord.z = z - 0.5f;
 
 			selectionCube.transform.position = currentTileCoord;
 
