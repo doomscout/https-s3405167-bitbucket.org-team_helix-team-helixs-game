@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public enum Direction {None, Up, Down, Left, Right};
-
 public class Unit {
 	public bool FinishedAnimation{get;set;}
 	//public bool IsDead{get; private set;}

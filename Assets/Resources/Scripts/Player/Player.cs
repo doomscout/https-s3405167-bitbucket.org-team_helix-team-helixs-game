@@ -25,6 +25,7 @@ public class Player {
 		colour = (Colour)Random.Range(1, 6);
 		Debug.Log ("Player colour: " + colour);
 
+
 		IsDead = false;
 		player_object = Object.Instantiate(Resources.Load("Prefabs/PlayerPrefab", typeof(GameObject))) as GameObject;
 		for (int i = 0; i < GameTools.Map.size_z; i++) {
@@ -37,12 +38,14 @@ public class Player {
 			}
 		}
 		player_object.transform.position = new Vector3(Map_position_x, 0, Map_position_y);
+		player_object.renderer.material.color = ColourManager.toColor(colour);
 
 		GameTools.Player = this;
 	}
 
 	public bool listenInput() {
         bool validInput = false;
+		//Keyboard
         if (Input.GetKey("w")) {
             validInput = true;
             current_target = Direction.Up;
@@ -60,6 +63,13 @@ public class Player {
 			validInput = true;
 		} else {
 			current_target = Direction.None;
+		}
+
+		//Mouse
+		if (Input.GetMouseButtonDown(0)) {
+			if (GameTools.Mouse.IsOnMap) {
+				Debug.Log ("Clicked at (" + GameTools.Mouse.Pos_x + ", " + GameTools.Mouse.Pos_z + ")");
+			}
 		}
         return validInput;
 	}

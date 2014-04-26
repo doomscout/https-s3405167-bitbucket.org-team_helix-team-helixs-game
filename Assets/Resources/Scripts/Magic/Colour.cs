@@ -5,6 +5,25 @@ public enum Colour { None, Red, Blue, Yellow, Green, Purple, Pink};
 
 public static class ColourManager {
 
+	public static Color toColor(Colour c) {
+		switch(c) {
+		case Colour.Red:
+			return Color.red;
+		case Colour.Blue:
+			return Color.blue;
+		case Colour.Yellow:
+			return Color.yellow;
+		case Colour.Green:
+			return Color.green;
+		case Colour.Purple:
+			return Color.magenta;
+		case Colour.Pink:
+			return new Color(255.0f/255.0f, 153.0f/255.0f, 255.0f/255.0f, 1.0f);
+		default:
+			return Color.white;
+		}
+	}
+
 	public static Colour getWeakness(Colour c) {
 		switch(c) {
 		case Colour.Red:
