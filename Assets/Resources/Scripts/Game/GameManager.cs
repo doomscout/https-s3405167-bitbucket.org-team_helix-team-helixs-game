@@ -163,7 +163,7 @@ public class GameManager : MonoBehaviour{
 
 	void actionPlayRunning() {
 		//insert ingame state machine here
-		Debug.Log("actionPlayRunning");
+		//Debug.Log("actionPlayRunning");
         turn_manager.tick();
 	}
 

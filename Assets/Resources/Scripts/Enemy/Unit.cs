@@ -24,12 +24,13 @@ public class Unit {
 	public Unit() {
 		brain = new SimpleAI(this);
 		unit = Object.Instantiate(Resources.Load("Prefabs/EnemyPrefab", typeof(GameObject))) as GameObject;
-		Map_position_x = Random.Range(1, 10);
-		Map_position_y = Random.Range(1, 10);
+		Map_position_x = Random.Range(0, GameTools.Map.size_x);
+		Map_position_y = Random.Range(0, GameTools.Map.size_z);
 
-		while (GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] != false ) {
-			Map_position_x = Random.Range(1, 10);
-			Map_position_y = Random.Range(1, 10);
+		while (GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] == true  || 
+		       GameTools.Map.store_data[Map_position_x, Map_position_y] == Colour.None) {
+			Map_position_x = Random.Range(0, GameTools.Map.size_x);
+			Map_position_y = Random.Range(0, GameTools.Map.size_z);
 		}
 
 		GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = true;
@@ -54,7 +55,7 @@ public class Unit {
 		if (current_target == Direction.None) {
 			if (list_directions.Count > 0) {
 				if (list_directions[0] == Direction.None) {
-					determineNextMove();
+					FinishedAnimation = true;
 					return;
 				}
 				current_target = list_directions[0];
@@ -116,6 +117,7 @@ public class Unit {
 		if (d == Direction.None) {
 			if (stackOfDirections.Count == 0) {
 				//Can't move anywhere, let's not move
+				list_directions.Add(Direction.None);
 				return;
 			}
 			d = stackOfDirections.Pop ();
@@ -149,15 +151,10 @@ public class Unit {
 					list_directions.Remove(d);
 				}
 				//Don't let the enemy move on top of each other
-				foreach (Unit u in GameTools.All_Units) {
-					if (u != this) {
-						if (u.Map_position_x == Map_position_x && u.Map_position_y == Map_position_y) {
-							Map_position_x = old_x;
-							Map_position_y = old_y;
-							list_directions.Remove(d);
-							break;
-						}
-					}
+				if (GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y]) {
+					Map_position_x = old_x;
+					Map_position_y = old_y;
+					list_directions.Remove(d);
 				}
 				//Occupy the new position (it might be the same one thanks to old_x and old_y)
 				GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = true;

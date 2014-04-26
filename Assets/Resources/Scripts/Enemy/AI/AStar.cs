@@ -29,8 +29,8 @@ public class AStar {
 		bool found = false;
 		int debugCount = 0;	
 		
-		AStarNode nodeCurrentPosition = new AStarNode(x, y, 0.0f, distanceFromTarget(destinationX, destinationX), Direction.None);
-		AStarNode nodeDestination = new AStarNode(destinationX, destinationY);
+		AStarNode nodeCurrentPosition = new AStarNode(x, y, 0.0f, manhattanDistanceFromTarget(destinationX, destinationX), Direction.None);
+		AStarNode nodeDestination = new AStarNode(destinationX, destinationY, 0.0f, 0.0f, Direction.None);
 		
 		openSet.insert(nodeCurrentPosition);
 		
@@ -72,7 +72,7 @@ public class AStar {
 		
 		Stack<Direction> path = new Stack<Direction>();
 		if (!found) {
-			//do nothing, return empty stack
+			Debug.Log ("(" + x + ", " + y + ") found nothing");
 		} else {
 			AStarNode pointer = nodeCurrentPosition;
 			int count = 0;
@@ -89,54 +89,65 @@ public class AStar {
 	}
 	
 	//This function is also used in simpleAI
-	public float distanceFromTarget(float target_x, float target_y) {
+	public float euclidianDistanceFromTarget(float target_x, float target_y) {
 		float ans = Mathf.Sqrt((target_x - x) * (target_x - x) + 
 		                       (target_y - y) * (target_y - y));
+		return ans;
+	}
+
+	public float manhattanDistanceFromTarget(float target_x, float target_y) {
+		float ans = Mathf.Max(target_x, target_y);
 		return ans;
 	}
 	
 	private List<AStarNode> findNeighbours(AStarNode a) {
 		List<AStarNode> listOfNeighbours = new List<AStarNode>();
 		float weight = 1.0f;	//default weight
+		float distanceFromPlayer = 0.0f;
 		int node_x = a.CoOrds[0], node_y = a.CoOrds[1];
 		AStarNode newNode;
 		
 		//Logic to find valid neighbours
 		weight = 1.0f;
+		distanceFromPlayer = manhattanDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) / 5.0f;
 		if (node_x >= 0 && node_x + 1 < GameTools.Map.size_x && node_y >= 0 && node_y + 1 < GameTools.Map.size_z ) {
-			if (node_x - 1 >= 0 ) {
+			if (node_x - 1 >= 0 && GameTools.Map.store_data[node_x - 1, node_y] != Colour.None) {
 				if (GameTools.Map.map_unit_occupy[node_x - 1, node_y]) {
-					weight = 4.0f;
+					weight = 500.0f/(distanceFromPlayer * distanceFromPlayer);
 				}
-				newNode = new AStarNode(node_x - 1, node_y, a.getFScore() + weight, distanceFromTarget(node_x - 1, node_y), Direction.Left);
+				newNode = new AStarNode(node_x - 1, node_y, a.getFScore() + weight, manhattanDistanceFromTarget(node_x - 1, node_y), Direction.Left);
 				newNode.Prev = a;
 				listOfNeighbours.Add (newNode);
 			}
-			if ( node_x + 1 < GameTools.Map.size_x ) {
+			if ( node_x + 1 < GameTools.Map.size_x && GameTools.Map.store_data[node_x + 1, node_y] != Colour.None) {
 				weight = 1.0f;
 				if (GameTools.Map.map_unit_occupy[node_x + 1, node_y]) {
-					weight = 4.0f;
+					weight = 500.0f/(distanceFromPlayer * distanceFromPlayer);
 				}
-				newNode = new AStarNode(node_x + 1, node_y, a.getFScore() + weight, distanceFromTarget(node_x + 1, node_y), Direction.Right);
+				newNode = new AStarNode(node_x + 1, node_y, a.getFScore() + weight, manhattanDistanceFromTarget(node_x + 1, node_y), Direction.Right);
 				newNode.Prev = a;
 				listOfNeighbours.Add (newNode);
 			}
 			
 			weight = 1.0f;
-			if (node_y - 1 >= 0 && GameTools.Map.map_unit_occupy[node_x, node_y - 1]) {
-				weight = 4.0f;
+			if (node_y - 1 >= 0 && GameTools.Map.store_data[node_x, node_y -1] != Colour.None) {
+				if (GameTools.Map.map_unit_occupy[node_x, node_y - 1]) {
+					weight = 500.0f/(distanceFromPlayer * distanceFromPlayer);
+				}
+				newNode = new AStarNode(node_x, node_y - 1, a.getFScore() + weight, manhattanDistanceFromTarget(node_x, node_y - 1), Direction.Down);
+				newNode.Prev = a;
+				listOfNeighbours.Add (newNode);
 			}
-			newNode = new AStarNode(node_x, node_y - 1, a.getFScore() + weight, distanceFromTarget(node_x, node_y - 1), Direction.Down);
-			newNode.Prev = a;
-			listOfNeighbours.Add (newNode);
 			
 			weight = 1.0f;
-			if (node_y + 1 < GameTools.Map.size_z && GameTools.Map.map_unit_occupy[node_x, node_y + 1]) {
-				weight = 4.0f;
+			if (node_y + 1 < GameTools.Map.size_z && GameTools.Map.store_data[node_x, node_y+1] != Colour.None) {
+				if (GameTools.Map.map_unit_occupy[node_x, node_y + 1]) {
+					weight = 500.0f/(distanceFromPlayer * distanceFromPlayer);
+				}
+				newNode = new AStarNode(node_x, node_y + 1, a.getFScore() + weight, manhattanDistanceFromTarget(node_x, node_y + 1), Direction.Up);
+				newNode.Prev = a;
+				listOfNeighbours.Add (newNode);
 			}
-			newNode = new AStarNode(node_x, node_y + 1, a.getFScore() + weight, distanceFromTarget(node_x, node_y + 1), Direction.Up);
-			newNode.Prev = a;
-			listOfNeighbours.Add (newNode);
 		}
 		return listOfNeighbours;
 	}

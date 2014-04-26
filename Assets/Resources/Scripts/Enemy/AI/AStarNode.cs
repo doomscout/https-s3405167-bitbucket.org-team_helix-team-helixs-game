@@ -10,16 +10,10 @@ public class AStarNode {
 	public int[] CoOrds {get; private set;}
 	public AStarNode Prev{get;set;}
 
-	public AStarNode (int x, int y) {
+	public AStarNode (int x, int y, float gscore, float hscore, Direction d) {
 		CoOrds = new int[2];
 		CoOrds[0] = x;
 		CoOrds[1] = y;
-		GScore = 0.0f;
-		HScore = 0.0f;
-		d = Direction.None;
-	}
-
-	public AStarNode (int x, int y, float gscore, float hscore, Direction d) : this (x, y) {
 		this.GScore = gscore;
 		this.HScore = hscore;
 

@@ -70,7 +70,7 @@ public class SimpleAI {
     bool transitionInRange() {
 		return AStar
 				.fromPosition(unit.Map_position_x, unit.Map_position_y)
-				.distanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) < 5.0f;
+				.euclidianDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) < 5.0f;
     }
 
     bool transitionOutRange() {

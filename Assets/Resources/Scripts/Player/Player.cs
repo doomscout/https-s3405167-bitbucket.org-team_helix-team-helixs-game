@@ -13,22 +13,30 @@ public class Player {
 
 	private string col;
 	private Vector3 dir;
-	private GameObject player_obect;
+	private GameObject player_object;
 	private Direction current_target = Direction.None;
 	private float remainingDistance = 1.0f;
 
 
 	public Player() {
 		MoveSpeed = 10.0f;
-        Map_position_x = 0;
-        Map_position_y = 0;
 		stats = new Stats();
 		stats.setHealth(10);
 		colour = (Colour)Random.Range(1, 6);
 		Debug.Log ("Player colour: " + colour);
 
 		IsDead = false;
-		player_obect = Object.Instantiate(Resources.Load("Prefabs/PlayerPrefab", typeof(GameObject))) as GameObject;
+		player_object = Object.Instantiate(Resources.Load("Prefabs/PlayerPrefab", typeof(GameObject))) as GameObject;
+		for (int i = 0; i < GameTools.Map.size_z; i++) {
+			for (int j = 0; j < GameTools.Map.size_x; j++) {
+				if (GameTools.Map.store_data[j, i] != Colour.None) {
+					Map_position_x = j;
+					Map_position_y = i;
+					break;
+				}
+			}
+		}
+		player_object.transform.position = new Vector3(Map_position_x, 0, Map_position_y);
 
 		GameTools.Player = this;
 	}
@@ -47,8 +55,10 @@ public class Player {
         } else if (Input.GetKey("d")) {
             current_target = Direction.Right;
             validInput = true;
-        } else {
-			//Debug.log("Player None direction");
+        } else if (Input.GetKey("space")){
+			current_target = Direction.None;
+			validInput = true;
+		} else {
 			current_target = Direction.None;
 		}
         return validInput;
@@ -76,16 +86,16 @@ public class Player {
 		}
 		switch (current_target) {
 			case Direction.Up:
-				player_obect.transform.Translate(0, 0, MoveSpeed * Time.deltaTime, null);
+				player_object.transform.Translate(0, 0, MoveSpeed * Time.deltaTime, null);
 				break;
 			case Direction.Down:
-				player_obect.transform.Translate(0, 0, -MoveSpeed * Time.deltaTime, null);
+				player_object.transform.Translate(0, 0, -MoveSpeed * Time.deltaTime, null);
 				break;
 			case Direction.Left:
-				player_obect.transform.Translate(-MoveSpeed * Time.deltaTime, 0, 0, null);
+				player_object.transform.Translate(-MoveSpeed * Time.deltaTime, 0, 0, null);
 				break;
 			case Direction.Right:
-				player_obect.transform.Translate(MoveSpeed * Time.deltaTime, 0, 0, null);
+				player_object.transform.Translate(MoveSpeed * Time.deltaTime, 0, 0, null);
 				break;
 			default:
 				Debug.Log ("player animation tick no direction!!");
@@ -94,8 +104,8 @@ public class Player {
 		remainingDistance -= MoveSpeed * Time.deltaTime;
 		if (remainingDistance <= 0) {
 			//We've arrived at our destination, but may have overshot, so lets correct it
-			Vector3 temp = player_obect.transform.position;
-			player_obect.transform.position = new Vector3(Mathf.Round(temp.x), temp.y, Mathf.Round(temp.z));
+			Vector3 temp = player_object.transform.position;
+			player_object.transform.position = new Vector3(Mathf.Round(temp.x), temp.y, Mathf.Round(temp.z));
             switch (current_target) {
                 case Direction.Up:
                     Map_position_y++;
