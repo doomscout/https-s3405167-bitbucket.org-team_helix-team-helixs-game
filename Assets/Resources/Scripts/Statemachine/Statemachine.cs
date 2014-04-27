@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public delegate void Action();
 public delegate bool TriggerCondition();
 
 //Generic Statemachine
@@ -50,8 +50,8 @@ public class Statemachine {
 			if (current_state.Exit_action != null) {
 				actions.Add(current_state.Exit_action);
 			}
-			if (triggered_transition.Action != null) {
-				actions.Add(triggered_transition.Action);
+			if (triggered_transition.Transition_Action != null) {
+				actions.Add(triggered_transition.Transition_Action);
 			}
 			if (target_state.Entry_action != null) {
 				actions.Add(target_state.Entry_action);

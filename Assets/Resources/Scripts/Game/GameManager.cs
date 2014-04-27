@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -85,9 +86,9 @@ public class GameManager : MonoBehaviour{
         start2menu.Trigger_condition = new TriggerCondition(conditionTrue);
 
 		//give transition some actions
-		menu2play.Action = new Action(actionTransitionClickedPlay);
-		win2play.Action = new Action(actionTransitionClickedContinue);
-		lose2menu.Action = new Action(actionTransitionClickedOkay);
+		menu2play.Transition_Action= new Action(actionTransitionClickedPlay);
+		win2play.Transition_Action = new Action(actionTransitionClickedContinue);
+		lose2menu.Transition_Action = new Action(actionTransitionClickedOkay);
 
 		//give states the populated transitions
 		state_menu.addTransition(menu2play);
@@ -250,8 +251,8 @@ public class GameManager : MonoBehaviour{
 	}
 
 	bool conditionLose() {
-		return  Input.GetKeyDown("down");
-		//return turn_manager.IsAnimationDone && turn_manager.IsPlayerDead
+		//return  Input.GetKeyDown("down");
+		return turn_manager.IsAnimationDone && GameTools.Player.IsDead;
 	}
 
     bool conditionTrue() {

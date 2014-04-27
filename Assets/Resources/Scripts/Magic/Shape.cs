@@ -3,9 +3,11 @@ using System.Collections;
 
 public class Shape {
 
-	private readonly int[,] coneShape = new int[3,3]{	{0, 0, 1},
-														{1, 1, 1},
-														{0, 0, 1}
+	private readonly int[,] coneShape = new int[5,4]{	{0, 0, 0, 1},
+														{0, 0, 1, 1},
+														{1, 1, 1, 1},
+														{0, 0, 1, 1},
+														{0, 0, 0, 1}
 													};
 	private string spellShape;
 
@@ -30,6 +32,8 @@ public class Shape {
 			spellShape = "cone";
 		else if(set==5)
 			spellShape = "floor";
+
+		spellShape = "cone";
 	}
 
 	public string getShape() {
@@ -45,7 +49,7 @@ public class Shape {
 
 		if(spellShape=="line") {
 			//calculate direction, extrapolate 4 tiles
-			coordArray = new int[4,2];
+			coordArray = new int[6,2];
 			int x = m_x - c_x;
 			int y = m_y - c_y;
 
@@ -67,7 +71,7 @@ public class Shape {
 			x = x / div;
 			y = y / div;
 
-			for(int i = 0; i < 4; i++) {
+			for(int i = 0; i < 6; i++) {
 				coordArray[i, 0] = c_x + (x * (i+1));
 				coordArray[i, 1] = c_y + (y * (i+1));
 			}
@@ -143,9 +147,12 @@ public class Shape {
 			//use gametools.map to find the coordinates of all enemy units;
 
 			//filler code
-			coordArray = new int[1,2];
-			coordArray[0,0] = m_x;
-			coordArray[0,1] = m_y;
+			coordArray = new int[GameTools.TM.list_live_units.Count, 2];
+			for (int i = 0; i < GameTools.TM.list_live_units.Count; i++) {
+				coordArray[i,0] = GameTools.TM.list_live_units[i].Map_position_x;
+				coordArray[i,1] = GameTools.TM.list_live_units[i].Map_position_y;
+			}
+
 			
 			return coordArray;
 		}

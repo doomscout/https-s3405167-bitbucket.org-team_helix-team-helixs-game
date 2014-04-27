@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -6,11 +7,12 @@ public class TurnManager {
 
     bool turn_player, turn_enemy;
     Statemachine turn_manager;
-    List<Unit> list_live_units;
+	public List<Unit> list_live_units {get; private set;}
 	List<Unit> list_dead_units;							//Remember to reset kill units after both sides' turns
 	Player player;
 
     private bool validInput = false;
+	private bool showDamageIndicators = true;
 
 	public bool IsAnimationDone{get; private set;}
 	//bool hasRemovedUnits;								//BONUS: Do this
@@ -25,7 +27,10 @@ public class TurnManager {
     }
 
     public void tick() {
-
+		if (Input.GetKeyDown("p")) {
+			showDamageIndicators = !showDamageIndicators;
+			Debug.Log ("Damage indicators are now " + (showDamageIndicators?"On":"Off"));
+		}
         List<Action> tick_actions = turn_manager.calculateActions();
         if (tick_actions == null) {
             Debug.LogError("tick_actions in TurnManager is null");
@@ -104,6 +109,13 @@ public class TurnManager {
     }
 
     void actionPlayerExit() {
+		player.showIndicatorAnimation();
+		if (showDamageIndicators) {
+			player.showDamageTakenAnimation();
+			foreach(Unit u in list_live_units) {
+				u.showDamageTakenAnimation();
+			}
+		}
         turn_player = false;
         turn_enemy = true;
 		player.FinishedAnimation = false;

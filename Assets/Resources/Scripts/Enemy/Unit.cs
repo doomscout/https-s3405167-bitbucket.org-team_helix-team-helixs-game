@@ -20,6 +20,7 @@ public class Unit {
 
 	private Spell unitSpell;
 	private SpellIndicator spellIndicator;
+	private List<float> list_of_damage_taken;
 
 	public Unit() {
 		brain = new SimpleAI(this);
@@ -42,6 +43,7 @@ public class Unit {
 		unit_object.renderer.material.color = ColourManager.toColor(UnitColour);
 		castRange = 5;
 		spellIndicator = new SpellIndicator(1);
+		list_of_damage_taken = new List<float>();
 	}
 
 	public void logic_tick() {
@@ -118,7 +120,9 @@ public class Unit {
 			//The spell is strong against us
 			modifier = ColourManager.StrengthModifier;
 		}
-		Health -= taken_spell.Power * modifier;
+		float dmg = taken_spell.Power * modifier;
+		Health -= dmg;
+		list_of_damage_taken.Add(dmg);
 	}
 
 	public void attack() {
@@ -131,6 +135,17 @@ public class Unit {
 		unitSpell.cast (	new int[2]{ Map_position_x, Map_position_y},
 							new int[2] {GameTools.Player.Map_position_x, GameTools.Player.Map_position_y});
 		unit_object.transform.LookAt(new Vector3(GameTools.Player.Map_position_x, 0, GameTools.Player.Map_position_y));
+	}
+
+	public void showDamageTakenAnimation() {
+		for (int i = 0; i < list_of_damage_taken.Count; i++) {
+			GameObject o = Object.Instantiate(Resources.Load("Prefabs/DamagePopupPrefab", typeof(GameObject))) as GameObject;
+			DamagePopup script = o.GetComponent<DamagePopup>();
+			script.setText(list_of_damage_taken[i] + "");
+			o.transform.position = new Vector3(unit_object.transform.position.x, 0, unit_object.transform.position.z + 1.0f + i/2.0f);
+
+		}
+		list_of_damage_taken = new List<float>();
 	}
 
 	public void determineNextMove() {

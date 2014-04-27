@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Player {
 	public Stats stats;
@@ -19,6 +20,7 @@ public class Player {
 	private string topSpell = "single";
 	private Spell spell = new Spell();
 	private SpellIndicator spellIndicator;
+	private List<float> list_of_damage_taken;
 
 	public Player() {
 		MoveSpeed = 10.0f;
@@ -81,12 +83,29 @@ public class Player {
 	}
 
 	private bool castSpell() {
-		spellIndicator.showAnimation();
 		spell.cast(	new int[2] {Map_position_x, Map_position_y},
 					new int[2] {GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z});
 		return true;
 	}
-	
+
+	public void showIndicatorAnimation() {
+		spellIndicator.showAnimation();
+	}
+
+	public void showDamageTakenAnimation() {
+		if (list_of_damage_taken == null) {
+			list_of_damage_taken = new List<float>();
+			return;
+		}
+		for (int i = 0; i < list_of_damage_taken.Count; i++) {
+			GameObject o = Object.Instantiate(Resources.Load("Prefabs/DamagePopupPrefab", typeof(GameObject))) as GameObject;
+			DamagePopup script = o.GetComponent<DamagePopup>();
+			script.setText(list_of_damage_taken[i] + "");
+			o.transform.position = new Vector3(player_object.transform.position.x, 0, player_object.transform.position.z + 1.0f + i/2.0f);
+		}
+		list_of_damage_taken = new List<float>();
+	}
+
 	public void showIndicator() {
 		spellIndicator.setSpellIndicator(	new int[2] {Map_position_x, Map_position_y},
 											new int[2] {GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z},
@@ -102,7 +121,9 @@ public class Player {
 			//The spell is strong against us
 			modifier = ColourManager.StrengthModifier;
 		}
-		stats.Health -= taken_spell.Power * modifier;
+		float damage = taken_spell.Power * modifier;
+		stats.Health -= damage;
+		list_of_damage_taken.Add(damage);
 	}
 
 	public bool checkIfDead() {
@@ -116,7 +137,7 @@ public class Player {
 	}
 
 	public void death_tick(){
-
+		return;
 	}
 
 	public void animation_tick() {
