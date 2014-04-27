@@ -25,13 +25,17 @@ public class Spell : MonoBehaviour {
 	public void cast(string aoe) {
 		int[] centre = getPlayerPosition ();
 		
-		TileMouseOver selector = new TileMouseOver();
-		Vector3 selection = selector.getSelector();
+		TileMouseOver selector = GameTools.Mouse;
 		int[] mouse = new int[2];
-		mouse[0] = Mathf.CeilToInt(selection.x);
-		mouse[1] = Mathf.CeilToInt(selection.y);
+		mouse[0] = selector.Pos_x;
+		mouse[1] = selector.Pos_z;
 
-		int[][] coordinates = shape.shapeSpell(centre, mouse, aoe);
+		int[,] coordinates = shape.shapeSpell(centre, mouse, aoe);
+
+		for (int i = 0; i < coordinates.GetLength(0); i++) {
+			GameObject o = GameObject.CreatePrimitive(PrimitiveType.Cube);
+			o.transform.position = new Vector3(coordinates[i,0], 0, coordinates[i,1]);
+		}
 
 		//deal damage to anything in those tiles
 	}

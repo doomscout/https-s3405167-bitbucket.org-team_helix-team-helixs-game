@@ -68,7 +68,7 @@ public class Player {
 		//Mouse
 		if (Input.GetMouseButtonDown(0)) {
 			if (GameTools.Mouse.IsOnMap) {
-				Debug.Log ("Clicked at (" + GameTools.Mouse.Pos_x + ", " + GameTools.Mouse.Pos_z + ")");
+				new Spell().cast ("line");
 			}
 		}
         return validInput;
