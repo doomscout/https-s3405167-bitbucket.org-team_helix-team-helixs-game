@@ -2,32 +2,29 @@
 using System.Collections;
 
 public class Player {
+	public Stats stats;
+	public Colour PlayerColour;
+
 	public bool FinishedAnimation{get;set;}
 	public bool IsDead{get; private set;}
 	public float MoveSpeed{get;set;}
-	public Stats stats;
-	public Colour colour;
-	public Movement movement;
+
     public int Map_position_x{ get; private set;}
     public int Map_position_y{ get; private set;}
 
-	private string col;
-	private Vector3 dir;
-	private GameObject player_object;
+	public GameObject player_object {get; private set;}
+
 	private Direction current_target = Direction.None;
 	private float remainingDistance = 1.0f;
-	private string topSpell = "cone";
-
-	private GameObject[] pool;
-	private bool isShowingIndicator = false;
-	private int refill = 10;
+	private string topSpell = "single";
+	private Spell spell = new Spell();
+	private SpellIndicator spellIndicator;
 
 	public Player() {
 		MoveSpeed = 10.0f;
 		stats = new Stats();
-		stats.setHealth(10);
-		colour = ColourManager.getRandomColour();
-		Debug.Log ("Player colour: " + colour);
+		PlayerColour = ColourManager.getRandomColour();
+		Debug.Log ("Player colour: " + PlayerColour);
 
 
 		IsDead = false;
@@ -42,9 +39,9 @@ public class Player {
 			}
 		}
 		player_object.transform.position = new Vector3(Map_position_x, 0, Map_position_y);
-		player_object.renderer.material.color = ColourManager.toColor(colour);
+		player_object.renderer.material.color = ColourManager.toColor(PlayerColour);
 
-		pool = new GameObject[refill];
+		spellIndicator = new SpellIndicator(20);
 
 		GameTools.Player = this;
 	}
@@ -54,26 +51,21 @@ public class Player {
 		//Keyboard
         if (Input.GetKey("w")) {
             validInput = true;
-			refill = 0;
             current_target = Direction.Up;
         } else if (Input.GetKey("a")) {
             current_target = Direction.Left;
-			refill = 0;
             validInput = true;
         } else if (Input.GetKey("s")) {
             current_target = Direction.Down;
-			refill = 0;
             validInput = true;
         } else if (Input.GetKey("d")) {
             current_target = Direction.Right;
-			refill = 0;
             validInput = true;
-        } else if (Input.GetKey("space")){
+        } else if (Input.GetKey("space")){	//skips turn
 			current_target = Direction.None;
-			refill = 0;
 			validInput = true;
-		}  else  if (Input.GetKey("1")){
-			isShowingIndicator = true;
+		}  else  if (Input.GetKeyDown("1")){
+			spellIndicator.toggleIndicator();
 			current_target = Direction.None;
 		} else {
 			current_target = Direction.None;
@@ -81,44 +73,40 @@ public class Player {
 
 		//Mouse
 		if (Input.GetMouseButtonDown(0)) {
-			if (GameTools.Mouse.IsOnMap) {
-				for (int i = 0; i < refill; i++) {
-					Indicator script = pool[i].transform.GetComponent<Indicator>();
-					script.TriggerAnimation();
-				}
-				new Spell().cast(topSpell);
-				validInput = true;
+			if (spellIndicator.IsShowingIndicator) {
+				validInput = castSpell();
 			}
 		}
         return validInput;
 	}
 
-	public void initSpellIndicator() {
-		for (int i = 0; i < refill; i++) {
-			pool[i] = Object.Instantiate(Resources.Load("Prefabs/Cube4", typeof(GameObject))) as GameObject;
-			pool[i].transform.position = new Vector3(-100, i, 0);
-		}
-		isShowingIndicator = false;
+	private bool castSpell() {
+		spellIndicator.showAnimation();
+		spell.cast(	new int[2] {Map_position_x, Map_position_y},
+					new int[2] {GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z});
+		return true;
+	}
+	
+	public void showIndicator() {
+		spellIndicator.setSpellIndicator(	new int[2] {Map_position_x, Map_position_y},
+											new int[2] {GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z},
+											spell);
 	}
 
-	public void showSpellIndicator() {
-		if (!isShowingIndicator) {
-			return;
+	public void getHitByMagic(Spell taken_spell) {
+		float modifier = 1.0f;
+		if (ColourManager.getWeakness(taken_spell.SpellColour) == PlayerColour) {
+			//The spell is weak against our colour
+			modifier = ColourManager.WeaknessModifier;
+		} else if (ColourManager.getStrength(taken_spell.SpellColour) == PlayerColour) {
+			//The spell is strong against us
+			modifier = ColourManager.StrengthModifier;
 		}
-		int[,] coordinates = new Shape().shapeSpell(Spell.getPlayerPosition(), Spell.getMousePosition(), topSpell);
-		int temp_count = 0;
-		for (int i = 0; i < coordinates.GetLength(0); i++) {
-			pool[i].transform.position = new Vector3(coordinates[i,0], 0.1f, coordinates[i,1]);
-		}
-		refill = coordinates.GetLength(0);
-	}
-
-	public string getTopSpell() {
-		return topSpell;
+		stats.Health -= taken_spell.Power * modifier;
 	}
 
 	public bool checkIfDead() {
-		if (stats.getHealth() <= 0) {
+		if (stats.Health <= 0) {
 			Debug.Log ("player ded");
 			IsDead = true;
 			FinishedAnimation = true;
@@ -184,6 +172,7 @@ public class Player {
 
 	//Player input for movement. Must be in update for keypress to work.
 	//"not all code paths return a value" 
+	/*
 	public void direction(){
 		if(Input.GetKeyDown("w"))
 			dir = Vector3.up;
@@ -198,4 +187,5 @@ public class Player {
 		Debug.Log("Direction = " + dir);
 		movement.tileJump(dir);
 	}
+	*/
 }

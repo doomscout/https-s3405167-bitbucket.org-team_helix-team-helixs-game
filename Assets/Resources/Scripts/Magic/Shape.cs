@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Shape : TileMouseOver {
+public class Shape {
 
 	private readonly int[,] coneShape = new int[3,3]{	{0, 0, 1},
 														{1, 1, 1},
@@ -9,7 +9,15 @@ public class Shape : TileMouseOver {
 													};
 	private string spellShape;
 
-	public void setShape() {
+	public Shape() {
+		setRandomShape();
+	}
+
+	public Shape(string shape) : this() {
+		spellShape = shape;
+	}
+
+	public void setRandomShape() {
 		int set = (int)Random.Range(1,6);
 		
 		if(set==1)
@@ -25,25 +33,24 @@ public class Shape : TileMouseOver {
 	}
 
 	public string getShape() {
-
 		return spellShape;
 	}
 
-	public int[,] shapeSpell(int[] centre, int[] mouse, string shape) {
+	public int[,] toCoords(int[] centre, int[] mouse) {
 		int[,] coordArray;
 		int c_x = centre[0];
 		int c_y = centre[1];
 		int m_x = mouse[0];
 		int m_y = mouse[1];
 
-		if(shape=="line") {
+		if(spellShape=="line") {
 			//calculate direction, extrapolate 4 tiles
 			coordArray = new int[4,2];
 			int x = m_x - c_x;
 			int y = m_y - c_y;
 
 			if (x == 0 && y == 0) {
-				Debug.LogError ("No direction");
+				//Debug.LogError ("No direction");
 				return new int[0,0];
 			}
 
@@ -68,7 +75,7 @@ public class Shape : TileMouseOver {
 			return coordArray;
 		}
 
-		else if(shape=="circle") {
+		else if(spellShape=="circle") {
 			//circle centred around player coordinates. Hard coded.
 			coordArray = new int[12,2];
 
@@ -110,77 +117,29 @@ public class Shape : TileMouseOver {
 			
 			return coordArray;
 		}
-		else if(shape=="single") {
+		else if(spellShape=="single") {
 			//centered around mouse coordinates. No limit on range.
 			coordArray = new int[1,2];
+			/* this code imposes a limit on range
+			int x = c_x - m_x;
+			int y = c_y - m_y;
+			if (Mathf.Abs (x) + Mathf.Abs(y) > 5) {
+				return new int[0,0];
+			}
+			*/
+
 			coordArray[0,0] = m_x;
 			coordArray[0,1] = m_y;
 
 			return coordArray;
 		}
-		else if(shape=="cone") {
+		else if(spellShape=="cone") {
 			//calculates a line, then the surrounding cone tiles
 
 			return shapeToWorldSpace(centre, mouse, coneShape);
-			/*
-			//only 4 cardinal directions
-			if(Mathf.Abs(x) > Mathf.Abs(y)) {
-				//line coord
-				dir = x/Mathf.Abs(x);
-				for(int i = 0; i < 3; i++) {
-					coordArray[i,0] = c_x + ((i+1)*dir);
-					coordArray[i,1] = c_y;
-				}
-				//cone coord
-				coordArray[3,0] = coordArray[1,0];
-				coordArray[3,0] = coordArray[1,1] + 1;
 
-				coordArray[4,0] = coordArray[1,0];
-				coordArray[4,0] = coordArray[1,1] - 1;
-
-				coordArray[5,0] = coordArray[2,0];
-				coordArray[5,0] = coordArray[2,1] + 1;
-
-				coordArray[6,0] = coordArray[2,0];
-				coordArray[6,0] = coordArray[2,1] + 2;
-
-				coordArray[7,0] = coordArray[2,0];
-				coordArray[7,0] = coordArray[2,1] - 1;
-
-				coordArray[8,0] = coordArray[2,0];
-				coordArray[8,0] = coordArray[2,1] - 2;
-			}
-			else {
-				//line coord
-				dir = y/Mathf.Abs(y);
-				for(int i = 0; i < 3; i++) {
-					coordArray[i,0] = c_x;
-					coordArray[i,1] = c_y + ((i+1)*dir);
-				}
-				//cone coord
-				coordArray[3,0] = coordArray[1,0] + 1;
-				coordArray[3,0] = coordArray[1,1];
-				
-				coordArray[4,0] = coordArray[1,0] - 1;
-				coordArray[4,0] = coordArray[1,1];
-				
-				coordArray[5,0] = coordArray[2,0] + 1;
-				coordArray[5,0] = coordArray[2,1];
-				
-				coordArray[6,0] = coordArray[2,0] + 2;
-				coordArray[6,0] = coordArray[2,1];
-				
-				coordArray[7,0] = coordArray[2,0] - 1;
-				coordArray[7,0] = coordArray[2,1];
-				
-				coordArray[8,0] = coordArray[2,0] - 2;
-				coordArray[8,0] = coordArray[2,1];
-			}
-
-			return coordArray;
-			*/
 		}
-		else if(shape=="floor")	{
+		else if(spellShape=="floor")	{
 			//use gametools.map to find the coordinates of all enemy units;
 
 			//filler code

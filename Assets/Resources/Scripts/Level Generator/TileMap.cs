@@ -162,6 +162,10 @@ public class TileMap : MonoBehaviour {
 		//PrintDebug();
 	}
 
+	public bool isOutOfBounds(int x, int y) {
+		return 	x < 0 || x >= size_x ||
+				y < 0 || y >= size_z;
+	}
 	
 }
 

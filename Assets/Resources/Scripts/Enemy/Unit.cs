@@ -10,6 +10,7 @@ public class Unit {
     public int Map_position_x { get; private set;}
     public int Map_position_y { get; private set;}
 	public Colour UnitColour {get; set;}
+	public int castRange {get; set;}
 	GameObject unit_object;
 
 	List<Direction> list_directions = new List<Direction>();
@@ -17,8 +18,8 @@ public class Unit {
 	SimpleAI brain;
 	float remainingDistance = 1f;
 
-	//AStar pathFinder;
-
+	private Spell unitSpell;
+	private SpellIndicator spellIndicator;
 
 	public Unit() {
 		brain = new SimpleAI(this);
@@ -37,8 +38,10 @@ public class Unit {
 		Health = 10f;
 		MoveSpeed = 10.0f;
 		UnitColour = ColourManager.getRandomColour();
-
-		//pathFinder = new AStar();
+		unitSpell = new Spell("single", UnitColour);
+		unit_object.renderer.material.color = ColourManager.toColor(UnitColour);
+		castRange = 5;
+		spellIndicator = new SpellIndicator(1);
 	}
 
 	public void logic_tick() {
@@ -106,7 +109,7 @@ public class Unit {
 		Debug.Log ("Death Tick");
 	}
 
-	public void takeDamage(Spell taken_spell) {
+	public void getHitByMagic(Spell taken_spell) {
 		float modifier = 1.0f;
 		if (ColourManager.getWeakness(taken_spell.SpellColour) == UnitColour) {
 			//The spell is weak against our colour
@@ -116,6 +119,18 @@ public class Unit {
 			modifier = ColourManager.StrengthModifier;
 		}
 		Health -= taken_spell.Power * modifier;
+	}
+
+	public void attack() {
+		spellIndicator.initSpellIndicator();
+		spellIndicator.toggleIndicator();
+		spellIndicator.setSpellIndicator(	new int[2]{ Map_position_x, Map_position_y},
+											new int[2] {GameTools.Player.Map_position_x, GameTools.Player.Map_position_y},
+											unitSpell);
+		spellIndicator.showAnimation();
+		unitSpell.cast (	new int[2]{ Map_position_x, Map_position_y},
+							new int[2] {GameTools.Player.Map_position_x, GameTools.Player.Map_position_y});
+		unit_object.transform.LookAt(new Vector3(GameTools.Player.Map_position_x, 0, GameTools.Player.Map_position_y));
 	}
 
 	public void determineNextMove() {

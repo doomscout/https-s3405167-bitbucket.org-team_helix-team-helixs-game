@@ -5,13 +5,32 @@ public class Test : MonoBehaviour {
 
 	public bool Done {get; private set;}
 	public bool Triggered {get; set;}
+	public Color colour {get;set;}
+
 	// Use this for initialization
 	void Start () {
+		init ();
+	}
+
+	public void init() {
 		rigidbody.useGravity = false;
-		renderer.material.color = Color.cyan;
+		renderer.material = new Material(Shader.Find ("Transparent/Diffuse"));
+		Color c;
+		if (colour == null) {
+			c = Color.cyan;
+		} else {
+			c = colour;
+		}
+		c.a = 0.5f;
+		renderer.material.color = c;
 		rigidbody.detectCollisions = false;
 		Done = false;
 		Triggered = false;
+	}
+
+	public void changeColour(Color c) {
+		c.a = 0.5f;
+		renderer.material.color = c;
 	}
 	
 	// Update is called once per frame
@@ -25,9 +44,19 @@ public class Test : MonoBehaviour {
 			
 			rigidbody.AddForce(dir * 50);
 			rigidbody.AddForce(Vector3.up * 80);
+			StartCoroutine("Fade");
 			Done = true;
-			GameObject.Destroy(gameObject, 3.0f);
-			Debug.Log ("asdasdsadasdasd");
+			GameObject.Destroy(gameObject, 4.0f);
 		}
 	}
+
+	IEnumerator Fade() {
+		for (float f = 0.5f; f >= 0; f -= 0.05f) {
+			Color c = renderer.material.color;
+			c.a = f;
+			renderer.material.color = c;
+			yield return new WaitForSeconds(0.2f);
+		}
+	}
+
 }

@@ -94,12 +94,12 @@ public class TurnManager {
 	}
 
 	void actionPlayerEntry() {
-		player.initSpellIndicator();
+
 	}
 	                        
     void actionPlayerRunning() {
         //listen to input handlers and verify
-		player.showSpellIndicator();
+		player.showIndicator();
 		validInput = player.listenInput();
     }
 
@@ -157,6 +157,7 @@ public class TurnManager {
 	void actionAnimationExit() {
 		//Clear the dead units so we don't animate them again
 		list_dead_units = new List<Unit>();
+
 	}
 
     void actionEnemyEntry() {

@@ -42,7 +42,7 @@ using System.Collections;
 			currentTileCoord.x = Pos_x - 0.5f;
 			currentTileCoord.z = Pos_z - 0.5f;
 
-			selectionCube.transform.position = currentTileCoord;
+			//selectionCube.transform.position = currentTileCoord;
 
 		}
 		else 
