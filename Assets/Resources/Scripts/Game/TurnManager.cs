@@ -70,10 +70,12 @@ public class TurnManager {
         state_animation.addTransition(animation2player);
 		state_start.addTransition(start2player);
 
+		state_player.Entry_action = new Action(actionPlayerEntry);
         state_player.addAction(new Action(actionPlayerRunning));
         state_player.Exit_action = new Action(actionPlayerExit);
 		state_animation.Entry_action = new Action(actionAnimationEntry);
         state_animation.addAction(new Action(actionAnimationRunning));
+		state_animation.Exit_action = new Action(actionAnimationExit);
         state_enemy.Entry_action = new Action(actionEnemyEntry);
         state_enemy.Exit_action = new Action(actionEnemyExit);
 		state_start.Exit_action = new Action(actionStartExit);
@@ -90,9 +92,14 @@ public class TurnManager {
 			list_live_units.Add(new Unit());
 		}
 	}
+
+	void actionPlayerEntry() {
+		player.initSpellIndicator();
+	}
 	                        
     void actionPlayerRunning() {
         //listen to input handlers and verify
+		player.showSpellIndicator();
 		validInput = player.listenInput();
     }
 

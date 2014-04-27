@@ -3,15 +3,17 @@ using System.Collections;
 
 public class Spell : MonoBehaviour {
 	Shape shape = new Shape();
+	public Colour SpellColour {get; private set;}
+	public float Power {get; private set;}
 
 	public Spell () {
-		float dmg = Random.Range(1, 50);
-		int colour = (int)Random.Range (1, 6);
+		Power = Random.Range(1, 50);
+		SpellColour = ColourManager.getRandomColour();
 
 		shape.setShape();
 		string aoe = shape.getShape();
 
-		Debug.Log (dmg + ", " + colour + ", " + aoe + "\n");
+		Debug.Log (Power + ", " + SpellColour + ", " + aoe + "\n");
 	}
 
 	public static int[] getPlayerPosition() {
@@ -22,19 +24,26 @@ public class Spell : MonoBehaviour {
 		return position;
 	}
 
-	public void cast(string aoe) {
-		int[] centre = getPlayerPosition ();
-		
+	public static int[] getMousePosition() {
 		TileMouseOver selector = GameTools.Mouse;
 		int[] mouse = new int[2];
 		mouse[0] = selector.Pos_x;
 		mouse[1] = selector.Pos_z;
 
+		return mouse;
+	}
+
+	public void cast(string aoe) {
+		int[] centre = getPlayerPosition ();
+		int[] mouse = getMousePosition();
+
 		int[,] coordinates = shape.shapeSpell(centre, mouse, aoe);
 
 		for (int i = 0; i < coordinates.GetLength(0); i++) {
-			GameObject o = GameObject.CreatePrimitive(PrimitiveType.Cube);
-			o.transform.position = new Vector3(coordinates[i,0], 0, coordinates[i,1]);
+			if (GameTools.Map.map_unit_occupy[coordinates[i,0], coordinates[i,1]] != null) {
+				GameTools.Map.map_unit_occupy[coordinates[i,0], coordinates[i,1]].takeDamage(this);
+			}
+
 		}
 
 		//deal damage to anything in those tiles

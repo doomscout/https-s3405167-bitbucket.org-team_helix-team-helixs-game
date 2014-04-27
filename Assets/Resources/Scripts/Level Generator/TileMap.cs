@@ -16,7 +16,7 @@ public class TileMap : MonoBehaviour {
 	public Colour[,] store_data;
 
 
-	public bool[,] map_unit_occupy;
+	public Unit[,] map_unit_occupy;
 
 	//Declare variable of Texture and texture resolution
 	public Texture2D terrainTiles;
@@ -28,7 +28,7 @@ public class TileMap : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		BuildMesh();
-		map_unit_occupy = new bool[size_x,size_z];
+		map_unit_occupy = new Unit[size_x,size_z];
 		GameTools.Map = this;/*
 		for (int i = 0; i < size_x; i++) {
 			for (int j = 0; j < size_z; j++) {

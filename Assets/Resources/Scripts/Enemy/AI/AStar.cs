@@ -72,7 +72,7 @@ public class AStar {
 		
 		Stack<Direction> path = new Stack<Direction>();
 		if (!found) {
-			Debug.Log ("(" + x + ", " + y + ") found nothing");
+			//Debug.Log ("(" + x + ", " + y + ") found nothing");
 		} else {
 			AStarNode pointer = nodeCurrentPosition;
 			int count = 0;
@@ -112,7 +112,7 @@ public class AStar {
 		distanceFromPlayer = manhattanDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) / 5.0f;
 		if (node_x >= 0 && node_x + 1 < GameTools.Map.size_x && node_y >= 0 && node_y + 1 < GameTools.Map.size_z ) {
 			if (node_x - 1 >= 0 && GameTools.Map.store_data[node_x - 1, node_y] != Colour.None) {
-				if (GameTools.Map.map_unit_occupy[node_x - 1, node_y]) {
+				if (GameTools.Map.map_unit_occupy[node_x - 1, node_y] != null) {
 					weight = 500.0f/(distanceFromPlayer * distanceFromPlayer);
 				}
 				newNode = new AStarNode(node_x - 1, node_y, a.getFScore() + weight, manhattanDistanceFromTarget(node_x - 1, node_y), Direction.Left);
@@ -121,7 +121,7 @@ public class AStar {
 			}
 			if ( node_x + 1 < GameTools.Map.size_x && GameTools.Map.store_data[node_x + 1, node_y] != Colour.None) {
 				weight = 1.0f;
-				if (GameTools.Map.map_unit_occupy[node_x + 1, node_y]) {
+				if (GameTools.Map.map_unit_occupy[node_x + 1, node_y] != null) {
 					weight = 500.0f/(distanceFromPlayer * distanceFromPlayer);
 				}
 				newNode = new AStarNode(node_x + 1, node_y, a.getFScore() + weight, manhattanDistanceFromTarget(node_x + 1, node_y), Direction.Right);
@@ -131,7 +131,7 @@ public class AStar {
 			
 			weight = 1.0f;
 			if (node_y - 1 >= 0 && GameTools.Map.store_data[node_x, node_y -1] != Colour.None) {
-				if (GameTools.Map.map_unit_occupy[node_x, node_y - 1]) {
+				if (GameTools.Map.map_unit_occupy[node_x, node_y - 1] != null) {
 					weight = 500.0f/(distanceFromPlayer * distanceFromPlayer);
 				}
 				newNode = new AStarNode(node_x, node_y - 1, a.getFScore() + weight, manhattanDistanceFromTarget(node_x, node_y - 1), Direction.Down);
@@ -141,7 +141,7 @@ public class AStar {
 			
 			weight = 1.0f;
 			if (node_y + 1 < GameTools.Map.size_z && GameTools.Map.store_data[node_x, node_y+1] != Colour.None) {
-				if (GameTools.Map.map_unit_occupy[node_x, node_y + 1]) {
+				if (GameTools.Map.map_unit_occupy[node_x, node_y + 1] != null) {
 					weight = 500.0f/(distanceFromPlayer * distanceFromPlayer);
 				}
 				newNode = new AStarNode(node_x, node_y + 1, a.getFScore() + weight, manhattanDistanceFromTarget(node_x, node_y + 1), Direction.Up);
@@ -158,7 +158,7 @@ public class AStar {
 		int asd = 0;
 		for (int i = 0; i < GameTools.Map.size_x; i++) {
 			for (int j = 0; j < GameTools.Map.size_z; j++) {
-				if (GameTools.Map.map_unit_occupy[i,j]) {
+				if (GameTools.Map.map_unit_occupy[i,j] != null) {
 					asd++;
 				}
 			}

@@ -16,13 +16,17 @@ public class Player {
 	private GameObject player_object;
 	private Direction current_target = Direction.None;
 	private float remainingDistance = 1.0f;
+	private string topSpell = "cone";
 
+	private GameObject[] pool;
+	private bool isShowingIndicator = false;
+	private int refill = 10;
 
 	public Player() {
 		MoveSpeed = 10.0f;
 		stats = new Stats();
 		stats.setHealth(10);
-		colour = (Colour)Random.Range(1, 6);
+		colour = ColourManager.getRandomColour();
 		Debug.Log ("Player colour: " + colour);
 
 
@@ -40,6 +44,8 @@ public class Player {
 		player_object.transform.position = new Vector3(Map_position_x, 0, Map_position_y);
 		player_object.renderer.material.color = ColourManager.toColor(colour);
 
+		pool = new GameObject[refill];
+
 		GameTools.Player = this;
 	}
 
@@ -48,19 +54,27 @@ public class Player {
 		//Keyboard
         if (Input.GetKey("w")) {
             validInput = true;
+			refill = 0;
             current_target = Direction.Up;
         } else if (Input.GetKey("a")) {
             current_target = Direction.Left;
+			refill = 0;
             validInput = true;
         } else if (Input.GetKey("s")) {
             current_target = Direction.Down;
+			refill = 0;
             validInput = true;
         } else if (Input.GetKey("d")) {
             current_target = Direction.Right;
+			refill = 0;
             validInput = true;
         } else if (Input.GetKey("space")){
 			current_target = Direction.None;
+			refill = 0;
 			validInput = true;
+		}  else  if (Input.GetKey("1")){
+			isShowingIndicator = true;
+			current_target = Direction.None;
 		} else {
 			current_target = Direction.None;
 		}
@@ -68,10 +82,39 @@ public class Player {
 		//Mouse
 		if (Input.GetMouseButtonDown(0)) {
 			if (GameTools.Mouse.IsOnMap) {
-				new Spell().cast ("line");
+				for (int i = 0; i < refill; i++) {
+					Indicator script = pool[i].transform.GetComponent<Indicator>();
+					script.TriggerAnimation();
+				}
+				new Spell().cast(topSpell);
+				validInput = true;
 			}
 		}
         return validInput;
+	}
+
+	public void initSpellIndicator() {
+		for (int i = 0; i < refill; i++) {
+			pool[i] = Object.Instantiate(Resources.Load("Prefabs/Cube4", typeof(GameObject))) as GameObject;
+			pool[i].transform.position = new Vector3(-100, i, 0);
+		}
+		isShowingIndicator = false;
+	}
+
+	public void showSpellIndicator() {
+		if (!isShowingIndicator) {
+			return;
+		}
+		int[,] coordinates = new Shape().shapeSpell(Spell.getPlayerPosition(), Spell.getMousePosition(), topSpell);
+		int temp_count = 0;
+		for (int i = 0; i < coordinates.GetLength(0); i++) {
+			pool[i].transform.position = new Vector3(coordinates[i,0], 0.1f, coordinates[i,1]);
+		}
+		refill = coordinates.GetLength(0);
+	}
+
+	public string getTopSpell() {
+		return topSpell;
 	}
 
 	public bool checkIfDead() {

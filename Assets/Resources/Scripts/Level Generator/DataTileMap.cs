@@ -53,7 +53,7 @@ public class DataTileMap {
 			for(column = 0; column <= Size_y-1; column++)
 			{
 				//The range from Red, to the last colour in the enum
-				int randomNumber = Random.Range(1, System.Enum.GetNames(typeof(Colour)).Length - 1);
+				int randomNumber = (int)ColourManager.getRandomColour();
 				if(Map_data_passable[column, row] == 1)
 					Map_data[column, row] = (Colour)randomNumber;
 				//Debug.Log ("column = " + (column+1) + " row =  "+ (row+1) + " ColorNumber  "+ Map_data[column, row]);

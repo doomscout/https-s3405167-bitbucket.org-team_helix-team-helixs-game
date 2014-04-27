@@ -5,6 +5,13 @@ public enum Colour { None, Red, Blue, Yellow, Green, Purple, Pink};
 
 public static class ColourManager {
 
+	public static readonly float WeaknessModifier = 0.5f;
+	public static readonly float StrengthModifier = 1.5f;
+
+	public static Colour getRandomColour() {
+		return (Colour)Random.Range(1, System.Enum.GetNames(typeof(Colour)).Length - 1);
+	}
+
 	public static Color toColor(Colour c) {
 		switch(c) {
 		case Colour.Red:
