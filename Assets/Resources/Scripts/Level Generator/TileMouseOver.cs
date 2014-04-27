@@ -50,6 +50,10 @@ using System.Collections;
 			IsOnMap = false;
 		}
 	}
+
+	public Vector3 getSelector() {
+		return currentTileCoord;
+	}
 	
 	/*
 	// Update is called once per frame
