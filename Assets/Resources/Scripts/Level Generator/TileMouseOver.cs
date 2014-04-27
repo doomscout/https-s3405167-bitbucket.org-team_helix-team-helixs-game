@@ -50,6 +50,10 @@ using System.Collections;
 			Debug.Log ("Click!");
 		}
 	}
+
+	public Vector3 getSelector() {
+		return currentTileCoord;
+	}
 	
 	/*
 	// Update is called once per frame
