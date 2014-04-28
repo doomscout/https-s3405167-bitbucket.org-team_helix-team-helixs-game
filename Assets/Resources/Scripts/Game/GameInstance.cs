@@ -7,6 +7,7 @@ public class GameInstance {
 
     bool turn_player, turn_enemy;
     Statemachine turn_manager;
+	public List<Unit> all_units {get;set;}
 	public List<Unit> list_live_units {get; private set;}
 	List<Unit> list_dead_units;							//Remember to reset kill units after both sides' turns
 	Player player;
@@ -21,6 +22,7 @@ public class GameInstance {
     public GameInstance(Player player) {
         list_live_units = new List<Unit>();
 		list_dead_units = new List<Unit>();
+		all_units = new List<Unit>();
 		GameTools.All_Units = list_live_units;			//Perhaps move this into a different class?
 		GameTools.Dead_Units = list_dead_units;			//and this
 		this.player = player;
@@ -38,6 +40,7 @@ public class GameInstance {
 		}
 		GameTools.All_Units = null;
 		GameTools.Dead_Units = null;
+		all_units = null;
 		TileMap script = tileMapPrefab.GetComponent<TileMap>();
 		script.cleanUp();
 	}
@@ -49,8 +52,14 @@ public class GameInstance {
 		player.loadIntoGame();
 		//populate map with enemies
 		for (int i = 0; i < 10; i++) {
-			list_live_units.Add(new Unit());
+			Unit u = new Unit();
+			list_live_units.Add(u);
+			all_units.Add (u);
 		}
+	}
+
+	public void saveData() {
+		FileHandler.saveEntityData(player, all_units);
 	}
 
     public void tick() {

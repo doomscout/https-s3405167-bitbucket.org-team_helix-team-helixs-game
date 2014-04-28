@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour{
     Pause pauseTemp;
 
     TileMap map;
+	int numberOfWins = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -180,6 +181,10 @@ public class GameManager : MonoBehaviour{
 	void actionWinEntry() {
 		//Display Win GUI
         winScreen = Instantiate(Resources.Load("Prefabs/Win")) as GameObject;
+		if (numberOfWins == 0) {
+			turn_manager.saveData();
+		}
+		numberOfWins++;
 		Debug.Log("actionWinEntry");
 	}
 

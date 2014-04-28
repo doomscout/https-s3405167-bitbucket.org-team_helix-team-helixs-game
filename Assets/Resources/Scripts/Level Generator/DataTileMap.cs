@@ -16,6 +16,12 @@ public class DataTileMap {
 	public int[,] Map_data_passable;
 	public Colour[,] Map_data;
 	//public int[,] Store_data;
+
+	
+	public int numberOfColourTiles = 0;
+	private bool foundOneColourTile = false;
+	private int xPosOfTile = 0;
+	private int yPosOfTile = 0;
 	
 	/*
 	 * 0 = null or white
@@ -42,20 +48,28 @@ public class DataTileMap {
 	}
 
 	public int GetTileAt(int x, int y) {
-			return (int)Map_data[x,y];
+		return (int)Map_data[x,y];
 	}
 			
 
 	public void GeneratorColorTile()
 	{
+		numberOfColourTiles = 0;
 		for(int column = 0, row = 0; row <= Size_x -1; row++)
 		{
 			for(column = 0; column <= Size_y-1; column++)
 			{
 				//The range from Red, to the last colour in the enum
 				int randomNumber = (int)ColourManager.getRandomColour();
-				if(Map_data_passable[column, row] == 1)
+				if(Map_data_passable[column, row] == 1) {
 					Map_data[column, row] = (Colour)randomNumber;
+					numberOfColourTiles++;
+					if (!foundOneColourTile) {
+						foundOneColourTile = true;
+						xPosOfTile = column;
+						yPosOfTile = row;
+					}
+				}
 				//Debug.Log ("column = " + (column+1) + " row =  "+ (row+1) + " ColorNumber  "+ Map_data[column, row]);
 			}
 		}
@@ -212,6 +226,74 @@ public class DataTileMap {
 			return 1;
 		}
 		return 0;
+	}
+
+	//Testing functions
+	public bool isAllsConnected() {
+		int count = 0;
+		int newX = 0;
+		int newY = 0;
+		GraphNode neighbour;
+		
+		Stack<GraphNode> openSet = new Stack<GraphNode>();
+		HashSet<GraphNode> closedSet = new HashSet<GraphNode>();
+		
+		GraphNode originNode = new GraphNode(xPosOfTile, yPosOfTile);
+		openSet.Push(originNode);
+		
+		while (openSet.Count > 0) {
+			GraphNode n = openSet.Pop();
+			closedSet.Add(n);
+			count++;
+			
+			if (count > 5000) {
+				Debug.LogError("Infinite Loop");
+				break;
+			}
+			
+			newX = n.x+1;
+			newY = n.y;
+			neighbour = new GraphNode(newX, newY);
+			if (!IsOutOfBounds(newX, newY) && 
+			    Map_data[newX, newY] != Colour.None && 
+			    !closedSet.Contains(neighbour) &&
+			    !openSet.Contains(neighbour)) {
+				openSet.Push (neighbour);
+			}
+			
+			newX = n.x-1;
+			newY = n.y;
+			neighbour = new GraphNode(newX, newY);
+			if (!IsOutOfBounds(newX, newY) && 
+			    Map_data[newX, newY] != Colour.None && 
+			    !closedSet.Contains(neighbour) &&
+			    !openSet.Contains(neighbour)) {
+				openSet.Push (neighbour);
+			}
+			
+			newX = n.x;
+			newY = n.y+1;
+			neighbour = new GraphNode(newX, newY);
+			if (!IsOutOfBounds(newX, newY) && 
+			    Map_data[newX, newY] != Colour.None && 
+			    !closedSet.Contains(neighbour) &&
+			    !openSet.Contains(neighbour)) {
+				openSet.Push (neighbour);
+			}
+			
+			newX = n.x;
+			newY = n.y-1;
+			neighbour = new GraphNode(newX, newY);
+			if (!IsOutOfBounds(newX, newY) && 
+			    Map_data[newX, newY] != Colour.None && 
+			    !closedSet.Contains(neighbour) &&
+			    !openSet.Contains(neighbour)) {
+				openSet.Push (neighbour);
+			}
+			
+		}
+		
+		return numberOfColourTiles == count;
 	}
 }
 

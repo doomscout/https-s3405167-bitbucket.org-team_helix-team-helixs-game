@@ -8,7 +8,7 @@ public class Spell {
 
 	public Spell () {
 		SpellColour = ColourManager.getRandomColour();
-		Power = Random.Range(1, 50);
+		Power = Random.Range(1, 10);
 		Shape = new Shape();
 
 	}
@@ -25,7 +25,7 @@ public class Spell {
 		SpellColour = c;
 	}
 
-	public void cast(int[] origin, int[] position) {
+	public void cast(int[] origin, int[] position, float power) {
 		int[,] coordinates = Shape.toCoords(origin, position);
 
 		for (int i = 0; i < coordinates.GetLength(0); i++) {
@@ -33,10 +33,10 @@ public class Spell {
 				continue;
 			}
 			if (GameTools.Map.map_unit_occupy[coordinates[i,0], coordinates[i,1]] != null) {
-				GameTools.Map.map_unit_occupy[coordinates[i,0], coordinates[i,1]].getHitByMagic(this);
+				GameTools.Map.map_unit_occupy[coordinates[i,0], coordinates[i,1]].getHitByMagic(this, power);
 			}
 			if (coordinates[i,0] == GameTools.Player.Map_position_x && coordinates[i,1] == GameTools.Player.Map_position_y) {
-				GameTools.Player.getHitByMagic(this);
+				GameTools.Player.getHitByMagic(this, power);
 			}
 
 		}

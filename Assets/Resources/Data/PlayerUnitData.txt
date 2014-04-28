@@ -1,0 +1,189 @@
+----Start----
+Player:
+Max Health:200
+Health:2
+Player Damage:12
+Units:
+Max Health:10
+Spell Damage:2
+Max Health:10
+Spell Damage:3
+Max Health:10
+Spell Damage:3
+Max Health:10
+Spell Damage:4
+Max Health:10
+Spell Damage:3
+Max Health:10
+Spell Damage:9
+Max Health:10
+Spell Damage:9
+Max Health:10
+Spell Damage:2
+Max Health:10
+Spell Damage:7
+Max Health:10
+Spell Damage:4
+----End----
+----Start----
+Player:
+Max Health:200
+Health:58.5
+Player Damage:15
+Units:
+Max Health:10
+Spell Damage:6
+Max Health:10
+Spell Damage:7
+Max Health:10
+Spell Damage:3
+Max Health:10
+Spell Damage:4
+Max Health:10
+Spell Damage:4
+Max Health:10
+Spell Damage:9
+Max Health:10
+Spell Damage:4
+Max Health:10
+Spell Damage:6
+Max Health:10
+Spell Damage:4
+Max Health:10
+Spell Damage:3
+----End----
+----Start----
+Player:
+Max Health:200
+Health:200
+Player Damage:18
+Units:
+Max Health:10
+Spell Damage:3
+Max Health:10
+Spell Damage:3
+Max Health:10
+Spell Damage:9
+Max Health:10
+Spell Damage:4
+Max Health:10
+Spell Damage:8
+Max Health:10
+Spell Damage:5
+Max Health:10
+Spell Damage:8
+Max Health:10
+Spell Damage:3
+Max Health:10
+Spell Damage:2
+Max Health:10
+Spell Damage:4
+----End----
+----Start----
+Player:
+Max Health:200
+Health:80.25
+Player Damage:18
+Units:
+Max Health:10
+Spell Damage:7
+Max Health:10
+Spell Damage:6
+Max Health:10
+Spell Damage:5
+Max Health:10
+Spell Damage:2
+Max Health:10
+Spell Damage:9
+Max Health:10
+Spell Damage:4
+Max Health:10
+Spell Damage:8
+Max Health:10
+Spell Damage:9
+Max Health:10
+Spell Damage:8
+Max Health:10
+Spell Damage:6
+----End----
+----Start----
+Player:
+Max Health:200
+Health:52
+Player Damage:16
+Units:
+Max Health:10
+Spell Damage:7
+Max Health:10
+Spell Damage:9
+Max Health:10
+Spell Damage:5
+Max Health:10
+Spell Damage:6
+Max Health:10
+Spell Damage:5
+Max Health:10
+Spell Damage:6
+Max Health:10
+Spell Damage:8
+Max Health:10
+Spell Damage:1
+Max Health:10
+Spell Damage:1
+Max Health:10
+Spell Damage:4
+----End----
+----Start----
+Player:
+Max Health:200
+Health:132.5
+Player Damage:16
+Units:
+Max Health:10
+Spell Damage:5
+Max Health:10
+Spell Damage:6
+Max Health:10
+Spell Damage:9
+Max Health:10
+Spell Damage:5
+Max Health:10
+Spell Damage:3
+Max Health:10
+Spell Damage:5
+Max Health:10
+Spell Damage:6
+Max Health:10
+Spell Damage:6
+Max Health:10
+Spell Damage:5
+Max Health:10
+Spell Damage:9
+----End----
+----Start----
+Player:
+Max Health:200
+Health:105.75
+Player Damage:10
+Units:
+Max Health:10
+Spell Damage:1
+Max Health:10
+Spell Damage:7
+Max Health:10
+Spell Damage:5
+Max Health:10
+Spell Damage:8
+Max Health:10
+Spell Damage:9
+Max Health:10
+Spell Damage:1
+Max Health:10
+Spell Damage:5
+Max Health:10
+Spell Damage:3
+Max Health:10
+Spell Damage:8
+Max Health:10
+Spell Damage:2
+----End----

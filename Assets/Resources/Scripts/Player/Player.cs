@@ -17,10 +17,11 @@ public class Player {
 
 	private Direction current_target = Direction.None;
 	private float remainingDistance = 1.0f;
-	private string topSpell = "single";
 	private Spell spell = new Spell();
 	private SpellIndicator spellIndicator;
 	private List<float> list_of_damage_taken;
+	private List<Colour> list_of_colour_taken;
+	private bool castedSpell = false;
 
 	public Player() {
 		MoveSpeed = 10.0f;
@@ -33,6 +34,8 @@ public class Player {
 		player_object.renderer.material.color = ColourManager.toColor(PlayerColour);
 
 		spellIndicator = new SpellIndicator(20);
+		list_of_damage_taken = new List<float>();
+		list_of_colour_taken = new List<Colour>();
 
 		GameTools.Player = this;
 	}
@@ -58,6 +61,7 @@ public class Player {
 
 	public bool listenInput() {
         bool validInput = false;
+		castedSpell = false;
 		//Keyboard
         if (Input.GetKey("w")) {
             validInput = true;
@@ -142,26 +146,35 @@ public class Player {
 
 	private bool castSpell() {
 		spell.cast(	new int[2] {Map_position_x, Map_position_y},
-					new int[2] {GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z});
+					new int[2] {GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z},
+					stats.Damage);
+		castedSpell = true;
 		return true;
 	}
 
 	public void showIndicatorAnimation() {
-		spellIndicator.showAnimation();
+		if (!castedSpell) {
+			spellIndicator.showNoCastAnimation();
+		}
+		spellIndicator.showCastAnimation();
 	}
 
 	public void showDamageTakenAnimation() {
-		if (list_of_damage_taken == null) {
-			list_of_damage_taken = new List<float>();
-			return;
-		}
 		for (int i = 0; i < list_of_damage_taken.Count; i++) {
 			GameObject o = Object.Instantiate(Resources.Load("Prefabs/DamagePopupPrefab", typeof(GameObject))) as GameObject;
 			DamagePopup script = o.GetComponent<DamagePopup>();
+			Color c = Color.white;
+			if (ColourManager.getStrength(list_of_colour_taken[i]) == PlayerColour) {
+				c = Color.magenta;
+			} else if (ColourManager.getWeakness(list_of_colour_taken[i]) == PlayerColour) {
+				c = Color.grey;
+			}
 			script.setText(list_of_damage_taken[i] + "");
+			script.setColor(c);
 			o.transform.position = new Vector3(player_object.transform.position.x, 0, player_object.transform.position.z + 1.0f + i/2.0f);
 		}
 		list_of_damage_taken = new List<float>();
+		list_of_colour_taken = new List<Colour>();
 	}
 
 	public void showIndicator() {
@@ -170,7 +183,7 @@ public class Player {
 											spell);
 	}
 
-	public void getHitByMagic(Spell taken_spell) {
+	public void getHitByMagic(Spell taken_spell, float power) {
 		float modifier = 1.0f;
 		if (ColourManager.getWeakness(taken_spell.SpellColour) == PlayerColour) {
 			//The spell is weak against our colour
@@ -179,9 +192,10 @@ public class Player {
 			//The spell is strong against us
 			modifier = ColourManager.StrengthModifier;
 		}
-		float damage = taken_spell.Power * modifier;
+		float damage = taken_spell.Power * modifier * power/10;
 		stats.Health -= damage;
 		list_of_damage_taken.Add(damage);
+		list_of_colour_taken.Add (taken_spell.SpellColour);
 	}
 
 	public bool checkIfDead() {

@@ -8,9 +8,9 @@ public class Stats {
 	public float Healing {get;set;}
 
 	public Stats() {
-		Health = 	1000.0f;//((Random.Range(10, 50)) + (Random.Range(50, 100)/3));
+		Health = 	200.0f;//((Random.Range(10, 50)) + (Random.Range(50, 100)/3));
 		Max_Health = Health;
-		Damage = 	((Random.Range(10, 50)/2) + (Random.Range(50, 100)/10));
+		Damage = 	((Random.Range(10, 20)));
 		Healing =	((Random.Range(10, 50)/2) + (Random.Range(50, 100)/10));
 	}
 }

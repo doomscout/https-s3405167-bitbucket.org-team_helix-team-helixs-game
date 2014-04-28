@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 //[ExecuteInEditMode]
 [RequireComponent(typeof(MeshFilter))]
@@ -33,6 +34,7 @@ public class TileMap : MonoBehaviour {
 	public void init() {
 		if (!hasInit) {
 			BuildMesh();
+
 			map_unit_occupy = new Unit[size_x,size_z];			
 			this.transform.Translate(0, 0, size_z);
 			this.transform.Translate(-0.5f, 0f, -0.5f);
@@ -49,7 +51,6 @@ public class TileMap : MonoBehaviour {
 		Object.Destroy(gameObject);
 		Debug.Log ("TileMap cleaned up");
 	}
-	
 
 	//import and read image file and chop down each color for each tile.
 
@@ -70,8 +71,8 @@ public class TileMap : MonoBehaviour {
 
 	//import and read image file and chop down each color for each tile.
 
-	void BuildTexture() {
-		map = new DataTileMap(size_x, size_z, percentAreTile);
+	void BuildTexture(DataTileMap bestMap) {
+		map = bestMap;
 		
 		int texWidth = size_x * tileResolution;
 		int texHeight = size_z * tileResolution;
@@ -79,7 +80,6 @@ public class TileMap : MonoBehaviour {
 		
 		Color[][] tiles = ChopUpTiles();
 
-		
 		for(int y=0; y < size_z; y++) {
 			for(int x=0; x < size_x; x++) {
 				Color[] p = tiles[ map.GetTileAt(x,y) ];
@@ -165,8 +165,40 @@ public class TileMap : MonoBehaviour {
 		mesh_collider.sharedMesh = mesh;
 		Debug.Log ("Done Mesh!");
 
-		BuildTexture();
+		//Generate and test maps
+		List<DataTileMap> list_of_generated_maps = new List<DataTileMap>();
+		for (int i = 0; i < 10; i++) {
+			DataTileMap newMap = new DataTileMap(size_x, size_z, percentAreTile);
+			list_of_generated_maps.Add(newMap);
+		}
+		DataTileMap bestMap = testMaps(list_of_generated_maps);
+		BuildTexture(bestMap);
+
 		//PrintDebug();
+	}
+
+	private DataTileMap testMaps(List<DataTileMap> list) {
+		DataTileMap bestMap = null;
+		int maxNum = 0;
+
+		for (int i = 0; i < list.Count; i++) {
+			if (!list[i].isAllsConnected()) {
+				continue;
+			}
+			if (bestMap == null) {
+				bestMap = list[i];
+				maxNum = list[i].numberOfColourTiles;
+			} else {
+				if (list[i].numberOfColourTiles > maxNum) {
+					bestMap = list[i];
+					maxNum = list[i].numberOfColourTiles;
+				}
+			}
+		}
+		if (bestMap == null) {
+			Debug.LogError("Looked at 10 maps, none of them are any good");
+		}
+		return bestMap;
 	}
 
 	public bool isOutOfBounds(int x, int y) {

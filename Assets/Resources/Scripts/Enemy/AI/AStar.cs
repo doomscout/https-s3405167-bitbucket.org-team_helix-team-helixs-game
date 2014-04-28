@@ -87,7 +87,7 @@ public class AStar {
 		}
 		return path;
 	}
-	
+
 	//This function is also used in simpleAI
 	public float euclidianDistanceFromTarget(float target_x, float target_y) {
 		float ans = Mathf.Sqrt((target_x - x) * (target_x - x) + 

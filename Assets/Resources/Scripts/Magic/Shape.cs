@@ -22,18 +22,23 @@ public class Shape {
 	public void setRandomShape() {
 		int set = (int)Random.Range(1,6);
 		
-		if(set==1)
+		if(set==1) {
 			spellShape = "line";
-		else if(set==2)
+		}
+		else if(set==2) {
 			spellShape = "circle";
-		else if(set==3)
+		}
+		else if(set==3) {
 			spellShape = "single";
-		else if(set==4)
+		}
+		else if(set==4) {
 			spellShape = "cone";
-		else if(set==5)
-			spellShape = "floor";
+		}
+		else if(set==5) {
+			//spellShape = "floor";
+			spellShape = "cone";
+		}
 
-		spellShape = "cone";
 	}
 
 	public string getShape() {
@@ -49,7 +54,7 @@ public class Shape {
 
 		if(spellShape=="line") {
 			//calculate direction, extrapolate 4 tiles
-			coordArray = new int[6,2];
+			coordArray = new int[7,2];
 			int x = m_x - c_x;
 			int y = m_y - c_y;
 
@@ -71,7 +76,7 @@ public class Shape {
 			x = x / div;
 			y = y / div;
 
-			for(int i = 0; i < 6; i++) {
+			for(int i = 0; i < 9; i++) {
 				coordArray[i, 0] = c_x + (x * (i+1));
 				coordArray[i, 1] = c_y + (y * (i+1));
 			}

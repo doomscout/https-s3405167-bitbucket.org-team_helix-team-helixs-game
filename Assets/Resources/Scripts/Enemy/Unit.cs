@@ -6,6 +6,7 @@ public class Unit {
 	public bool FinishedAnimation{get;set;}
 	//public bool IsDead{get; private set;}
 	public float MoveSpeed{get;set;}
+	public float MaxHealth{get;private set;}
 	public float Health{get;private set;}
     public int Map_position_x { get; private set;}
     public int Map_position_y { get; private set;}
@@ -18,10 +19,11 @@ public class Unit {
 	SimpleAI brain;
 	float remainingDistance = 1f;
 
-	private Spell unitSpell;
+	public Spell unitSpell {get; private set;}
 	private SpellIndicator spellIndicator;
 	private List<float> list_of_damage_taken;
-
+	private List<Colour> list_of_colour_taken;
+	
 	public Unit() {
 		brain = new SimpleAI(this);
 		unit_object = Object.Instantiate(Resources.Load("Prefabs/EnemyPrefab", typeof(GameObject))) as GameObject;
@@ -33,7 +35,8 @@ public class Unit {
 		}
 
 		while (GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] != null || 
-		       GameTools.Map.store_data[Map_position_x, Map_position_y] == Colour.None) {
+		       GameTools.Map.store_data[Map_position_x, Map_position_y] == Colour.None ||
+		       AStar.fromPosition(Map_position_x, Map_position_y).manhattanDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) < 10) {
 			Map_position_x = Random.Range(0, GameTools.Map.size_x);
 			Map_position_y = Random.Range(0, GameTools.Map.size_z);
 		}
@@ -41,6 +44,7 @@ public class Unit {
 		GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = this;
         unit_object.transform.position = new Vector3(Map_position_x, 0, Map_position_y);
 		Health = 10f;
+		MaxHealth = 10f;
 		MoveSpeed = 10.0f;
 		UnitColour = ColourManager.getRandomColour();
 		unitSpell = new Spell("single", UnitColour);
@@ -48,6 +52,7 @@ public class Unit {
 		castRange = 5;
 		spellIndicator = new SpellIndicator(1);
 		list_of_damage_taken = new List<float>();
+		list_of_colour_taken = new List<Colour>();
 	}
 
 	public void logic_tick() {
@@ -122,7 +127,7 @@ public class Unit {
 		Debug.Log ("Death Tick");
 	}
 
-	public void getHitByMagic(Spell taken_spell) {
+	public void getHitByMagic(Spell taken_spell, float power) {
 		float modifier = 1.0f;
 		if (ColourManager.getWeakness(taken_spell.SpellColour) == UnitColour) {
 			//The spell is weak against our colour
@@ -131,9 +136,10 @@ public class Unit {
 			//The spell is strong against us
 			modifier = ColourManager.StrengthModifier;
 		}
-		float dmg = taken_spell.Power * modifier;
+		float dmg = taken_spell.Power * modifier * (power/10);
 		Health -= dmg;
 		list_of_damage_taken.Add(dmg);
+		list_of_colour_taken.Add(taken_spell.SpellColour);
 	}
 
 	public void attack() {
@@ -142,9 +148,10 @@ public class Unit {
 		spellIndicator.setSpellIndicator(	new int[2]{ Map_position_x, Map_position_y},
 											new int[2] {GameTools.Player.Map_position_x, GameTools.Player.Map_position_y},
 											unitSpell);
-		spellIndicator.showAnimation();
+		spellIndicator.showCastAnimation();
 		unitSpell.cast (	new int[2]{ Map_position_x, Map_position_y},
-							new int[2] {GameTools.Player.Map_position_x, GameTools.Player.Map_position_y});
+							new int[2] {GameTools.Player.Map_position_x, GameTools.Player.Map_position_y},
+							10.0f);
 		unit_object.transform.LookAt(new Vector3(GameTools.Player.Map_position_x, 0, GameTools.Player.Map_position_y));
 	}
 
@@ -152,11 +159,19 @@ public class Unit {
 		for (int i = 0; i < list_of_damage_taken.Count; i++) {
 			GameObject o = Object.Instantiate(Resources.Load("Prefabs/DamagePopupPrefab", typeof(GameObject))) as GameObject;
 			DamagePopup script = o.GetComponent<DamagePopup>();
+			Color c = Color.white;
+			if (ColourManager.getStrength(list_of_colour_taken[i]) == UnitColour) {
+				c = Color.magenta;
+			} else if (ColourManager.getWeakness(list_of_colour_taken[i]) == UnitColour) {
+				c = Color.grey;
+			}
 			script.setText(list_of_damage_taken[i] + "");
+			script.setColor(c);
 			o.transform.position = new Vector3(unit_object.transform.position.x, 0, unit_object.transform.position.z + 1.0f + i/2.0f);
 
 		}
 		list_of_damage_taken = new List<float>();
+		list_of_colour_taken = new List<Colour>();
 	}
 
 	public void determineNextMove() {

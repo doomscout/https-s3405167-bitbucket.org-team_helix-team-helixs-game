@@ -20,10 +20,18 @@ public class SpellIndicator {
 		}
 	}
 
-	public void showAnimation() {
+	public void showCastAnimation() {
 		for (int i = 0; i < refill; i++) {
 			Indicator script = pool[i].transform.GetComponent<Indicator>();
 			script.TriggerAnimation();
+		}
+		refillPool();
+		IsShowingIndicator = false;
+	}
+
+	public void showNoCastAnimation() {
+		for (int i = 0; i < refill; i++) {
+			Object.Destroy(pool[i]);
 		}
 		refillPool();
 		IsShowingIndicator = false;
