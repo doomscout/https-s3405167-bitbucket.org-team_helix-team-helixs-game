@@ -15,8 +15,8 @@ public class TileMap : MonoBehaviour {
 	public int percentAreTile =90;
 	public Colour[,] store_data;
 
-
 	public Unit[,] map_unit_occupy;
+	public bool hasInit = false;
 
 	//Declare variable of Texture and texture resolution
 	public Texture2D terrainTiles;
@@ -27,21 +27,19 @@ public class TileMap : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		BuildMesh();
-		map_unit_occupy = new Unit[size_x,size_z];
-		GameTools.Map = this;/*
-		for (int i = 0; i < size_x; i++) {
-			for (int j = 0; j < size_z; j++) {
-				Debug.Log (map.Map_data[i,j]);
-			}
-		}
-		Debug.LogError("Done");
-		*/
-		this.transform.Translate(0, 0, size_z);
-		this.transform.Translate(-0.5f, 0f, -0.5f);
+		init();
 	}
 
-
+	public void init() {
+		if (!hasInit) {
+			BuildMesh();
+			map_unit_occupy = new Unit[size_x,size_z];			
+			this.transform.Translate(0, 0, size_z);
+			this.transform.Translate(-0.5f, 0f, -0.5f);
+			GameTools.Map = this;
+			hasInit = true;
+		}
+	}
 	
 
 	//import and read image file and chop down each color for each tile.

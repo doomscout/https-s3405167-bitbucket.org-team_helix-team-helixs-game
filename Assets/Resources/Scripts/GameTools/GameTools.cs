@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -12,7 +12,7 @@ public static class GameTools {
 	public static List<Unit> Dead_Units{get;set;}
 	public static TileMap Map{get;set;}
 	public static GameManager GM{get;set;}
-	public static TurnManager TM{get;set;}
+	public static GameInstance GI{get;set;}
 	public static Player Player{get;set;}
 	public static TileMouseOver Mouse {get;set;}
 

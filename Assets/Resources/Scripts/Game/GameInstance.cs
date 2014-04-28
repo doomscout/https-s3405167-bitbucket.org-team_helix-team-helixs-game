@@ -3,13 +3,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class TurnManager {
+public class GameInstance {
 
     bool turn_player, turn_enemy;
     Statemachine turn_manager;
 	public List<Unit> list_live_units {get; private set;}
 	List<Unit> list_dead_units;							//Remember to reset kill units after both sides' turns
 	Player player;
+	GameObject tileMapPrefab;
 
     private bool validInput = false;
 	private bool showDamageIndicators = true;
@@ -17,14 +18,27 @@ public class TurnManager {
 	public bool IsAnimationDone{get; private set;}
 	//bool hasRemovedUnits;								//BONUS: Do this
 
-    public TurnManager() {
+    public GameInstance(Player player) {
         list_live_units = new List<Unit>();
 		list_dead_units = new List<Unit>();
 		GameTools.All_Units = list_live_units;			//Perhaps move this into a different class?
 		GameTools.Dead_Units = list_dead_units;			//and this
+		this.player = player;
         initSM();
-		GameTools.TM = this;
+		initGame();
+		GameTools.GI = this;
     }
+
+	public void initGame() {
+		tileMapPrefab = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/TileMapPrefab", typeof(GameObject))) as GameObject;
+		TileMap script = tileMapPrefab.GetComponent<TileMap>();
+		script.init ();
+		player.loadIntoGame();
+		//populate map with enemies
+		for (int i = 0; i < 10; i++) {
+			list_live_units.Add(new Unit());
+		}
+	}
 
     public void tick() {
 		if (Input.GetKeyDown("p")) {
@@ -91,11 +105,7 @@ public class TurnManager {
     //Actions
 
 	void actionStartExit() {
-		player = new Player();
-		//populate map with enemies
-		for (int i = 0; i < 10; i++) {
-			list_live_units.Add(new Unit());
-		}
+
 	}
 
 	void actionPlayerEntry() {

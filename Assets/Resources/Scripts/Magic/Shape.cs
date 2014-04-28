@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Shape {
@@ -147,10 +147,10 @@ public class Shape {
 			//use gametools.map to find the coordinates of all enemy units;
 
 			//filler code
-			coordArray = new int[GameTools.TM.list_live_units.Count, 2];
-			for (int i = 0; i < GameTools.TM.list_live_units.Count; i++) {
-				coordArray[i,0] = GameTools.TM.list_live_units[i].Map_position_x;
-				coordArray[i,1] = GameTools.TM.list_live_units[i].Map_position_y;
+			coordArray = new int[GameTools.GI.list_live_units.Count, 2];
+			for (int i = 0; i < GameTools.GI.list_live_units.Count; i++) {
+				coordArray[i,0] = GameTools.GI.list_live_units[i].Map_position_x;
+				coordArray[i,1] = GameTools.GI.list_live_units[i].Map_position_y;
 			}
 
 			

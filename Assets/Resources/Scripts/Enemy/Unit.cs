@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -28,6 +28,10 @@ public class Unit {
 		Map_position_x = Random.Range(0, GameTools.Map.size_x);
 		Map_position_y = Random.Range(0, GameTools.Map.size_z);
 
+		if (GameTools.Map.store_data == null) {
+			Debug.Log ("what's going on?");
+		}
+
 		while (GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] != null || 
 		       GameTools.Map.store_data[Map_position_x, Map_position_y] == Colour.None) {
 			Map_position_x = Random.Range(0, GameTools.Map.size_x);
@@ -54,7 +58,7 @@ public class Unit {
 		if (Health <= 0) {
 			//IsDead = true;
 			FinishedAnimation = true;
-			GameTools.TM.signalDeath(this);
+			GameTools.GI.signalDeath(this);
 			GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = null;
 			return;
 		}

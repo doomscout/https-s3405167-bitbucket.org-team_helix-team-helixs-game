@@ -28,9 +28,16 @@ public class Player {
 		PlayerColour = ColourManager.getRandomColour();
 		Debug.Log ("Player colour: " + PlayerColour);
 
-
 		IsDead = false;
 		player_object = Object.Instantiate(Resources.Load("Prefabs/PlayerPrefab", typeof(GameObject))) as GameObject;
+		player_object.renderer.material.color = ColourManager.toColor(PlayerColour);
+
+		spellIndicator = new SpellIndicator(20);
+
+		GameTools.Player = this;
+	}
+
+	public void loadIntoGame() {
 		for (int i = 0; i < GameTools.Map.size_z; i++) {
 			for (int j = 0; j < GameTools.Map.size_x; j++) {
 				if (GameTools.Map.store_data[j, i] != Colour.None) {
@@ -41,11 +48,6 @@ public class Player {
 			}
 		}
 		player_object.transform.position = new Vector3(Map_position_x, 0, Map_position_y);
-		player_object.renderer.material.color = ColourManager.toColor(PlayerColour);
-
-		spellIndicator = new SpellIndicator(20);
-
-		GameTools.Player = this;
 	}
 
 	public bool listenInput() {

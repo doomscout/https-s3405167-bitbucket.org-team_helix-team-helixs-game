@@ -7,7 +7,9 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour{
 
 	Statemachine game_manager;
-    TurnManager turn_manager;
+    GameInstance turn_manager;
+
+	Player player;
 
     GameObject main_menu;
     GameObject pause_menu;
@@ -22,7 +24,7 @@ public class GameManager : MonoBehaviour{
 	// Use this for initialization
 	void Start () {
 		initSM();
-        turn_manager = new TurnManager();
+        
 		GameTools.GM = this;
 
 	}
@@ -147,6 +149,10 @@ public class GameManager : MonoBehaviour{
 	void actionMenuExit() {
 		//cleanup menu
 		Gameexit = false;
+		if (player == null) {
+			player = new Player();
+		}
+		turn_manager = new GameInstance(player);
 		Debug.Log("actionMenuExit");
 		//Temp placement of generate level
 		/* Disable this for now
@@ -166,6 +172,7 @@ public class GameManager : MonoBehaviour{
 		//insert ingame state machine here
 		//Debug.Log("actionPlayRunning");
         turn_manager.tick();
+		Debug.Log ("actionPlayRunning");
 	}
 
 	void actionWinEntry() {
@@ -181,6 +188,7 @@ public class GameManager : MonoBehaviour{
 
 	void actionWinExit() {
 		//Cleanup menu
+		turn_manager = new GameInstance(player);
 		Debug.Log("actionWinExit");
 	}
 
@@ -247,7 +255,7 @@ public class GameManager : MonoBehaviour{
 	}
 
 	bool conditionWin() {
-		return  Input.GetKeyDown("right");
+		return turn_manager.list_live_units.Count == 0;
 	}
 
 	bool conditionLose() {
