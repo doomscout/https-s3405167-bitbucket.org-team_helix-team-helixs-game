@@ -3,6 +3,7 @@ using System.Collections;
 
 public class HelpGUI : MonoBehaviour {
     public bool helpOn;
+
 	// Use this for initialization
 	void Start () {
         helpOn = false;
@@ -20,7 +21,13 @@ public class HelpGUI : MonoBehaviour {
         {
             GUI.Box(new Rect(0, 120, 250, 100), "Help Content" +
                 "\nMovement - WASD keys" +
-                "\nClick on Magic then select tile to use");
+                "\nPress 1 and select Area- to Cast Spell"
+                 +"\n Space Bar - Skip Turn"   );
         }
+
+       
+            Debug.Log("GUIComplete");
+        GUI.Box(new Rect(100, 100, GameTools.Player.stats.Health/10, 20), "Health" + GameTools.Player.stats.Health);
+       
     }
 }
