@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -30,7 +31,16 @@ public static class FileHandler{
 			Debug.Log("Unable to save -- player or units are null");
 			return;
 		}
-		StreamWriter writer = new StreamWriter(@"Assets/Resources/Data/PlayerUnitData.txt", APPEND);			
+		StreamWriter writer;
+		try {
+			writer = new StreamWriter(@"Assets/Resources/Data/PlayerUnitData.txt", APPEND);			
+		} catch (DirectoryNotFoundException e) {
+			Debug.Log (e.ToString());
+			Debug.LogError ("Cannot write to path");
+
+
+			return;
+		}
 		writer.WriteLine("----Start----");
 		writer.WriteLine("Player:");
 		writer.WriteLine("Max Health:" + p.stats.Max_Health);
