@@ -29,6 +29,19 @@ public class GameInstance {
 		GameTools.GI = this;
     }
 
+	public void cleanUp() {
+		foreach(Unit u in list_live_units) {
+			u.cleanUp();
+		}
+		foreach(Unit u in list_dead_units) {
+			u.cleanUp();
+		}
+		GameTools.All_Units = null;
+		GameTools.Dead_Units = null;
+		tileMapPrefab = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/TileMapPrefab", typeof(GameObject))) as GameObject;
+		TileMap script = tileMapPrefab.GetComponent<TileMap>();
+	}
+
 	public void initGame() {
 		tileMapPrefab = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/TileMapPrefab", typeof(GameObject))) as GameObject;
 		TileMap script = tileMapPrefab.GetComponent<TileMap>();

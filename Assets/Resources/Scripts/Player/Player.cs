@@ -50,6 +50,11 @@ public class Player {
 		player_object.transform.position = new Vector3(Map_position_x, 0, Map_position_y);
 	}
 
+	public void cleanUp() {
+		GameTools.Player = null;
+		Object.Destroy(player_object);
+	}
+
 	public bool listenInput() {
         bool validInput = false;
 		//Keyboard

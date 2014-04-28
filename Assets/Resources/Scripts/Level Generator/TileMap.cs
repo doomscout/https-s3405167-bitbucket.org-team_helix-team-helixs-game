@@ -40,6 +40,11 @@ public class TileMap : MonoBehaviour {
 			hasInit = true;
 		}
 	}
+
+	public void cleanUp() {
+		GameTools.Map = null;
+		Object.Destroy(gameObject);
+	}
 	
 
 	//import and read image file and chop down each color for each tile.

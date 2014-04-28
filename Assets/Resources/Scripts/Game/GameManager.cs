@@ -193,7 +193,6 @@ public class GameManager : MonoBehaviour{
 		//Cleanup menu
         Destroy(winScreen);
 		turn_manager = new GameInstance(player);
-        Application.LoadLevel (0); 
         Debug.Log("actionWinExit");
 	}
 
@@ -225,7 +224,10 @@ public class GameManager : MonoBehaviour{
 	void actionLoseExit() {
 		//Hide GUI
         Destroy(loseScreen);
-        Application.LoadLevel (0); 
+		turn_manager.cleanUp();
+		player.cleanUp();
+		turn_manager = null;
+		player = null;
 		Debug.Log("actionLoseExit");
 	}
 

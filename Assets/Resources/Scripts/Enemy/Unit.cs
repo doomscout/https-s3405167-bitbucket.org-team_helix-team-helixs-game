@@ -107,6 +107,12 @@ public class Unit {
 		}
 		
 	}
+
+	public void cleanUp() {
+		if (unit_object != null) {
+			GameObject.Destroy(unit_object);
+		}
+	}
 	
 	public void death_tick() {
 		//display death animation (if any)
