@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour{
 
     GameObject main_menu;
     GameObject pause_menu;
+    GameObject winScreen;
+    GameObject loseScreen;
     bool Gameexit;
     bool GamePaused;
     MainMenu temp;
@@ -177,6 +179,7 @@ public class GameManager : MonoBehaviour{
 
 	void actionWinEntry() {
 		//Display Win GUI
+        winScreen = Instantiate(Resources.Load("Prefabs/Win")) as GameObject;
 		Debug.Log("actionWinEntry");
 	}
 
@@ -188,8 +191,10 @@ public class GameManager : MonoBehaviour{
 
 	void actionWinExit() {
 		//Cleanup menu
+        Destroy(winScreen);
 		turn_manager = new GameInstance(player);
-		Debug.Log("actionWinExit");
+        Application.LoadLevel (0); 
+        Debug.Log("actionWinExit");
 	}
 
 	void actionTransitionClickedContinue() {
@@ -213,11 +218,14 @@ public class GameManager : MonoBehaviour{
 
 	void actionLoseEntry() {
 		//Display Lose GUI
+        loseScreen = Instantiate(Resources.Load("Prefabs/Lose")) as GameObject;
 		Debug.Log("actionLoseEntry");
 	}
 
 	void actionLoseExit() {
 		//Hide GUI
+        Destroy(loseScreen);
+        Application.LoadLevel (0); 
 		Debug.Log("actionLoseExit");
 	}
 
@@ -233,7 +241,7 @@ public class GameManager : MonoBehaviour{
 	}
 	
 	bool conditionPressedEsc() {
-		return Input.GetKeyDown("up");
+		return Input.GetKeyDown("escape");
 	}
 
 	bool conditionClickedQuit() {
