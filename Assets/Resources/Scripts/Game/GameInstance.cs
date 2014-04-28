@@ -38,8 +38,8 @@ public class GameInstance {
 		}
 		GameTools.All_Units = null;
 		GameTools.Dead_Units = null;
-		tileMapPrefab = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/TileMapPrefab", typeof(GameObject))) as GameObject;
 		TileMap script = tileMapPrefab.GetComponent<TileMap>();
+		script.cleanUp();
 	}
 
 	public void initGame() {

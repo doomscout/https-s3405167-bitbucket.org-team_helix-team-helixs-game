@@ -12,6 +12,14 @@ public class SpellIndicator {
 		initSpellIndicator();
 	}
 
+	public void cleanUp() {
+		for (int i = 0; i < pool.Length; i++) {
+			if (pool[i] != null) {
+				Object.Destroy(pool[i]);
+			}
+		}
+	}
+
 	public void showAnimation() {
 		for (int i = 0; i < refill; i++) {
 			Indicator script = pool[i].transform.GetComponent<Indicator>();

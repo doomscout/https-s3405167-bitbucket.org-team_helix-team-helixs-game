@@ -43,7 +43,11 @@ public class TileMap : MonoBehaviour {
 
 	public void cleanUp() {
 		GameTools.Map = null;
+		TileMouseOver tileMouseOverScript = gameObject.GetComponent<TileMouseOver>();
+		tileMouseOverScript.cleanUp();
+		gameObject.transform.position = new Vector3(-100, -100, -100);
 		Object.Destroy(gameObject);
+		Debug.Log ("TileMap cleaned up");
 	}
 	
 

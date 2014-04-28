@@ -51,6 +51,7 @@ public class Player {
 	}
 
 	public void cleanUp() {
+		spellIndicator.cleanUp();
 		GameTools.Player = null;
 		Object.Destroy(player_object);
 	}
@@ -78,6 +79,56 @@ public class Player {
 			current_target = Direction.None;
 		} else {
 			current_target = Direction.None;
+		}
+
+		//Check to see if player is going somewhere invalid
+		switch (current_target) {
+			case Direction.Down:
+				if (GameTools.Map.isOutOfBounds(Map_position_x, Map_position_y-1)) {
+					current_target = Direction.None;
+					validInput = false;
+				} else {
+					if (GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y-1] != null) {
+						current_target = Direction.None;
+						validInput = false;
+					}
+				}
+				break;
+			case Direction.Up:
+				if (GameTools.Map.isOutOfBounds(Map_position_x, Map_position_y+1)) {
+					current_target = Direction.None;
+					validInput = false;
+				} else {
+					if (GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y+1] != null) {
+						current_target = Direction.None;
+						validInput = false;
+					}
+				}
+				break;
+			case Direction.Left:
+				if (GameTools.Map.isOutOfBounds(Map_position_x-1, Map_position_y)) {
+					current_target = Direction.None;
+					validInput = false;
+				} else {
+					if (GameTools.Map.map_unit_occupy[Map_position_x-1, Map_position_y] != null) {
+						current_target = Direction.None;
+						validInput = false;
+					}
+				}
+				break;
+			case Direction.Right:
+				if (GameTools.Map.isOutOfBounds(Map_position_x+1, Map_position_y)) {
+					current_target = Direction.None;
+					validInput = false;
+				} else {
+					if (GameTools.Map.map_unit_occupy[Map_position_x+1, Map_position_y] != null) {
+						current_target = Direction.None;
+						validInput = false;
+					}
+				}
+				break;
+			case Direction.None:
+			break;
 		}
 
 		//Mouse

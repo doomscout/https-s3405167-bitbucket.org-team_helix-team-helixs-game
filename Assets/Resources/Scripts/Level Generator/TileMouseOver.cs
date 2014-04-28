@@ -27,28 +27,36 @@ using System.Collections;
 
 	void Update()
 	{
-		Ray ray = Camera.mainCamera.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hitInfo;
-		if(collider.Raycast(ray, out hitInfo, Mathf.Infinity ) )
-		{
-			IsOnMap = true;
-			//Debug.Log (hitInfo.point - transform.point);
-			Pos_x = Mathf.RoundToInt ( hitInfo.point.x / _tileMap.tileSize);
-			Pos_z = Mathf.RoundToInt ( hitInfo.point.z / _tileMap.tileSize);
-			colorNumber = GameTools.Map.store_data[Pos_x, Pos_z];
+		if (GameTools.Map != null) {
+					
+			Ray ray = Camera.mainCamera.ScreenPointToRay(Input.mousePosition);
+			RaycastHit hitInfo;
+			if(collider.Raycast(ray, out hitInfo, Mathf.Infinity ) )
+			{
+				IsOnMap = true;
+				//Debug.Log (hitInfo.point - transform.point);
+				Pos_x = Mathf.RoundToInt ( hitInfo.point.x / _tileMap.tileSize);
+				Pos_z = Mathf.RoundToInt ( hitInfo.point.z / _tileMap.tileSize);
+				colorNumber = GameTools.Map.store_data[Pos_x, Pos_z];
 
-			//Debug.Log ("Map Position: (" + Pos_x + ", " + Pos_z + ") Color: " + colorNumber);
+				//Debug.Log ("Map Position: (" + Pos_x + ", " + Pos_z + ") Color: " + colorNumber);
 
-			currentTileCoord.x = Pos_x - 0.5f;
-			currentTileCoord.z = Pos_z - 0.5f;
+				currentTileCoord.x = Pos_x - 0.5f;
+				currentTileCoord.z = Pos_z - 0.5f;
 
-			//selectionCube.transform.position = currentTileCoord;
+				//selectionCube.transform.position = currentTileCoord;
 
+			}
+			else 
+			{
+				IsOnMap = false;
+			}
 		}
-		else 
-		{
-			IsOnMap = false;
-		}
+	}
+
+	public void cleanUp() {
+		GameTools.Mouse = null;
+		Object.Destroy(gameObject);
 	}
 
 	public Vector3 getSelector() {

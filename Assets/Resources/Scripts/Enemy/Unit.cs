@@ -109,6 +109,7 @@ public class Unit {
 	}
 
 	public void cleanUp() {
+		spellIndicator.cleanUp();
 		if (unit_object != null) {
 			GameObject.Destroy(unit_object);
 		}
