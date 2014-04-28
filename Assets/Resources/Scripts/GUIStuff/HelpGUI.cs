@@ -27,7 +27,9 @@ public class HelpGUI : MonoBehaviour {
 
        
             Debug.Log("GUIComplete");
-        GUI.Box(new Rect(100, 100, GameTools.Player.stats.Health/10, 20), "Health" + GameTools.Player.stats.Health);
+		if (GameTools.Player != null) {
+			GUI.Box(new Rect(100, 100, (float)GameTools.Player.stats.Health/(float)GameTools.Player.stats.Max_Health * 100.0f + 10, 20), "" + GameTools.Player.stats.Health);
+		}
        
     }
 }
