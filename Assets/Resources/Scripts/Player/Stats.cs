@@ -11,6 +11,6 @@ public class Stats {
 		Health = 	200.0f;//((Random.Range(10, 50)) + (Random.Range(50, 100)/3));
 		Max_Health = Health;
 		Damage = 	((Random.Range(10, 20)));
-		Healing =	((Random.Range(10, 50)/2) + (Random.Range(50, 100)/10));
+		Healing =	Random.Range(1, 5);
 	}
 }
