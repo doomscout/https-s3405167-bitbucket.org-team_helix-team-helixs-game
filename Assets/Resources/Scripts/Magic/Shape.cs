@@ -10,6 +10,7 @@ public class Shape {
 														{0, 0, 0, 1}
 													};
 	public string spellShape;
+	public float shapeModifier;
 
 	public Shape() {
 		setRandomShape();
@@ -24,19 +25,23 @@ public class Shape {
 		
 		if(set==1) {
 			spellShape = "line";
+			shapeModifier = 0.8f;
 		}
 		else if(set==2) {
 			spellShape = "circle";
+			shapeModifier = 0.3f;
 		}
 		else if(set==3) {
 			spellShape = "single";
+			shapeModifier = 1.0f;
 		}
 		else if(set==4) {
 			spellShape = "cone";
+			shapeModifier = 0.5f;
 		}
 		else if(set==5) {
 			spellShape = "floor";
-
+			shapeModifier = 0.2f;
 		}
 
 	}
@@ -86,43 +91,46 @@ public class Shape {
 
 		else if(spellShape=="circle") {
 			//circle centred around player coordinates. Hard coded.
-			coordArray = new int[12,2];
+			coordArray = new int[5,2];
 
-			coordArray[0,0] = c_x-2;
-			coordArray[0,1] = c_y;
+			//coordArray[0,0] = m_x-2;
+			//coordArray[0,1] = m_y;
 
-			coordArray[1,0] = c_x-1;
-			coordArray[1,1] = c_y;
+			coordArray[0,0] = m_x-1;
+			coordArray[0,1] = m_y;
 
-			coordArray[2,0] = c_x-1;
-			coordArray[2,1] = c_y+1;
+			//coordArray[1,0] = m_x-1;
+			//coordArray[1,1] = m_y+1;
 
-			coordArray[3,0] = c_x-1;
-			coordArray[3,1] = c_y-1;
+			//coordArray[2,0] = m_x-1;
+			//coordArray[2,1] = m_y-1;
 
-			coordArray[4,0] = c_x;
-			coordArray[4,1] = c_y-1;
+			coordArray[1,0] = m_x;
+			coordArray[1,1] = m_y-1;
 
-			coordArray[5,0] = c_x;
-			coordArray[5,1] = c_y-2;
+			//coordArray[5,0] = m_x;
+			//coordArray[5,1] = m_y-2;
 			
-			coordArray[6,0] = c_x;
-			coordArray[6,1] = c_y+1;
+			coordArray[2,0] = m_x;
+			coordArray[2,1] = m_y+1;
 			
-			coordArray[7,0] = c_x;
-			coordArray[7,1] = c_y+2;
+			//coordArray[7,0] = m_x;
+			//coordArray[7,1] = m_y+2;
 			
-			coordArray[8,0] = c_x+1;
-			coordArray[8,1] = c_y;
+			coordArray[3,0] = m_x+1;
+			coordArray[3,1] = m_y;
 			
-			coordArray[9,0] = c_x+1;
-			coordArray[9,1] = c_y-1;
+			//coordArray[6,0] = m_x+1;
+			//coordArray[6,1] = m_y-1;
 
-			coordArray[10,0] = c_x+1;
-			coordArray[10,1] = c_y+1;
+			//coordArray[7,0] = m_x+1;
+			//coordArray[7,1] = m_y+1;
 			
-			coordArray[11,0] = c_x+2;
-			coordArray[11,1] = c_y;
+			//coordArray[11,0] = m_x+2;
+			//coordArray[11,1] = m_y;
+
+			coordArray[4,0] = m_x;
+			coordArray[4,1] = m_y;
 			
 			return coordArray;
 		}

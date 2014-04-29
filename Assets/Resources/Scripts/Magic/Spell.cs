@@ -8,8 +8,10 @@ public class Spell {
 
 	public Spell () {
 		SpellColour = ColourManager.getRandomColour();
-		Power = Random.Range(1, 10);
+
 		Shape = new Shape();
+
+		Power = Random.Range(7, 10) * Shape.shapeModifier;
 
 	}
 

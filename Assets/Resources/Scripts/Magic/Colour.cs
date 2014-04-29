@@ -5,8 +5,8 @@ public enum Colour { None, Red, Blue, Yellow, Green, Purple, Pink};
 
 public static class ColourManager {
 
-	public static readonly float WeaknessModifier = 0.75f;
-	public static readonly float StrengthModifier = 1.25f;
+	public static readonly float WeaknessModifier = 2.0f;
+	//public static readonly float StrengthModifier = 1.25f;
 
 	public static Colour getRandomColour() {
 		return (Colour)Random.Range(1, System.Enum.GetNames(typeof(Colour)).Length - 1);
@@ -34,22 +34,23 @@ public static class ColourManager {
 	public static Colour getWeakness(Colour c) {
 		switch(c) {
 		case Colour.Red:
-			return Colour.Blue;
-		case Colour.Blue:
-			return Colour.Yellow;
-		case Colour.Yellow:
-			return Colour.Green;
-		case Colour.Green:
-			return Colour.Purple;
-		case Colour.Purple:
-			return Colour.Pink;
-		case Colour.Pink:
 			return Colour.Red;
+		case Colour.Blue:
+			return Colour.Blue;
+		case Colour.Yellow:
+			return Colour.Yellow;
+		case Colour.Green:
+			return Colour.Green;
+		case Colour.Purple:
+			return Colour.Purple;
+		case Colour.Pink:
+			return Colour.Pink;
 		default:
 			return Colour.None;
 		}
 	}
 
+	/*
 	public static Colour getStrength(Colour c) {
 		switch(c) {
 		case Colour.Red:
@@ -68,5 +69,5 @@ public static class ColourManager {
 			return Colour.None;
 		}
 	}
-	
+	*/
 }

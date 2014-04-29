@@ -173,10 +173,11 @@ public class Player {
 			GameObject o = Object.Instantiate(Resources.Load("Prefabs/DamagePopupPrefab", typeof(GameObject))) as GameObject;
 			DamagePopup script = o.GetComponent<DamagePopup>();
 			Color c = Color.white;
-			if (ColourManager.getStrength(list_of_colour_taken[i]) == PlayerColour) {
+			/*if (ColourManager.getStrength(list_of_colour_taken[i]) == PlayerColour) {
 				c = Color.magenta;
-			} else if (ColourManager.getWeakness(list_of_colour_taken[i]) == PlayerColour) {
-				c = Color.grey;
+			} else */
+			if (ColourManager.getWeakness(list_of_colour_taken[i]) == PlayerColour) {
+				c = Color.magenta;
 			}
 			script.setText(list_of_damage_taken[i] + "");
 			script.setColor(c);
@@ -197,10 +198,11 @@ public class Player {
 		if (ColourManager.getWeakness(taken_spell.SpellColour) == PlayerColour) {
 			//The spell is weak against our colour
 			modifier = ColourManager.WeaknessModifier;
-		} else if (ColourManager.getStrength(taken_spell.SpellColour) == PlayerColour) {
+		}
+		/*else if (ColourManager.getStrength(taken_spell.SpellColour) == PlayerColour) {
 			//The spell is strong against us
 			modifier = ColourManager.StrengthModifier;
-		}
+		}*/
 		float damage = taken_spell.Power * modifier * power/10;
 		stats.Health -= damage;
 		list_of_damage_taken.Add(damage);
