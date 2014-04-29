@@ -5,7 +5,9 @@ using System.Collections.Generic;
 public class Inventory : List<Spell> {
 
 	public Inventory() {
-
+		for(int i = 0; i < 10; i++) {
+			this.Add(new Spell());
+		}
 	}
 
 	public void generateNewSpell() {
