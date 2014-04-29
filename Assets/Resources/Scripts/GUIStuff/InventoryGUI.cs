@@ -3,6 +3,7 @@ using System.Collections;
 
 public class InventoryGUI : MonoBehaviour {
     public bool inventoryEnabled;
+    public int  numberInv;
     Inventory inventory;
     void Update()
     {
@@ -32,13 +33,33 @@ public class InventoryGUI : MonoBehaviour {
                 Debug.Log("pressed i");
                 if (inventory.size != 0)
                 {
-            GUI.Box(new Rect(100, 300, 120, 500),"Inventory\nCurrent Spell\nShape: " + GameTools.Player.deckManager.getInvSpell(0).Shape.spellShape 
-                    + "\nColour: " + GameTools.Player.deckManager.getInvSpell(0).SpellColour.ToString() + "\nPower: " + GameTools.Player.deckManager.getInvSpell(0).Power);
+            GUI.Box(new Rect(100, 300, 120, 500),"Inventory\nCurrent Spell\nShape: " + GameTools.Player.deckManager.getInvSpell(numberInv).Shape.spellShape 
+                            + "\nColour: " + GameTools.Player.deckManager.getInvSpell(numberInv).SpellColour.ToString() + "\nPower: " + GameTools.Player.deckManager.getInvSpell(numberInv).Power);
                 
                 if (GUI.Button(new Rect(100, 500, 120, 30), "Add Spell to Deck"))
                  {
                     GameTools.Player.deckManager.moveSpellInventoryToDeck(GameTools.Player.deckManager.getInvSpell(0));
                  }
+                    if (GUI.Button(new Rect( 100, 530, 20, 20), "<-"))
+                    {
+                        if (numberInv != 0)
+                        {
+                            numberInv--;
+                        }
+                        else{
+                            numberInv = inventory.size -1;
+                        }
+                     }
+                    if (GUI.Button(new Rect( 200, 530, 20, 20), "->"))
+                    {
+                        if (numberInv != inventory.size -1)
+                        {
+                            numberInv++;
+                        }
+                        else{
+                            numberInv = 0;
+                        }
+                    }
                 }
                 else{
                     GUI.Box(new Rect(100, 300, 120, 500),"Inventory");
