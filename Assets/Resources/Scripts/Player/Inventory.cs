@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Inventory : List<Spell> {
-
+    public int size;
 	public Inventory() {
+       
 		for(int i = 0; i < 10; i++) {
 			this.Add(new Spell());
+            size++;
 		}
 	}
 
@@ -42,8 +44,8 @@ public class Deck : List<Spell> {
 }
 
 public class ItemManager {
-	Inventory inv = new Inventory();
-	Deck deck = new Deck();
+	public Inventory inv = new Inventory();
+	public Deck deck = new Deck();
 
 	public Spell peekTopSpell() {
 		return deck.peekTopSpell();
@@ -55,12 +57,16 @@ public class ItemManager {
     public Spell getDeckSpell(int placement){
         return deck[placement];
     }
+    public Spell getInvSpell(int placement){
+        return inv[placement];
+    }
 	public void moveSpellInventoryToDeck(Spell s) {
 		if (!inv.Contains(s)) {
 			return;
 		}
 		deck.Add(s);
 		inv.Remove(s);
+        inv.size--;
 	}
 
 	public void moveSpellDeckToInventory(Spell s) {
@@ -69,5 +75,6 @@ public class ItemManager {
 		}
 		inv.Add(s);
 		deck.Remove(s);
+        inv.size++;
 	}
 }
