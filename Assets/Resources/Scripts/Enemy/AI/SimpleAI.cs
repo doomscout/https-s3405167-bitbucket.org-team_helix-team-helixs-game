@@ -32,19 +32,23 @@ public class SimpleAI {
         Transition seek2attack = new Transition();
         Transition attack2die = new Transition();
         Transition halt2die = new Transition();
+		Transition halt2attack = new Transition();
 
 		halt2seek.Trigger_condition = new TriggerCondition(transitionInSeekRange);
 		seek2attack.Trigger_condition = new TriggerCondition(transitionInAttackRange);
+		halt2attack.Trigger_condition = new TriggerCondition(transitionInAttackRange);
         halt2die.Trigger_condition = new TriggerCondition(transitionDie);
         attack2die.Trigger_condition = new TriggerCondition(transitionDie);
 
 		halt2seek.Target_state = state_seek;
         seek2attack.Target_state = state_attack;
         halt2die.Target_state = state_die;
+		halt2attack.Target_state = state_attack;
         attack2die.Target_state = state_die;
 
         state_halt.addTransition(halt2die);
         state_halt.addTransition(halt2seek);
+		state_halt.addTransition(halt2attack);
 		state_seek.addTransition(seek2attack);
 		state_attack.addTransition(attack2die);
 
@@ -77,7 +81,8 @@ public class SimpleAI {
     bool transitionInSeekRange() {
 		return AStar
 				.fromPosition(unit.Map_position_x, unit.Map_position_y)
-				.euclidianDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) < 8.0f;
+				.euclidianDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) < 8.0f ||
+				unit.MaxHealth != unit.Health;
     }
 
     bool transitionInAttackRange() {

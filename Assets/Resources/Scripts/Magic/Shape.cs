@@ -20,7 +20,7 @@ public class Shape {
 	}
 
 	public void setRandomShape() {
-		int set = (int)Random.Range(1,6);
+		int set = (int)Random.Range(1,6); 
 		
 		if(set==1) {
 			spellShape = "line";
@@ -35,8 +35,8 @@ public class Shape {
 			spellShape = "cone";
 		}
 		else if(set==5) {
-			//spellShape = "floor";
-			spellShape = "cone";
+			spellShape = "floor";
+
 		}
 
 	}
@@ -76,7 +76,7 @@ public class Shape {
 			x = x / div;
 			y = y / div;
 
-			for(int i = 0; i < 9; i++) {
+			for(int i = 0; i < 7; i++) {
 				coordArray[i, 0] = c_x + (x * (i+1));
 				coordArray[i, 1] = c_y + (y * (i+1));
 			}

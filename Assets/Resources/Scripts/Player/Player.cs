@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class Player {
 	public Stats stats;
 	public Colour PlayerColour;
+	public ItemManager deckManager;
 
 	public bool FinishedAnimation{get;set;}
 	public bool IsDead{get; private set;}
@@ -17,7 +18,7 @@ public class Player {
 
 	private Direction current_target = Direction.None;
 	private float remainingDistance = 1.0f;
-	private Spell spell = new Spell();
+	private Spell spell;
 	private SpellIndicator spellIndicator;
 	private List<float> list_of_damage_taken;
 	private List<Colour> list_of_colour_taken;
@@ -27,6 +28,8 @@ public class Player {
 		MoveSpeed = 10.0f;
 		stats = new Stats();
 		PlayerColour = ColourManager.getRandomColour();
+		deckManager = new ItemManager();
+		spell = deckManager.peekTopSpell();
 		Debug.Log ("Player colour: " + PlayerColour);
 
 		IsDead = false;
@@ -149,6 +152,8 @@ public class Player {
 					new int[2] {GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z},
 					stats.Damage);
 		castedSpell = true;
+		deckManager.popTopSpell();
+		spell = deckManager.peekTopSpell();
 		return true;
 	}
 

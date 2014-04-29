@@ -2,59 +2,68 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Inventory {
-	public List<Spell> spellInventory = new List<Spell>();
+public class Inventory : List<Spell> {
 
 	public Inventory() {
 
 	}
 
-	public void addSpell() {
-
-	}
-
-	public void removeSpell() {
-
-	}
-
-	public void generateSpell() {
-		spellInventory.Add(new Spell());
+	public void generateNewSpell() {
+		this.Add(new Spell());
 	}
 }
 
-public class Deck {
-	public List<Spell> spellDeck = new List<Spell>();
+public class Deck : List<Spell> {
+	private int count = 0;
 
 	public Deck() {
-		for(int i = 0; i < 6; i++) {
-			spellDeck.Add(new Spell());
+		for(int i = 0; i < 10; i++) {
+			this.Add(new Spell());
 		}
 	}
 
-	public void dropSpell(int element) {
-		spellDeck.RemoveAt(element);
+	public void shuffle() {
+
 	}
 
-	public void addSpell() {
-		
+	public Spell peekTopSpell() {
+		return this[0];
 	}
-	
-	public void removeSpell() {
-		
+
+	public Spell popTopSpell() {
+		//get top card and put at end
+		Spell s = this[0];
+		this.RemoveAt(0);
+		this.Add (s);
+		return s;
 	}
 }
 
-public class DeckManager {
+public class ItemManager {
 	Inventory inv = new Inventory();
 	Deck deck = new Deck();
 
-	public void addToDeck() {
-		deck.addSpell();
-		inv.removeSpell();
+	public Spell peekTopSpell() {
+		return deck.peekTopSpell();
 	}
 
-	public void removeFromDeck() {
-		inv.addSpell();
-		deck.removeSpell();
+	public Spell popTopSpell() {
+		return deck.popTopSpell();
+	}
+
+	public void moveSpellInventoryToDeck(Spell s) {
+		if (!inv.Contains(s)) {
+			return;
+		}
+		deck.Add(s);
+		inv.Remove(s);
+	}
+
+	public void moveSpellDeckToInventory(Spell s) {
+		if (!deck.Contains(s)) {
+			return;
+		}
+		inv.Add(s);
+		deck.Remove(s);
 	}
 }
