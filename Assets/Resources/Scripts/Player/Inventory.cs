@@ -30,10 +30,6 @@ public class Deck : List<Spell> {
 		return this[0];
 	}
 
-    public Spell getSpell(int placement){
-        return this[placement];
-    
-    }
 	public Spell popTopSpell() {
 		//get top card and put at end
 		Spell s = this[0];
@@ -54,8 +50,8 @@ public class ItemManager {
 	public Spell popTopSpell() {
 		return deck.popTopSpell();
 	}
-    public Spell getSpell(int placement){
-        return deck.getSpell(placement);
+    public Spell getDeckSpell(int placement){
+        return deck[placement];
     }
 	public void moveSpellInventoryToDeck(Spell s) {
 		if (!inv.Contains(s)) {
