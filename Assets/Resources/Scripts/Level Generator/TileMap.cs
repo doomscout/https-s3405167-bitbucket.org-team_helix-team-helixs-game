@@ -167,11 +167,14 @@ public class TileMap : MonoBehaviour {
 
 		//Generate and test maps
 		List<DataTileMap> list_of_generated_maps = new List<DataTileMap>();
-		for (int i = 0; i < 10; i++) {
-			DataTileMap newMap = new DataTileMap(size_x, size_z, percentAreTile);
-			list_of_generated_maps.Add(newMap);
+		DataTileMap bestMap = null;
+		while (bestMap == null) {
+			for (int i = 0; i < 10; i++) {
+				DataTileMap newMap = new DataTileMap(size_x, size_z, percentAreTile);
+				list_of_generated_maps.Add(newMap);
+			}
+			bestMap = testMaps(list_of_generated_maps);
 		}
-		DataTileMap bestMap = testMaps(list_of_generated_maps);
 		BuildTexture(bestMap);
 
 		//PrintDebug();
@@ -196,7 +199,7 @@ public class TileMap : MonoBehaviour {
 			}
 		}
 		if (bestMap == null) {
-			Debug.LogError("Looked at 10 maps, none of them are any good");
+			Debug.Log("Looked at 10 maps, none of them are any good");
 		}
 		return bestMap;
 	}
