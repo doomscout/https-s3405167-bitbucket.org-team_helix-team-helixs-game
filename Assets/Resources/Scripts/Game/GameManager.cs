@@ -175,7 +175,7 @@ public class GameManager : MonoBehaviour{
 		//insert ingame state machine here
 		//Debug.Log("actionPlayRunning");
         turn_manager.tick();
-		Debug.Log ("actionPlayRunning");
+		//Debug.Log ("actionPlayRunning");
 	}
 
 	void actionWinEntry() {

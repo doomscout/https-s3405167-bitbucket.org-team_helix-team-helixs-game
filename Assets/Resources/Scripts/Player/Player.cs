@@ -95,7 +95,8 @@ public class Player {
 					current_target = Direction.None;
 					validInput = false;
 				} else {
-					if (GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y-1] != null) {
+					if (GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y-1] != null ||
+				    	GameTools.Map.store_data[Map_position_x, Map_position_y-1] == Colour.None) {
 						current_target = Direction.None;
 						validInput = false;
 					}
@@ -106,10 +107,11 @@ public class Player {
 					current_target = Direction.None;
 					validInput = false;
 				} else {
-					if (GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y+1] != null) {
-						current_target = Direction.None;
-						validInput = false;
-					}
+					if (GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y+1] != null ||
+					    GameTools.Map.store_data[Map_position_x, Map_position_y+1] == Colour.None) {
+							current_target = Direction.None;
+							validInput = false;
+						}
 				}
 				break;
 			case Direction.Left:
@@ -117,10 +119,11 @@ public class Player {
 					current_target = Direction.None;
 					validInput = false;
 				} else {
-					if (GameTools.Map.map_unit_occupy[Map_position_x-1, Map_position_y] != null) {
-						current_target = Direction.None;
-						validInput = false;
-					}
+					if (GameTools.Map.map_unit_occupy[Map_position_x-1, Map_position_y] != null ||
+					    GameTools.Map.store_data[Map_position_x-1, Map_position_y] == Colour.None) {
+							current_target = Direction.None;
+							validInput = false;
+						}
 				}
 				break;
 			case Direction.Right:
@@ -128,10 +131,11 @@ public class Player {
 					current_target = Direction.None;
 					validInput = false;
 				} else {
-					if (GameTools.Map.map_unit_occupy[Map_position_x+1, Map_position_y] != null) {
-						current_target = Direction.None;
-						validInput = false;
-					}
+					if (GameTools.Map.map_unit_occupy[Map_position_x+1, Map_position_y] != null ||
+					    GameTools.Map.store_data[Map_position_x+1, Map_position_y] == Colour.None) {
+							current_target = Direction.None;
+							validInput = false;
+						}
 				}
 				break;
 			case Direction.None:
