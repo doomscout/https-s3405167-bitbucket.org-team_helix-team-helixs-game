@@ -9,7 +9,7 @@ public class Shape {
 														{0, 0, 1, 1},
 														{0, 0, 0, 1}
 													};
-	private string spellShape;
+	public string spellShape;
 
 	public Shape() {
 		setRandomShape();
