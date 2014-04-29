@@ -21,7 +21,7 @@ public class Test : MonoBehaviour {
 		} else {
 			c = colour;
 		}
-		c.a = 0.5f;
+		c.a = 0.7f;
 		renderer.material.color = c;
 		rigidbody.detectCollisions = false;
 		Done = false;
@@ -29,7 +29,7 @@ public class Test : MonoBehaviour {
 	}
 
 	public void changeColour(Color c) {
-		c.a = 0.5f;
+		c.a = 0.7f;
 		renderer.material.color = c;
 	}
 	
@@ -51,11 +51,11 @@ public class Test : MonoBehaviour {
 	}
 
 	IEnumerator Fade() {
-		for (float f = 0.5f; f >= 0; f -= 0.05f) {
+		for (float f = 0.7f; f >= 0; f -= 0.05f) {
 			Color c = renderer.material.color;
 			c.a = f;
 			renderer.material.color = c;
-			yield return new WaitForSeconds(0.2f);
+			yield return new WaitForSeconds(0.1f);
 		}
 	}
 
