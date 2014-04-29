@@ -5,7 +5,7 @@ public enum Colour { None, Red, Blue, Yellow, Green, Purple, Pink};
 
 public static class ColourManager {
 
-	public static readonly float WeaknessModifier = 2.0f;
+	public static readonly float WeaknessModifier = 1.5f;
 	//public static readonly float StrengthModifier = 1.25f;
 
 	public static Colour getRandomColour() {

@@ -21,7 +21,7 @@ public class Shape {
 	}
 
 	public void setRandomShape() {
-		int set = (int)Random.Range(1,6); 
+		int set = (int)Random.Range(1,5); 
 		
 		if(set==1) {
 			spellShape = "line";
@@ -33,7 +33,7 @@ public class Shape {
 		}
 		else if(set==3) {
 			spellShape = "single";
-			shapeModifier = 1.0f;
+			shapeModifier = 0.9f;
 		}
 		else if(set==4) {
 			spellShape = "cone";

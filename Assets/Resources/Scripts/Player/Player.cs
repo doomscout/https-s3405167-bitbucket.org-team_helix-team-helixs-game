@@ -80,6 +80,7 @@ public class Player {
             validInput = true;
         } else if (Input.GetKey("space")){	//skips turn
 			current_target = Direction.None;
+			//stats.Health += stats.Healing;
 			validInput = true;
 		}  else  if (Input.GetKeyDown("1")){
 			spellIndicator.toggleIndicator();
