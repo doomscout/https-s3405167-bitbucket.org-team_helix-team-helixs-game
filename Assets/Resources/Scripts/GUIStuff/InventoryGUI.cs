@@ -29,7 +29,7 @@ public class InventoryGUI : MonoBehaviour {
 
             if(GUI.Button(new Rect(700, 300, 150, 30), "Add Spell to Inevntory"))
             {
-                if (deck.deck.size > 3){
+                if (deck.deck.Count > 3){
                 GameTools.Player.deckManager.moveSpellDeckToInventory( GameTools.Player.deckManager.getDeckSpell(0));
                 }
              
