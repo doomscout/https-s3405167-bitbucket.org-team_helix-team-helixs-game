@@ -127,7 +127,7 @@ public class Unit {
 		Debug.Log ("Death Tick");
 	}
 
-	public void getHitByMagic(Spell taken_spell, float power) {
+	public void getHitByMagic(Spell taken_spell) {
 		float modifier = 1.0f;
 		if (ColourManager.getWeakness(taken_spell.SpellColour) == UnitColour) {
 			//The spell is weak against our colour
@@ -139,25 +139,33 @@ public class Unit {
 			modifier = ColourManager.StrengthModifier;
 		}
 		*/
-		float dmg = taken_spell.Power * modifier * (power/10);
+		float dmg = taken_spell.Power * modifier;
 		Health -= dmg;
 		list_of_damage_taken.Add(dmg);
 		list_of_colour_taken.Add(taken_spell.SpellColour);
 	}
 
 	public void attack() {
+		/* Old animation
 		spellIndicator.initSpellIndicator();
 		spellIndicator.toggleIndicator();
 		spellIndicator.setSpellIndicator(	new int[2]{ Map_position_x, Map_position_y},
 											new int[2] {GameTools.Player.Map_position_x, GameTools.Player.Map_position_y},
 											unitSpell);
 		spellIndicator.showCastAnimation();
+		*/
+		/* new animation */
+		ProjectileManager.queueProjectile(unitSpell, unit_object.transform.position, GameTools.Player.player_object.transform.position);
+		unitSpell.loadInfo(	new int[2]{ Map_position_x, Map_position_y},
+							new int[2] {GameTools.Player.Map_position_x, GameTools.Player.Map_position_y});
+		/*
 		unitSpell.cast (	new int[2]{ Map_position_x, Map_position_y},
-							new int[2] {GameTools.Player.Map_position_x, GameTools.Player.Map_position_y},
-							10.0f);
+							new int[2] {GameTools.Player.Map_position_x, GameTools.Player.Map_position_y});
+		*/
 		unit_object.transform.LookAt(new Vector3(GameTools.Player.Map_position_x, 0, GameTools.Player.Map_position_y));
 	}
 
+	/* No longer using this */
 	public void showDamageTakenAnimation() {
 		for (int i = 0; i < list_of_damage_taken.Count; i++) {
 			GameObject o = Object.Instantiate(Resources.Load("Prefabs/DamagePopupPrefab", typeof(GameObject))) as GameObject;

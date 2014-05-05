@@ -141,7 +141,7 @@ public class GameManager : MonoBehaviour{
 	void actionMenuRunning() {
 		//Remove previous level
 		//Load next level
-		Debug.Log("actionMenuRunning");
+		//Debug.Log("actionMenuRunning");
         temp = main_menu.GetComponent<MainMenu>();
         Gameexit = temp.exit;
         if (Gameexit) {

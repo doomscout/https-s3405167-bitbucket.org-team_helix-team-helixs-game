@@ -6,6 +6,10 @@ public class Spell {
 	public Colour SpellColour {get; private set;}
 	public float Power {get; private set;}
 
+	private int[] loadedOrigin;
+	private int[] loadedDestination;
+	private bool hasLoadInfo = false;
+
 	public Spell () {
 		SpellColour = ColourManager.getRandomColour();
 
@@ -27,7 +31,13 @@ public class Spell {
 		SpellColour = c;
 	}
 
-	public void cast(int[] origin, int[] position, float power) {
+	public void loadInfo(int[] origin, int[] position) {
+		loadedOrigin = origin;
+		loadedDestination = position;
+		hasLoadInfo = true;
+	}
+
+	public void cast(int[] origin, int[] position) {
 		int[,] coordinates = Shape.toCoords(origin, position);
 
 		for (int i = 0; i < coordinates.GetLength(0); i++) {
@@ -35,13 +45,22 @@ public class Spell {
 				continue;
 			}
 			if (GameTools.Map.map_unit_occupy[coordinates[i,0], coordinates[i,1]] != null) {
-				GameTools.Map.map_unit_occupy[coordinates[i,0], coordinates[i,1]].getHitByMagic(this, power);
+				GameTools.Map.map_unit_occupy[coordinates[i,0], coordinates[i,1]].getHitByMagic(this);
 			}
 			if (coordinates[i,0] == GameTools.Player.Map_position_x && coordinates[i,1] == GameTools.Player.Map_position_y) {
-				GameTools.Player.getHitByMagic(this, power);
+				GameTools.Player.getHitByMagic(this);
 			}
 
 		}
+	}
+
+	public bool cast() {
+		if (hasLoadInfo) {
+			cast(loadedOrigin, loadedDestination);
+			return true;
+		}
+		Debug.LogError("Tried casting without loading info, this is bug");
+		return false;
 	}
 
 }

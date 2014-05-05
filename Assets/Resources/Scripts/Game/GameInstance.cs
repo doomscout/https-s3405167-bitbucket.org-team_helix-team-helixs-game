@@ -143,7 +143,7 @@ public class GameInstance {
     void actionPlayerExit() {
 		player.showIndicatorAnimation();
 		if (showDamageIndicators) {
-			player.showDamageTakenAnimation();
+			//player.showDamageTakenAnimation();
 			foreach(Unit u in list_live_units) {
 				u.showDamageTakenAnimation();
 			}
@@ -173,6 +173,11 @@ public class GameInstance {
 		//Player isn't dead, let's run his animation tick
 		player.animation_tick();
 		IsAnimationDone = player.FinishedAnimation;
+
+		ProjectileManager.fireProjectiles();
+		if (!ProjectileManager.FinishedAnimation) {
+			IsAnimationDone = false;
+		}
 
 		//Animate live enemy units
 		foreach (Unit unit in list_live_units) {

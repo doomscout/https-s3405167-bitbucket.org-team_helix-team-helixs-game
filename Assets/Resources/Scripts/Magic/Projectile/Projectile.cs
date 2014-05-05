@@ -1,0 +1,77 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class Projectile : MonoBehaviour {
+
+	private float TimeToShoot;
+
+	float shootCounter = 0.0f;
+	Vector3 initPos;
+	Vector3 destPos;
+	bool alertedChild = false;
+	bool alertedPlayer = false;
+	bool hasShownDamage = false;
+	bool hasGivenTime = false;
+	Vector3 randomRotation;
+
+	Spell s;
+
+	// Use this for initialization
+	void Start () {
+		randomRotation = new Vector3(Random.Range(1, 10), Random.Range(1, 10), Random.Range(1, 10));
+	}
+
+	public void init(Spell s, Vector3 initPos, Vector3 destPos) {
+		this.s = s;
+		this.initPos = initPos;
+		this.destPos = destPos;
+		foreach (Transform t in transform) {
+			ProjectileCube pc = t.GetComponent<ProjectileCube>();
+			pc.changeColour(ColourManager.toColor(s.SpellColour));
+		}
+	}
+
+	public void shootIn(float time) {
+		TimeToShoot = time;
+		hasGivenTime = true;
+	}
+
+	public void showDamage() {
+		if (!hasShownDamage) {
+			hasShownDamage = true;
+			GameObject o = Object.Instantiate(Resources.Load("Prefabs/DamagePopupPrefab", typeof(GameObject))) as GameObject;
+			DamagePopup script = o.GetComponent<DamagePopup>();
+			Color c = Color.white;
+			script.setText(s.Power + "");
+			script.setColor(ColourManager.toColor(s.SpellColour));
+			o.transform.position = new Vector3(destPos.x, 0, destPos.z + 1.0f);
+			if (!s.cast()) {
+				Debug.LogError("Tried casting without loading first, bug");
+			}
+			ProjectileManager.signalCompletion(gameObject);
+		}
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		if (shootCounter < 1.0f) {
+			initPos.y += 3 * Time.deltaTime;
+			transform.position = initPos;
+			shootCounter += Time.deltaTime;
+			transform.Rotate(randomRotation);
+		} else if (hasGivenTime) {
+			if (TimeToShoot < 0) {
+				if (!alertedChild) {
+					foreach (ProjectileCube script in transform.GetComponentsInChildren<ProjectileCube>()) {
+						script.alert(destPos);
+					}
+					alertedChild = true;
+					Object.Destroy(gameObject, 5.0f);
+				}
+			} else {
+				TimeToShoot -= Time.deltaTime;
+				transform.Rotate(randomRotation);
+			}
+		}
+	}
+}

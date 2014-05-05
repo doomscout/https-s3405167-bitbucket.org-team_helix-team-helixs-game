@@ -28,9 +28,9 @@ public class Test : MonoBehaviour {
 		Triggered = false;
 	}
 
-	public void changeColour(Color c) {
-		c.a = 0.7f;
-		renderer.material.color = c;
+	public void changeColour(Color ca) {
+		ca.a = 0.7f;
+		renderer.material.color = ca;
 	}
 	
 	// Update is called once per frame

@@ -154,8 +154,7 @@ public class Player {
 
 	private bool castSpell() {
 		spell.cast(	new int[2] {Map_position_x, Map_position_y},
-					new int[2] {GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z},
-					stats.Damage);
+					new int[2] {GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z});
 		castedSpell = true;
 		deckManager.popTopSpell();
 		spell = deckManager.peekTopSpell();
@@ -169,6 +168,7 @@ public class Player {
 		spellIndicator.showCastAnimation();
 	}
 
+	/* No longer using this */
 	public void showDamageTakenAnimation() {
 		for (int i = 0; i < list_of_damage_taken.Count; i++) {
 			GameObject o = Object.Instantiate(Resources.Load("Prefabs/DamagePopupPrefab", typeof(GameObject))) as GameObject;
@@ -194,7 +194,7 @@ public class Player {
 											spell);
 	}
 
-	public void getHitByMagic(Spell taken_spell, float power) {
+	public void getHitByMagic(Spell taken_spell) {
 		float modifier = 1.0f;
 		if (ColourManager.getWeakness(taken_spell.SpellColour) == PlayerColour) {
 			//The spell is weak against our colour
@@ -204,7 +204,7 @@ public class Player {
 			//The spell is strong against us
 			modifier = ColourManager.StrengthModifier;
 		}*/
-		float damage = taken_spell.Power * modifier * power/10;
+		float damage = taken_spell.Power * modifier;
 		stats.Health -= damage;
 		list_of_damage_taken.Add(damage);
 		list_of_colour_taken.Add (taken_spell.SpellColour);
