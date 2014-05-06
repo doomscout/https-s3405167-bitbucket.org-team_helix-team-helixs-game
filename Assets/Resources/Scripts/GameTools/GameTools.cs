@@ -15,6 +15,7 @@ public static class GameTools {
 	public static GameInstance GI{get;set;}
 	public static Player Player{get;set;}
 	public static TileMouseOver Mouse {get;set;}
+	public static CameraInitMove GameCamera {get;set;}
 
 	//Below are things still need to be implemented
 	/*

@@ -6,18 +6,27 @@ public static class ProjectileManager {
 
 	public static bool FinishedAnimation = false;
 	private static List<GameObject> projectiles = new List<GameObject>();
-	private static bool hasFired = false;
+	private static bool hasFired = true;
+
+	private static Vector3 minV = new Vector3();
+	private static Vector3 maxV = new Vector3();
 
 	public static void fireProjectiles() {
 		if (!hasFired) {
+			initCoOrdinates();
 			for (int i = 0; i < projectiles.Count; i++) {
-				projectiles[i].GetComponent<Projectile>().shootIn((float)i * 0.5f);
+				Projectile script = projectiles[i].GetComponent<Projectile>();
+				script.shootIn((float)i * 0.5f);
+				minV = Vector3.Min(minV, Vector3.Min(script.initPos, script.destPos));
+				maxV = Vector3.Max(maxV, Vector3.Max(script.initPos, script.destPos));
 			}
+			GameTools.GameCamera.moveCameraProjectiles(minV, maxV);
 			hasFired = true;
 		}
 		if (projectiles.Count == 0) {
 			projectiles = new List<GameObject>();
 			FinishedAnimation = true;
+			GameTools.GameCamera.moveCameraNormal();
 		}
 	}
 
@@ -38,5 +47,13 @@ public static class ProjectileManager {
 		FinishedAnimation = false;
 	}
 
+	private static void initCoOrdinates() {
+		minV.x = float.MaxValue;
+		minV.y = float.MaxValue;
+		minV.z = float.MaxValue;
+		maxV.x = float.MinValue;
+		maxV.y = float.MinValue;
+		maxV.z = float.MinValue;
+	}
 }
 

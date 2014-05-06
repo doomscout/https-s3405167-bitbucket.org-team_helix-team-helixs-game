@@ -5,9 +5,11 @@ public class Projectile : MonoBehaviour {
 
 	private float TimeToShoot;
 
+	public Vector3 initPos;
+	public Vector3 destPos;
+
 	float shootCounter = 0.0f;
-	Vector3 initPos;
-	Vector3 destPos;
+
 	bool alertedChild = false;
 	bool alertedPlayer = false;
 	bool hasShownDamage = false;
