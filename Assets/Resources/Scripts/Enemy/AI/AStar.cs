@@ -8,6 +8,7 @@ public class AStar {
 	private static AStar instance = null;
 	private static int x;
 	private static int y;
+	private static float heavyWeight = 250.0f;
 
 	private AStar() {
 
@@ -117,7 +118,7 @@ public class AStar {
 		if (node_x >= 0 && node_x + 1 < GameTools.Map.size_x && node_y >= 0 && node_y + 1 < GameTools.Map.size_z ) {
 			if (node_x - 1 >= 0 && GameTools.Map.store_data[node_x - 1, node_y] != Colour.None) {
 				if (GameTools.Map.map_unit_occupy[node_x - 1, node_y] != null) {
-					weight = 500.0f/(distanceFromPlayer * distanceFromPlayer);
+					weight = heavyWeight/(distanceFromPlayer * distanceFromPlayer);
 				}
 				newNode = new AStarNode(node_x - 1, node_y, a.getFScore() + weight, chessboardDistanceFromTarget(node_x - 1, node_y), Direction.Left);
 				newNode.Prev = a;
@@ -126,7 +127,7 @@ public class AStar {
 			if ( node_x + 1 < GameTools.Map.size_x && GameTools.Map.store_data[node_x + 1, node_y] != Colour.None) {
 				weight = 1.0f;
 				if (GameTools.Map.map_unit_occupy[node_x + 1, node_y] != null) {
-					weight = 500.0f/(distanceFromPlayer * distanceFromPlayer);
+					weight = heavyWeight/(distanceFromPlayer * distanceFromPlayer);
 				}
 				newNode = new AStarNode(node_x + 1, node_y, a.getFScore() + weight, chessboardDistanceFromTarget(node_x + 1, node_y), Direction.Right);
 				newNode.Prev = a;
@@ -136,7 +137,7 @@ public class AStar {
 			weight = 1.0f;
 			if (node_y - 1 >= 0 && GameTools.Map.store_data[node_x, node_y -1] != Colour.None) {
 				if (GameTools.Map.map_unit_occupy[node_x, node_y - 1] != null) {
-					weight = 500.0f/(distanceFromPlayer * distanceFromPlayer);
+					weight = heavyWeight/(distanceFromPlayer * distanceFromPlayer);
 				}
 				newNode = new AStarNode(node_x, node_y - 1, a.getFScore() + weight, chessboardDistanceFromTarget(node_x, node_y - 1), Direction.Down);
 				newNode.Prev = a;
@@ -146,7 +147,7 @@ public class AStar {
 			weight = 1.0f;
 			if (node_y + 1 < GameTools.Map.size_z && GameTools.Map.store_data[node_x, node_y+1] != Colour.None) {
 				if (GameTools.Map.map_unit_occupy[node_x, node_y + 1] != null) {
-					weight = 500.0f/(distanceFromPlayer * distanceFromPlayer);
+					weight = heavyWeight/(distanceFromPlayer * distanceFromPlayer);
 				}
 				newNode = new AStarNode(node_x, node_y + 1, a.getFScore() + weight, chessboardDistanceFromTarget(node_x, node_y + 1), Direction.Up);
 				newNode.Prev = a;

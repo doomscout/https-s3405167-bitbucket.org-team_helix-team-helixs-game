@@ -33,24 +33,31 @@ public class SimpleAI {
         Transition attack2die = new Transition();
         Transition halt2die = new Transition();
 		Transition halt2attack = new Transition();
+		Transition attack2seek = new Transition();
 
 		halt2seek.Trigger_condition = new TriggerCondition(transitionInSeekRange);
 		seek2attack.Trigger_condition = new TriggerCondition(transitionInAttackRange);
 		halt2attack.Trigger_condition = new TriggerCondition(transitionInAttackRange);
         halt2die.Trigger_condition = new TriggerCondition(transitionDie);
         attack2die.Trigger_condition = new TriggerCondition(transitionDie);
+		attack2seek.Trigger_condition = new TriggerCondition(transitionOutAttackRange);
 
 		halt2seek.Target_state = state_seek;
         seek2attack.Target_state = state_attack;
         halt2die.Target_state = state_die;
 		halt2attack.Target_state = state_attack;
         attack2die.Target_state = state_die;
+		attack2seek.Target_state = state_seek;
+
+		halt2attack.Transition_Action = new Action(actionTransitionAttack);
+		seek2attack.Transition_Action = new Action(actionTransitionAttack);
 
         state_halt.addTransition(halt2die);
         state_halt.addTransition(halt2seek);
 		state_halt.addTransition(halt2attack);
 		state_seek.addTransition(seek2attack);
 		state_attack.addTransition(attack2die);
+		state_attack.addTransition(attack2seek);
 
 		state_halt.addAction(new Action(actionHaltRunning));
 		state_seek.addAction(new Action(actionSeekRunning));
@@ -63,6 +70,10 @@ public class SimpleAI {
     void actionSeekRunning() {
 		unit.determineNextMove();
     }
+
+	void actionTransitionAttack() {
+		unit.attack();
+	}
 
 	void actionAttackRunning() {
 		unit.attack();
@@ -89,9 +100,11 @@ public class SimpleAI {
         return AStar
 					.fromPosition(unit.Map_position_x, unit.Map_position_y)
 					.manhattanDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) <= unit.castRange;
+	}
 
-
-    }
+	bool transitionOutAttackRange() {
+		return !transitionInAttackRange();
+	}
 
     bool transitionDie() {
         return false;
