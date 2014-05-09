@@ -3,14 +3,17 @@ using System.Collections;
 
 public class Shape {
 
-	private readonly int[,] coneShape = new int[5,4]{	{0, 0, 0, 1},
-														{0, 0, 1, 1},
-														{1, 1, 1, 1},
-														{0, 0, 1, 1},
-														{0, 0, 0, 1}
+	private const int P = -1;	//Player symbol
+	private const int M = -2;	//Mouse symbol
+	private readonly int[,] coneShape = new int[5,5]{	{0, 0, 0, 0, 1},
+														{0, 0, 0, 1, 1},
+														{P, 1, 1, 1, 1},
+														{0, 0, 0, 1, 1},
+														{0, 0, 0, 0, 1}
 													};
-	public string spellShape;
+	public string spellShape;		
 	public float shapeModifier;
+	public int castRange;
 
 	public Shape() {
 		setRandomShape();
@@ -26,22 +29,27 @@ public class Shape {
 		if(set==1) {
 			spellShape = "line";
 			shapeModifier = 0.8f;
+			castRange = 0;
 		}
 		else if(set==2) {
 			spellShape = "circle";
 			shapeModifier = 0.3f;
+			castRange = 5;
 		}
 		else if(set==3) {
 			spellShape = "single";
 			shapeModifier = 0.9f;
+			castRange = 5;
 		}
 		else if(set==4) {
 			spellShape = "cone";
 			shapeModifier = 0.5f;
+			castRange = 0;
 		}
 		else if(set==5) {
 			spellShape = "floor";
 			shapeModifier = 0.2f;
+			castRange = 0;
 		}
 
 	}
@@ -182,6 +190,8 @@ public class Shape {
 		int numberOfOnes = 0;
 		int count = 0;
 		int[,] coordArray;
+		bool isPlayerCentered = false;
+		bool isMouseCentered = false;
 
 		if (x == 0 && y == 0) {
 			//Debug.LogError ("No direction");
@@ -193,9 +203,18 @@ public class Shape {
 			for (int j = 0; j < intShape.GetLength(1); j++) {
 				if (intShape[i,j] == 1) {
 					numberOfOnes++;
+				} else if (intShape[i,j] == P) {
+					isPlayerCentered = true;
+				} else if (intShape[i,j] == M) {
+					isMouseCentered = true;
 				}
 			}
 		}
+		if (isMouseCentered == isPlayerCentered) {
+			//These can't be the same, it has to be one or the other
+			Debug.LogError("Not sure if mouse centered or player centered " + isMouseCentered + "or " + isPlayerCentered + "value is " + intShape[3,0]);
+		}
+
 		//Since we know how many ones, we know how many tiles this spell affects
 		coordArray = new int[numberOfOnes,2];
 		
@@ -203,7 +222,7 @@ public class Shape {
 		for (int i = 0; i < intShape.GetLength(0); i++) {
 			for (int j = 0; j < intShape.GetLength(1); j++) {
 				if (intShape[i, j] == 1) {	
-					coordArray[count,0] = j + 1;
+					coordArray[count,0] = j;
 					coordArray[count,1] = i - (intShape.GetLength(0)/2); /* Center around origin */
 					count++;
 				}
