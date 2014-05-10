@@ -84,6 +84,7 @@ public class Player {
 			validInput = true;
 		}  else  if (Input.GetKeyDown("1")){
 			spellIndicator.toggleIndicator();
+            CastRangeIndicator.GetInstance().loadPlayerInformation(spell, this);
 			current_target = Direction.None;
 		} else {
 			current_target = Direction.None;
@@ -192,6 +193,7 @@ public class Player {
 		spellIndicator.setSpellIndicator(	new int[2] {Map_position_x, Map_position_y},
 											new int[2] {GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z},
 											spell);
+
 	}
 
 	public void getHitByMagic(Spell taken_spell) {

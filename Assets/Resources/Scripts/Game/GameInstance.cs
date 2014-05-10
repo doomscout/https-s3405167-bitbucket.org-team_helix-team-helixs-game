@@ -138,6 +138,14 @@ public class GameInstance {
         //listen to input handlers and verify
 		player.showIndicator();
 		validInput = player.listenInput();
+        if (Input.GetMouseButtonUp(0) && 
+            GameTools.Mouse.IsOnMap &&
+            GameTools.Map.map_unit_occupy[GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z] != null) {
+            Unit u = GameTools.Map.map_unit_occupy[GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z];
+            CastRangeIndicator.GetInstance().ToggleUnit(u);
+        }
+        CastRangeIndicator.GetInstance().ShowIndicators();
+        CastRangeIndicator.GetInstance().ShowPlayerIndicators();
     }
 
     void actionPlayerExit() {
@@ -148,6 +156,7 @@ public class GameInstance {
 				u.showDamageTakenAnimation();
 			}
 		}
+        CastRangeIndicator.GetInstance().ResetIndicators();
         turn_player = false;
         turn_enemy = true;
 		player.FinishedAnimation = false;
