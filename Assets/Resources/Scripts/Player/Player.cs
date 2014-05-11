@@ -39,7 +39,7 @@ public class Player : Entity {
 			base.game_object = Object.Instantiate(Resources.Load("Prefabs/PlayerPrefab", typeof(GameObject))) as GameObject;
 		}
 		game_object.transform.position = new Vector3(Map_position_x, 0, Map_position_y);
-		//game_object.renderer.material.color = ColourManager.toColor(MainColour);
+		game_object.renderer.material.color = ColourManager.toColor(MainColour);
 	}
 
 	protected override void InitMagic() {
@@ -52,9 +52,8 @@ public class Player : Entity {
 		InitGameObject();
 	}
 
-	public new void cleanUp() {
-		base.cleanUp();
-		spellIndicator.cleanUp();
+	public void CleanUp() {
+		base.CleanUp();
 		GameTools.Player = null;
 	}
 

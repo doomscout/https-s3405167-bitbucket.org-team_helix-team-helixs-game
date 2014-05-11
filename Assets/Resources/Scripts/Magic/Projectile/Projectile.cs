@@ -50,7 +50,7 @@ public class Projectile : MonoBehaviour {
 			if (!s.cast()) {
 				Debug.LogError("Tried casting without loading first, bug");
 			}
-			ProjectileManager.signalCompletion(gameObject);
+			ProjectileManager.getInstance().signalCompletion(gameObject);
 		}
 	}
 	

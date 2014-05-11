@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameInstance {
+public class GameInstance : Cleanable{
 
     bool turn_player, turn_enemy;
     Statemachine turn_manager;
@@ -23,26 +23,20 @@ public class GameInstance {
         list_live_units = new List<Unit>();
 		list_dead_units = new List<Unit>();
 		all_units = new List<Unit>();
-		GameTools.All_Units = list_live_units;			//Perhaps move this into a different class?
-		GameTools.Dead_Units = list_dead_units;			//and this
 		this.player = player;
         initSM();
 		initGame();
 		GameTools.GI = this;
+		GameTools.All_Units = list_live_units;			
+		GameTools.Dead_Units = list_dead_units;	
+		CleanTools.GetInstance().SubscribeCleanable(this);
     }
 
-	public void cleanUp() {
-		foreach(Unit u in list_live_units) {
-			u.cleanUp();
-		}
-		foreach(Unit u in list_dead_units) {
-			u.cleanUp();
-		}
+	public void CleanUp() {
 		GameTools.All_Units = null;
 		GameTools.Dead_Units = null;
+		GameTools.GI = null;
 		all_units = null;
-		TileMap script = tileMapPrefab.GetComponent<TileMap>();
-		script.cleanUp();
 	}
 
 	public void initGame() {
@@ -171,6 +165,7 @@ public class GameInstance {
 	//loop over units and display animations
     void actionAnimationRunning() {
 		IsAnimationDone = true;
+		Debug.Log ("animationrunning");
 
 		//Check if the player is dead before animating his inputs
 		if (player.IsDead) {
@@ -183,8 +178,8 @@ public class GameInstance {
 		player.animation_tick();
 		IsAnimationDone = player.FinishedAnimation;
 
-		ProjectileManager.fireProjectiles();
-		if (!ProjectileManager.FinishedAnimation) {
+		ProjectileManager.getInstance().fireProjectiles();
+		if (!ProjectileManager.getInstance().FinishedAnimation) {
 			IsAnimationDone = false;
 		}
 

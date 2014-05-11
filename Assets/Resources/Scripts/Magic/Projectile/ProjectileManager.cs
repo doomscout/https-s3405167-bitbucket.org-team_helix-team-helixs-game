@@ -2,16 +2,51 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public static class ProjectileManager {
+public class ProjectileManager : Cleanable{
 
-	public static bool FinishedAnimation = false;
-	private static List<GameObject> projectiles = new List<GameObject>();
-	private static bool hasFired = true;
+	private static ProjectileManager pm;
 
-	private static Vector3 minV = new Vector3();
-	private static Vector3 maxV = new Vector3();
+	public bool FinishedAnimation;
 
-	public static void fireProjectiles() {
+	private List<GameObject> projectiles;
+	private bool hasFired;
+
+	private Vector3 minV;
+	private Vector3 maxV;
+
+	private ProjectileManager() {
+		init();
+
+		CleanTools.GetInstance().SubscribeCleanable(this);
+	}
+
+	private void init() {
+		FinishedAnimation = true;
+		projectiles = new List<GameObject>();
+		hasFired = true;
+		
+		minV = new Vector3();
+		maxV = new Vector3();
+	}
+
+	public static ProjectileManager getInstance() {
+		if (pm == null) {
+			pm = new ProjectileManager();
+		}
+		return pm;
+	}
+
+	public void CleanUp() {
+		int count = projectiles.Count;
+		for (int i = 0; i < count; i++) {
+			GameObject.Destroy(projectiles[i]);
+		}
+		GameTools.GameCamera.moveCameraNormal();
+
+		init();
+	}
+
+	public void fireProjectiles() {
 		if (!hasFired) {
 			initCoOrdinates();
 			for (int i = 0; i < projectiles.Count; i++) {
@@ -24,13 +59,11 @@ public static class ProjectileManager {
 			hasFired = true;
 		}
 		if (projectiles.Count == 0) {
-			projectiles = new List<GameObject>();
-			FinishedAnimation = true;
-			GameTools.GameCamera.moveCameraNormal();
+			init();
 		}
 	}
 
-	public static void signalCompletion(GameObject o) {
+	public void signalCompletion(GameObject o) {
 		if (projectiles.Contains(o)) {
 			projectiles.Remove(o);
 		} else {
@@ -38,7 +71,7 @@ public static class ProjectileManager {
 		}
 	}
 
-	public static void queueProjectile(Spell s, Vector3 initPos, Vector3 destPos) {
+	public void queueProjectile(Spell s, Vector3 initPos, Vector3 destPos) {
 		GameObject projectile = Object.Instantiate(Resources.Load("Prefabs/ProjectilePrefab", typeof(GameObject))) as GameObject;
 		Projectile script = projectile.GetComponent<Projectile>();
 		script.init(s, initPos, destPos);
@@ -47,7 +80,7 @@ public static class ProjectileManager {
 		FinishedAnimation = false;
 	}
 
-	private static void initCoOrdinates() {
+	private void initCoOrdinates() {
 		minV.x = float.MaxValue;
 		minV.y = float.MaxValue;
 		minV.z = float.MaxValue;

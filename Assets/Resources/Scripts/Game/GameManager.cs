@@ -228,12 +228,13 @@ public class GameManager : MonoBehaviour{
 
 	void actionLoseExit() {
 		//Hide GUI
+
         Destroy(loseScreen);
-		turn_manager.cleanUp();
-		player.cleanUp();
+		CleanTools.GetInstance().CleanRemove();
 		turn_manager = null;
 		player = null;
 		Debug.Log("actionLoseExit");
+
 	}
 
 	void actionTransitionClickedOkay() {

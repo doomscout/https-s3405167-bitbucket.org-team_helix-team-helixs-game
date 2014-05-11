@@ -35,7 +35,6 @@ public class Unit : Entity{
 		base.game_object.transform.position = new Vector3(Map_position_x, 0, Map_position_y);
 		game_object.renderer.material.color = ColourManager.toColor(MainColour);
 		GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = this;
-		//player_object.renderer.material.color = ColourManager.toColor(PlayerColour);
 	}
 
 
@@ -94,7 +93,6 @@ public class Unit : Entity{
 			
 			current_target = Direction.None;
 		}
-		
 	}
 
 	public new float getHitByMagic(Spell taken_spell) {
@@ -107,13 +105,12 @@ public class Unit : Entity{
 	/* Maybe make the unit search for a valid target before shooting, as opposed to always shooting at the player */
 	public void attack() {
 		/* new animation */
-		ProjectileManager.queueProjectile(MainSpell, game_object.transform.position, GameTools.Player.game_object.transform.position);
+		ProjectileManager.getInstance().queueProjectile(MainSpell, game_object.transform.position, GameTools.Player.game_object.transform.position);
 		MainSpell.loadInfo(	new int[2]{ Map_position_x, Map_position_y},
 							new int[2] {GameTools.Player.Map_position_x, GameTools.Player.Map_position_y});
 		game_object.transform.LookAt(new Vector3(GameTools.Player.Map_position_x, 0, GameTools.Player.Map_position_y));
 	}
-
-	/* MAYBE USING THIS, CONFIRM PLZ */
+	
 	public void showDamageTakenAnimation() {
 		for (int i = 0; i < list_of_damage_taken.Count; i++) {
 			GameObject o = Object.Instantiate(Resources.Load("Prefabs/DamagePopupPrefab", typeof(GameObject))) as GameObject;

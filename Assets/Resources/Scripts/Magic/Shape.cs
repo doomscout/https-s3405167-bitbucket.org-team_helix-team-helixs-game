@@ -21,6 +21,11 @@ public class Shape {
 
 	public Shape(string shape) : this() {
 		spellShape = shape;
+		if (shape == "single" || shape == "circle") {
+			castRange = 5;
+		} else {
+			castRange = 0;
+		}
 	}
 
 	public void setRandomShape() {

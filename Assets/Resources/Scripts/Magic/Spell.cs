@@ -17,13 +17,14 @@ public class Spell {
 		Shape = new Shape();
 
 		Power = Random.Range(7, 10) * Shape.shapeModifier;
-
-        CastRange = Shape.castRange;
+		
+		CastRange = Shape.castRange;
 
 	}
 
 	public Spell (string shape) : this() {
 		Shape = new Shape(shape);
+		CastRange = Shape.castRange;
 	}
 
 	public Spell (Colour c) : this() {

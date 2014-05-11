@@ -4,7 +4,7 @@ using System.Collections;
 
 [RequireComponent(typeof(TileMap))]
 
-	public class TileMouseOver : MonoBehaviour 
+	public class TileMouseOver : MonoBehaviour, Cleanable 
 	{
 
 	public Color highlightColor;
@@ -24,6 +24,7 @@ using System.Collections;
 	void Start () {
 		_tileMap = GetComponent<TileMap>();
 		GameTools.Mouse = this;
+		CleanTools.GetInstance().SubscribeCleanable(this);
 	}
 
 	void Update()
@@ -55,7 +56,10 @@ using System.Collections;
 		}
 	}
 
-	public void cleanUp() {
+	public void CleanUp() {
+		if (gameObject == null) {
+			return;
+		}
 		GameTools.Mouse = null;
 		Object.Destroy(gameObject);
 	}

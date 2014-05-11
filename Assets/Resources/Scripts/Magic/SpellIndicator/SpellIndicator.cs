@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SpellIndicator {
+public class SpellIndicator : Cleanable{
 	private GameObject[] pool;
 	public bool IsShowingIndicator {get; private set;}
 	private int refill = 0;
@@ -10,9 +10,10 @@ public class SpellIndicator {
 	public SpellIndicator(int maxPoolSize) {
 		max_pool_size = maxPoolSize;
 		initSpellIndicator();
+		CleanTools.GetInstance().SubscribeCleanable(this);
 	}
 
-	public void cleanUp() {
+	public void CleanUp() {
 		for (int i = 0; i < pool.Length; i++) {
 			if (pool[i] != null) {
 				Object.Destroy(pool[i]);

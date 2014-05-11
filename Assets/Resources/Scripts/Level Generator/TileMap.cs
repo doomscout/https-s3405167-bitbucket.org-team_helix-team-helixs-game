@@ -7,7 +7,7 @@ using System.Collections.Generic;
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshCollider))]
 
-public class TileMap : MonoBehaviour {
+public class TileMap : MonoBehaviour, Cleanable {
 
 	//Declare variable of Size of Map
 	public int size_x = 100;
@@ -39,14 +39,16 @@ public class TileMap : MonoBehaviour {
 			this.transform.Translate(0, 0, size_z);
 			this.transform.Translate(-0.5f, 0f, -0.5f);
 			GameTools.Map = this;
+			CleanTools.GetInstance().SubscribeCleanable(this);
 			hasInit = true;
 		}
 	}
 
-	public void cleanUp() {
+	public void CleanUp() {
+		if (gameObject == null) {
+			return;
+		}
 		GameTools.Map = null;
-		TileMouseOver tileMouseOverScript = gameObject.GetComponent<TileMouseOver>();
-		tileMouseOverScript.cleanUp();
 		gameObject.transform.position = new Vector3(-100, -100, -100);
 		Object.Destroy(gameObject);
 		Debug.Log ("TileMap cleaned up");

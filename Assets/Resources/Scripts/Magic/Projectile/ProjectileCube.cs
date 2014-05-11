@@ -47,7 +47,7 @@ public class ProjectileCube : MonoBehaviour {
 	}
 
 	public void OnCollisionEnter(Collision c) {
-		if (GameTools.Player.game_object == null) {
+		if (GameTools.Player == null || GameTools.Player.game_object == null) {
 			return;
 		}
 		if (c.collider == GameTools.Player.game_object.collider) {
