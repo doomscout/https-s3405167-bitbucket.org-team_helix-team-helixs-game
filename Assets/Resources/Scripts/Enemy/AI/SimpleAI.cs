@@ -99,7 +99,7 @@ public class SimpleAI {
     bool transitionInAttackRange() {
         return AStar
 					.fromPosition(unit.Map_position_x, unit.Map_position_y)
-					.manhattanDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) <= unit.castRange;
+					.manhattanDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) <= 5.0f;
 	}
 
 	bool transitionOutAttackRange() {

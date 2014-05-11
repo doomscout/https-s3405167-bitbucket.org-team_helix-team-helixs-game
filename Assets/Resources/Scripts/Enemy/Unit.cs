@@ -2,37 +2,25 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Unit {
-	public bool FinishedAnimation{get;set;}
-	//public bool IsDead{get; private set;}
-	public float MoveSpeed{get;set;}
-	public float MaxHealth{get;private set;}
-	public float Health{get;private set;}
-    public int Map_position_x { get; private set;}
-    public int Map_position_y { get; private set;}
+public class Unit : Entity{
 	public Colour UnitColour {get; set;}
-	public int castRange {get; set;}
-	GameObject unit_object;
 
 	List<Direction> list_directions = new List<Direction>();
-	Direction current_target = Direction.None;
 	SimpleAI brain;
-	float remainingDistance = 1f;
 
-	public Spell unitSpell {get; private set;}
-	private SpellIndicator spellIndicator;
 	private List<float> list_of_damage_taken;
 	private List<Colour> list_of_colour_taken;
 	
-	public Unit() {
+	public Unit() : base(0) {
 		brain = new SimpleAI(this);
-		unit_object = Object.Instantiate(Resources.Load("Prefabs/EnemyPrefab", typeof(GameObject))) as GameObject;
+
+		list_of_damage_taken = new List<float>();
+		list_of_colour_taken = new List<Colour>();
+	}
+
+	protected override void InitMapPosition() {
 		Map_position_x = Random.Range(0, GameTools.Map.size_x);
 		Map_position_y = Random.Range(0, GameTools.Map.size_z);
-
-		if (GameTools.Map.store_data == null) {
-			Debug.Log ("what's going on?");
-		}
 
 		while (GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] != null || 
 		       GameTools.Map.store_data[Map_position_x, Map_position_y] == Colour.None ||
@@ -40,26 +28,25 @@ public class Unit {
 			Map_position_x = Random.Range(0, GameTools.Map.size_x);
 			Map_position_y = Random.Range(0, GameTools.Map.size_z);
 		}
-
-		GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = this;
-        unit_object.transform.position = new Vector3(Map_position_x, 0, Map_position_y);
-		Health = 10f;
-		MaxHealth = 10f;
-		MoveSpeed = 10.0f;
-		UnitColour = ColourManager.getRandomColour();
-		unitSpell = new Spell("single", UnitColour);
-		unit_object.renderer.material.color = ColourManager.toColor(UnitColour);
-		castRange = 5;
-		spellIndicator = new SpellIndicator(1);
-		list_of_damage_taken = new List<float>();
-		list_of_colour_taken = new List<Colour>();
 	}
+	
+	protected override void InitGameObject() {
+		if (base.game_object == null) {
+			base.game_object = Object.Instantiate(Resources.Load("Prefabs/EnemyPrefab", typeof(GameObject))) as GameObject;
+		}
+		base.game_object.transform.position = new Vector3(Map_position_x, 0, Map_position_y);
+		UnitColour = ColourManager.getRandomColour();
+		game_object.renderer.material.color = ColourManager.toColor(UnitColour);
+		GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = this;
+		//player_object.renderer.material.color = ColourManager.toColor(PlayerColour);
+	}
+
 
 	public void logic_tick() {
 		brain.tick();
 	}
 	
-	public void animation_tick() {
+	public override void animation_tick() {
 		if (Health <= 0) {
 			//IsDead = true;
 			FinishedAnimation = true;
@@ -86,16 +73,16 @@ public class Unit {
 		
 		switch (current_target) {
 		case Direction.Up:
-			unit_object.transform.Translate(0, 0, MoveSpeed * Time.deltaTime, null);
+			game_object.transform.Translate(0, 0, MoveSpeed * Time.deltaTime, null);
 			break;
 		case Direction.Down:
-			unit_object.transform.Translate(0, 0, -MoveSpeed * Time.deltaTime, null);
+			game_object.transform.Translate(0, 0, -MoveSpeed * Time.deltaTime, null);
 			break;
 		case Direction.Left:
-			unit_object.transform.Translate(-MoveSpeed * Time.deltaTime, 0, 0, null);
+			game_object.transform.Translate(-MoveSpeed * Time.deltaTime, 0, 0, null);
 			break;
 		case Direction.Right:
-			unit_object.transform.Translate(MoveSpeed * Time.deltaTime, 0, 0, null);
+			game_object.transform.Translate(MoveSpeed * Time.deltaTime, 0, 0, null);
 			break;
 		default:
 			Debug.Log ("Defaulted");
@@ -105,83 +92,41 @@ public class Unit {
 		if (remainingDistance < 0) {
 			//We've arrived at our destination, but overshot a little bit
 			//correct overshooting
-			Vector3 temp = unit_object.transform.position;
-			unit_object.transform.position = new Vector3(Mathf.Round(temp.x), temp.y, Mathf.Round(temp.z));
+			Vector3 temp = game_object.transform.position;
+			game_object.transform.position = new Vector3(Mathf.Round(temp.x), temp.y, Mathf.Round(temp.z));
 			
 			current_target = Direction.None;
 		}
 		
 	}
 
-	public void cleanUp() {
-		spellIndicator.cleanUp();
-		if (unit_object != null) {
-			GameObject.Destroy(unit_object);
-		}
-	}
-	
-	public void death_tick() {
-		//display death animation (if any)
-		GameObject.Destroy(unit_object);
-		FinishedAnimation = true;			//temp no animation, just return immediately
-		Debug.Log ("Death Tick");
-	}
-
-	public void getHitByMagic(Spell taken_spell) {
-		float modifier = 1.0f;
-		if (ColourManager.getWeakness(taken_spell.SpellColour) == UnitColour) {
-			//The spell is weak against our colour
-			modifier = ColourManager.WeaknessModifier;
-		}
-		/*
-		else if (ColourManager.getStrength(taken_spell.SpellColour) == UnitColour) {
-			//The spell is strong against us
-			modifier = ColourManager.StrengthModifier;
-		}
-		*/
-		float dmg = taken_spell.Power * modifier;
-		Health -= dmg;
+	public new float getHitByMagic(Spell taken_spell) {
+		float dmg = base.getHitByMagic(taken_spell);
 		list_of_damage_taken.Add(dmg);
 		list_of_colour_taken.Add(taken_spell.SpellColour);
 	}
 
+	/* Maybe make the unit search for a valid target before shooting, as opposed to always shooting at the player */
 	public void attack() {
-		/* Old animation
-		spellIndicator.initSpellIndicator();
-		spellIndicator.toggleIndicator();
-		spellIndicator.setSpellIndicator(	new int[2]{ Map_position_x, Map_position_y},
-											new int[2] {GameTools.Player.Map_position_x, GameTools.Player.Map_position_y},
-											unitSpell);
-		spellIndicator.showCastAnimation();
-		*/
 		/* new animation */
-		ProjectileManager.queueProjectile(unitSpell, unit_object.transform.position, GameTools.Player.player_object.transform.position);
+		ProjectileManager.queueProjectile(unitSpell, game_object.transform.position, GameTools.Player.player_object.transform.position);
 		unitSpell.loadInfo(	new int[2]{ Map_position_x, Map_position_y},
 							new int[2] {GameTools.Player.Map_position_x, GameTools.Player.Map_position_y});
-		/*
-		unitSpell.cast (	new int[2]{ Map_position_x, Map_position_y},
-							new int[2] {GameTools.Player.Map_position_x, GameTools.Player.Map_position_y});
-		*/
-		unit_object.transform.LookAt(new Vector3(GameTools.Player.Map_position_x, 0, GameTools.Player.Map_position_y));
+		game_object.transform.LookAt(new Vector3(GameTools.Player.Map_position_x, 0, GameTools.Player.Map_position_y));
 	}
 
-	/* No longer using this */
+	/* MAYBE USING THIS, CONFIRM PLZ */
 	public void showDamageTakenAnimation() {
 		for (int i = 0; i < list_of_damage_taken.Count; i++) {
 			GameObject o = Object.Instantiate(Resources.Load("Prefabs/DamagePopupPrefab", typeof(GameObject))) as GameObject;
 			DamagePopup script = o.GetComponent<DamagePopup>();
 			Color c = Color.white;
-			/*
-			if (ColourManager.getStrength(list_of_colour_taken[i]) == UnitColour) {
-				c = Color.magenta;
-			} else 
-			*/
 			if (ColourManager.getWeakness(list_of_colour_taken[i]) == UnitColour) {
 				c = Color.magenta;
 			}
 			script.setText(list_of_damage_taken[i] + "");
 			script.setColor(c);
-			o.transform.position = new Vector3(unit_object.transform.position.x, 0, unit_object.transform.position.z + 1.0f + i/2.0f);
+			o.transform.position = new Vector3(game_object.transform.position.x, 0, game_object.transform.position.z + 1.0f + i/2.0f);
 
 		}
 		list_of_damage_taken = new List<float>();
