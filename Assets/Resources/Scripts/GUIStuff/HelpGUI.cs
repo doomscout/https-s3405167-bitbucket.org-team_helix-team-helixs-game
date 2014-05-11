@@ -30,17 +30,17 @@ public class HelpGUI : MonoBehaviour {
 		if (GameTools.Player != null) {
             //Health Bar
             GUI.Box(new Rect(0, 60,5 * 100 + 10, 40), "Health" );
-            if (GameTools.Player.stats.Health < 0)
+            if (GameTools.Player.Health < 0)
             {
                 //Checks if health goes less than 0 and dsilpay 0
                 GUI.Box(new Rect(0, 80,5 * 100 + 10, 20), "0");
             }
             else
             {
-            GUI.Box(new Rect(0, 80,5 * 100 + 10, 20), "" + GameTools.Player.stats.Health);
+				GUI.Box(new Rect(0, 80,5 * 100 + 10, 20), "" + GameTools.Player.Health);
             }
             //Displays bar that decreases based on health
-            GUI.Box(new Rect(0, 80,  5*(float)GameTools.Player.stats.Health/(float)GameTools.Player.stats.Max_Health * 100.0f + 10, 20), "");
+			GUI.Box(new Rect(0, 80,  5*(float)GameTools.Player.Health/(float)GameTools.Player.Health * 100.0f + 10, 20), "");
 		}
        
     }

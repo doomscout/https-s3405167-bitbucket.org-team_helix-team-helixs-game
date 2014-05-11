@@ -117,7 +117,7 @@ public class CastRangeIndicator {
     }
 
     private bool addCastRange(Unit u) {
-        int castRange = u.unitSpell.CastRange;
+        int castRange = u.MainSpell.CastRange;
         Debug.Log("Cast range is " + castRange);
         if (castRange < 1) {
             return false;
@@ -136,7 +136,7 @@ public class CastRangeIndicator {
     }
 
     private bool removeCastRange(Unit u) {
-        int castRange = u.unitSpell.CastRange;
+        int castRange = u.MainSpell.CastRange;
         if (castRange < 1) {
             return false;
         }

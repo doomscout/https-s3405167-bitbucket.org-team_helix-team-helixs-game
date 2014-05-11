@@ -47,7 +47,10 @@ public class ProjectileCube : MonoBehaviour {
 	}
 
 	public void OnCollisionEnter(Collision c) {
-		if (c.collider == GameTools.Player.player_object.collider) {
+		if (GameTools.Player.game_object == null) {
+			return;
+		}
+		if (c.collider == GameTools.Player.game_object.collider) {
 			transform.parent.GetComponent<Projectile>().showDamage();
 		}
 	}

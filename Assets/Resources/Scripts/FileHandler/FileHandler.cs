@@ -8,6 +8,7 @@ public static class FileHandler{
 
 	const bool APPEND = true;
 
+	/*
 	public static void saveEntityData(Player p, List<Unit> all_units) {
 		if (p == null || all_units == null) {
 			Debug.Log("Unable to save -- player or units are null");
@@ -37,6 +38,6 @@ public static class FileHandler{
 		writer.Close();
 		Debug.Log("Saved Stats");
 	}
-
+	*/
 
 }

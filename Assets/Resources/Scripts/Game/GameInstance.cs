@@ -59,7 +59,7 @@ public class GameInstance {
 	}
 
 	public void saveData() {
-		FileHandler.saveEntityData(player, all_units);
+		//FileHandler.saveEntityData(player, all_units);
 	}
 
     public void tick() {

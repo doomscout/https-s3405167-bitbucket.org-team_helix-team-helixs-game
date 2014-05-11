@@ -93,13 +93,13 @@ public class SimpleAI {
 		return AStar
 				.fromPosition(unit.Map_position_x, unit.Map_position_y)
 				.euclidianDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) < 8.0f ||
-				unit.MaxHealth != unit.Health;
+				unit.Max_Health != unit.Health;
     }
 
     bool transitionInAttackRange() {
         return AStar
 					.fromPosition(unit.Map_position_x, unit.Map_position_y)
-					.manhattanDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) <= 5.0f;
+					.manhattanDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) <= unit.MainSpell.CastRange;
 	}
 
 	bool transitionOutAttackRange() {

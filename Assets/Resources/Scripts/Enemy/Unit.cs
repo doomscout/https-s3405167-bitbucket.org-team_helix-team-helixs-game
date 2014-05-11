@@ -3,15 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Unit : Entity{
-	public Colour UnitColour {get; set;}
-
 	List<Direction> list_directions = new List<Direction>();
 	SimpleAI brain;
 
 	private List<float> list_of_damage_taken;
 	private List<Colour> list_of_colour_taken;
 	
-	public Unit() : base(0) {
+	public Unit() {
 		brain = new SimpleAI(this);
 
 		list_of_damage_taken = new List<float>();
@@ -35,8 +33,7 @@ public class Unit : Entity{
 			base.game_object = Object.Instantiate(Resources.Load("Prefabs/EnemyPrefab", typeof(GameObject))) as GameObject;
 		}
 		base.game_object.transform.position = new Vector3(Map_position_x, 0, Map_position_y);
-		UnitColour = ColourManager.getRandomColour();
-		game_object.renderer.material.color = ColourManager.toColor(UnitColour);
+		game_object.renderer.material.color = ColourManager.toColor(MainColour);
 		GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = this;
 		//player_object.renderer.material.color = ColourManager.toColor(PlayerColour);
 	}
@@ -104,13 +101,14 @@ public class Unit : Entity{
 		float dmg = base.getHitByMagic(taken_spell);
 		list_of_damage_taken.Add(dmg);
 		list_of_colour_taken.Add(taken_spell.SpellColour);
+		return dmg;
 	}
 
 	/* Maybe make the unit search for a valid target before shooting, as opposed to always shooting at the player */
 	public void attack() {
 		/* new animation */
-		ProjectileManager.queueProjectile(unitSpell, game_object.transform.position, GameTools.Player.player_object.transform.position);
-		unitSpell.loadInfo(	new int[2]{ Map_position_x, Map_position_y},
+		ProjectileManager.queueProjectile(MainSpell, game_object.transform.position, GameTools.Player.game_object.transform.position);
+		MainSpell.loadInfo(	new int[2]{ Map_position_x, Map_position_y},
 							new int[2] {GameTools.Player.Map_position_x, GameTools.Player.Map_position_y});
 		game_object.transform.LookAt(new Vector3(GameTools.Player.Map_position_x, 0, GameTools.Player.Map_position_y));
 	}
@@ -121,7 +119,7 @@ public class Unit : Entity{
 			GameObject o = Object.Instantiate(Resources.Load("Prefabs/DamagePopupPrefab", typeof(GameObject))) as GameObject;
 			DamagePopup script = o.GetComponent<DamagePopup>();
 			Color c = Color.white;
-			if (ColourManager.getWeakness(list_of_colour_taken[i]) == UnitColour) {
+			if (ColourManager.getWeakness(list_of_colour_taken[i]) == MainColour) {
 				c = Color.magenta;
 			}
 			script.setText(list_of_damage_taken[i] + "");

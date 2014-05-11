@@ -3,14 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Player : Entity {
-	public Colour PlayerColour;
 	public ItemManager deckManager;
 
 	private bool castedSpell = false;
 	private SpellIndicator spellIndicator;
 
 	public Player() {
-		PlayerColour = ColourManager.getRandomColour();
 		spellIndicator = new SpellIndicator(20);
 
 		GameTools.Player = this;
@@ -41,12 +39,12 @@ public class Player : Entity {
 			base.game_object = Object.Instantiate(Resources.Load("Prefabs/PlayerPrefab", typeof(GameObject))) as GameObject;
 		}
 		game_object.transform.position = new Vector3(Map_position_x, 0, Map_position_y);
-		//game_object.renderer.material.color = ColourManager.toColor(PlayerColour);
+		//game_object.renderer.material.color = ColourManager.toColor(MainColour);
 	}
 
 	protected override void InitMagic() {
 		deckManager = new ItemManager();
-		mainSpell = deckManager.peekTopSpell();
+		MainSpell = deckManager.peekTopSpell();
 	}
 
 	public void loadIntoGame() {
@@ -56,6 +54,7 @@ public class Player : Entity {
 
 	public new void cleanUp() {
 		base.cleanUp();
+		spellIndicator.cleanUp();
 		GameTools.Player = null;
 	}
 
@@ -81,7 +80,7 @@ public class Player : Entity {
 			validInput = true;
 		}  else  if (Input.GetKeyDown("1")){
 			spellIndicator.toggleIndicator();
-            CastRangeIndicator.GetInstance().loadPlayerInformation(spell, this);
+            CastRangeIndicator.GetInstance().loadPlayerInformation(MainSpell, this);
 			current_target = Direction.None;
 		} else {
 			current_target = Direction.None;
@@ -151,11 +150,11 @@ public class Player : Entity {
 	}
 
 	private bool castSpell() {
-		spell.cast(	new int[2] {Map_position_x, Map_position_y},
+		MainSpell.cast(	new int[2] {Map_position_x, Map_position_y},
 					new int[2] {GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z});
 		castedSpell = true;
 		deckManager.popTopSpell();
-		spell = deckManager.peekTopSpell();
+		MainSpell = deckManager.peekTopSpell();
 		return true;
 	}
 
@@ -169,12 +168,12 @@ public class Player : Entity {
 	public void showIndicator() {
 		spellIndicator.setSpellIndicator(	new int[2] {Map_position_x, Map_position_y},
 											new int[2] {GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z},
-											spell);
+											MainSpell);
 
 	}
 
 	public bool checkIfDead() {
-		if (stats.Health <= 0) {
+		if (Health <= 0) {
 			Debug.Log ("player ded");
 			IsDead = true;
 			FinishedAnimation = true;
