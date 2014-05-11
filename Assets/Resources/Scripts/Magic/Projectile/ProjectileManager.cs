@@ -60,6 +60,7 @@ public class ProjectileManager : Cleanable{
 		}
 		if (projectiles.Count == 0) {
 			init();
+			GameTools.GameCamera.moveCameraNormal();
 		}
 	}
 

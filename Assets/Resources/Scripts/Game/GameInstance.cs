@@ -3,13 +3,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameInstance : Cleanable{
+public class GameInstance : Cleanable {
 
     bool turn_player, turn_enemy;
     Statemachine turn_manager;
 	public List<Unit> all_units {get;set;}
 	public List<Unit> list_live_units {get; private set;}
-	List<Unit> list_dead_units;							//Remember to reset kill units after both sides' turns
+	List<Unit> list_dead_units;		
+	public CastRangeIndicator UnitCastIndicator;
 	Player player;
 	GameObject tileMapPrefab;
 
@@ -17,13 +18,16 @@ public class GameInstance : Cleanable{
 	private bool showDamageIndicators = true;
 
 	public bool IsAnimationDone{get; private set;}
-	//bool hasRemovedUnits;								//BONUS: Do this
 
     public GameInstance(Player player) {
+		this.player = player;
+
         list_live_units = new List<Unit>();
 		list_dead_units = new List<Unit>();
 		all_units = new List<Unit>();
-		this.player = player;
+
+		UnitCastIndicator = new CastRangeIndicator();
+
         initSM();
 		initGame();
 		GameTools.GI = this;
@@ -132,14 +136,8 @@ public class GameInstance : Cleanable{
         //listen to input handlers and verify
 		player.showIndicator();
 		validInput = player.listenInput();
-        if (Input.GetMouseButtonUp(0) && 
-            GameTools.Mouse.IsOnMap &&
-            GameTools.Map.map_unit_occupy[GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z] != null) {
-            Unit u = GameTools.Map.map_unit_occupy[GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z];
-            CastRangeIndicator.GetInstance().ToggleUnit(u);
-        }
-        CastRangeIndicator.GetInstance().ShowIndicators();
-        CastRangeIndicator.GetInstance().ShowPlayerIndicators();
+        
+		UnitCastIndicator.ShowIndicators();
     }
 
     void actionPlayerExit() {
@@ -150,7 +148,7 @@ public class GameInstance : Cleanable{
 				u.showDamageTakenAnimation();
 			}
 		}
-        CastRangeIndicator.GetInstance().ResetIndicators();
+		UnitCastIndicator.ResetIndicators();
         turn_player = false;
         turn_enemy = true;
 		player.FinishedAnimation = false;

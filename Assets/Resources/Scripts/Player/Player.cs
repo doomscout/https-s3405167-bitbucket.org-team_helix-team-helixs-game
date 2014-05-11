@@ -7,9 +7,12 @@ public class Player : Entity {
 
 	private bool castedSpell = false;
 	private SpellIndicator spellIndicator;
+	private CastRangeIndicator PlayerCastIndicator;
 
 	public Player() {
 		spellIndicator = new SpellIndicator(20);
+		PlayerCastIndicator = new CastRangeIndicator();
+		spellIndicator.link(PlayerCastIndicator);
 
 		GameTools.Player = this;
 	}
@@ -77,9 +80,9 @@ public class Player : Entity {
 			current_target = Direction.None;
 			//stats.Health += stats.Healing;
 			validInput = true;
-		}  else  if (Input.GetKeyDown("1")){
+		}  else  if (Input.GetKeyUp("1")){
 			spellIndicator.toggleIndicator();
-            CastRangeIndicator.GetInstance().loadPlayerInformation(MainSpell, this);
+			PlayerCastIndicator.ToggleUnit(this);
 			current_target = Direction.None;
 		} else {
 			current_target = Direction.None;
@@ -162,12 +165,14 @@ public class Player : Entity {
 			spellIndicator.showNoCastAnimation();
 		}
 		spellIndicator.showCastAnimation();
+		PlayerCastIndicator.ResetIndicators();
 	}
 
 	public void showIndicator() {
 		spellIndicator.setSpellIndicator(	new int[2] {Map_position_x, Map_position_y},
 											new int[2] {GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z},
 											MainSpell);
+		PlayerCastIndicator.ShowIndicators();
 
 	}
 

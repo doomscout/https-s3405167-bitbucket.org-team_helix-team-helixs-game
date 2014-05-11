@@ -6,6 +6,7 @@ public class SpellIndicator : Cleanable{
 	public bool IsShowingIndicator {get; private set;}
 	private int refill = 0;
 	private int max_pool_size = 20;
+	private CastRangeIndicator RangeIndicator;
 
 	public SpellIndicator(int maxPoolSize) {
 		max_pool_size = maxPoolSize;
@@ -19,6 +20,11 @@ public class SpellIndicator : Cleanable{
 				Object.Destroy(pool[i]);
 			}
 		}
+		RangeIndicator = null;
+	}
+
+	public void link(CastRangeIndicator cr) {
+		RangeIndicator = cr;
 	}
 
 	public void showCastAnimation() {
@@ -85,5 +91,8 @@ public class SpellIndicator : Cleanable{
 			script.changeColour(ColourManager.toColor(spell.SpellColour));
 		}
 		refill = coordinates.GetLength(0);
+		if (RangeIndicator != null) {
+			RangeIndicator.updateSpellCoOrds(coordinates);
+		}
 	}
 }

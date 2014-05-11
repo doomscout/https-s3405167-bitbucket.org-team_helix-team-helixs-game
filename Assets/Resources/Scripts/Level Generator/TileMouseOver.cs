@@ -54,6 +54,12 @@ using System.Collections;
 				IsOnMap = false;
 			}
 		}
+		if (HasClickedOnUnit()) {
+			if (GameTools.Map != null) {
+				Unit u = GameTools.Map.map_unit_occupy[GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z];
+				u.OnClickAction();
+			}
+		}
 	}
 
 	public void CleanUp() {
@@ -67,7 +73,14 @@ using System.Collections;
 	public Vector3 getSelector() {
 		return currentTileCoord;
 	}
-	
+
+	public bool HasClickedOnUnit() {
+		return 	Input.GetMouseButtonUp(0) && 	
+		    	IsOnMap &&
+		    	GameTools.Map != null &&
+				GameTools.Map.map_unit_occupy[GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z] != null;
+	}
+
 	/*
 	// Update is called once per frame
 	void OnMouseOver(){

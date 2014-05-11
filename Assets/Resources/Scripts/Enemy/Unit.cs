@@ -188,6 +188,9 @@ public class Unit : Entity{
 		}
 	}
 
+	public void OnClickAction() {		
+		GameTools.GI.UnitCastIndicator.ToggleUnit(this);
+	}
 
 
 }
