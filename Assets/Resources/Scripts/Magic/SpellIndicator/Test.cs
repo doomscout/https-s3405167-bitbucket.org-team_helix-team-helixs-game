@@ -15,12 +15,7 @@ public class Test : MonoBehaviour {
 	public void init() {
 		rigidbody.useGravity = false;
 		renderer.material = new Material(Shader.Find ("Transparent/Diffuse"));
-		Color c;
-		if (colour == null) {
-			c = Color.cyan;
-		} else {
-			c = colour;
-		}
+		Color c = colour;
 		c.a = 0.7f;
 		renderer.material.color = c;
 		rigidbody.detectCollisions = false;

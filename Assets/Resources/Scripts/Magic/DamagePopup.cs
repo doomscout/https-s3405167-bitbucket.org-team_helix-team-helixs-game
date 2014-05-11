@@ -3,8 +3,6 @@ using System.Collections;
 
 public class DamagePopup : MonoBehaviour{
 
-	Color c;
-
 	// Use this for initialization
 	void Start () {
 		StartCoroutine("Fade");
@@ -22,7 +20,6 @@ public class DamagePopup : MonoBehaviour{
 	}
 
 	public void setColor(Color c) {
-		this.c = c;
 		this.renderer.material.color = c;
 	}
 

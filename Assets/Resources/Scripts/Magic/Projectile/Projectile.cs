@@ -11,7 +11,6 @@ public class Projectile : MonoBehaviour {
 	float shootCounter = 0.0f;
 
 	bool alertedChild = false;
-	bool alertedPlayer = false;
 	bool hasShownDamage = false;
 	bool hasGivenTime = false;
 	Vector3 randomRotation;
@@ -43,7 +42,6 @@ public class Projectile : MonoBehaviour {
 			hasShownDamage = true;
 			GameObject o = Object.Instantiate(Resources.Load("Prefabs/DamagePopupPrefab", typeof(GameObject))) as GameObject;
 			DamagePopup script = o.GetComponent<DamagePopup>();
-			Color c = Color.white;
 			script.setText(s.Power + "");
 			script.setColor(ColourManager.toColor(s.SpellColour));
 			o.transform.position = new Vector3(destPos.x, 0, destPos.z + 1.0f);

@@ -3,7 +3,6 @@ using System.Collections;
 
 public class ProjectileCube : MonoBehaviour {
 
-	bool done = false;
 	float time = 0.0f;
 	bool alerted = false;
 

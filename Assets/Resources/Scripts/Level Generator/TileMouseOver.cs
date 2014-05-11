@@ -11,7 +11,6 @@ using System.Collections;
 	Color normalColor;
 
 	TileMap _tileMap;
-	Colour colorNumber;
 	Vector3 currentTileCoord;
 
 	public Transform selectionCube;
@@ -31,7 +30,7 @@ using System.Collections;
 	{
 		if (GameTools.Map != null) {
 					
-			Ray ray = Camera.mainCamera.ScreenPointToRay(Input.mousePosition);
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hitInfo;
 			if(collider.Raycast(ray, out hitInfo, Mathf.Infinity ) )
 			{
@@ -39,7 +38,7 @@ using System.Collections;
 				//Debug.Log (hitInfo.point - transform.point);
 				Pos_x = Mathf.RoundToInt ( hitInfo.point.x / _tileMap.tileSize);
 				Pos_z = Mathf.RoundToInt ( hitInfo.point.z / _tileMap.tileSize);
-				colorNumber = GameTools.Map.store_data[Pos_x, Pos_z];
+				//colorNumber = GameTools.Map.store_data[Pos_x, Pos_z];
 
 				//Debug.Log ("Map Position: (" + Pos_x + ", " + Pos_z + ") Color: " + colorNumber);
 

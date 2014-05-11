@@ -95,15 +95,16 @@ public class Unit : Entity{
 		}
 	}
 
-	public new float getHitByMagic(Spell taken_spell) {
-		float dmg = base.getHitByMagic(taken_spell);
+	public new float GetHitByMagic(Spell taken_spell) {
+		float dmg = base.GetHitByMagic(taken_spell);
 		list_of_damage_taken.Add(dmg);
 		list_of_colour_taken.Add(taken_spell.SpellColour);
 		return dmg;
 	}
 
 	/* Maybe make the unit search for a valid target before shooting, as opposed to always shooting at the player */
-	public void attack() {
+	public new void CastMainSpell() {
+		base.CastMainSpell();
 		/* new animation */
 		ProjectileManager.getInstance().queueProjectile(MainSpell, game_object.transform.position, GameTools.Player.game_object.transform.position);
 		MainSpell.loadInfo(	new int[2]{ Map_position_x, Map_position_y},

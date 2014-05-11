@@ -72,11 +72,11 @@ public class SimpleAI {
     }
 
 	void actionTransitionAttack() {
-		unit.attack();
+		unit.CastMainSpell();
 	}
 
 	void actionAttackRunning() {
-		unit.attack();
+		unit.CastMainSpell();
 	}
 
     void actionHaltRunning() {

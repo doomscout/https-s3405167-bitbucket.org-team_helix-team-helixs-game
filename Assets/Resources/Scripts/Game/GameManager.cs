@@ -16,7 +16,6 @@ public class GameManager : MonoBehaviour{
     GameObject winScreen;
     GameObject loseScreen;
     bool Gameexit;
-    bool GamePaused;
     MainMenu temp;
 
     Pause pauseTemp;
@@ -209,7 +208,6 @@ public class GameManager : MonoBehaviour{
 	void actionPausedEntry() {
 		//Show paused GUI
         pause_menu = Instantiate(Resources.Load("Prefabs/PausePrefab")) as GameObject;
-        GamePaused = false;
 		Debug.Log("actionPausedEntry");
 	}
 

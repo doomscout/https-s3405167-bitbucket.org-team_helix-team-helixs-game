@@ -55,7 +55,7 @@ public class Player : Entity {
 		InitGameObject();
 	}
 
-	public void CleanUp() {
+	public new void CleanUp() {
 		base.CleanUp();
 		GameTools.Player = null;
 	}
@@ -145,15 +145,16 @@ public class Player : Entity {
 		//Mouse
 		if (Input.GetMouseButtonDown(0)) {
 			if (spellIndicator.IsShowingIndicator) {
-				validInput = castSpell();
+				validInput = CastMainSpell();
 			}
 		}
         return validInput;
 	}
 
-	private bool castSpell() {
-		MainSpell.cast(	new int[2] {Map_position_x, Map_position_y},
-					new int[2] {GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z});
+	private new bool CastMainSpell() {
+		base.CastMainSpell ();
+		MainSpell.cast(		new int[2] {Map_position_x, Map_position_y},
+							new int[2] {GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z});
 		castedSpell = true;
 		deckManager.popTopSpell();
 		MainSpell = deckManager.peekTopSpell();

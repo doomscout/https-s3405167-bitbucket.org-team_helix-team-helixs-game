@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Spell {
@@ -6,6 +6,9 @@ public class Spell {
 	public Colour SpellColour {get; private set;}
 	public float Power {get; private set;}
     public int CastRange {get; private set;}
+
+	//increase power or something, no touching
+	public float SpellPowerModifier {get;set;}
 
     private int[] loadedOrigin;
 	private int[] loadedDestination;
@@ -19,7 +22,7 @@ public class Spell {
 		Power = Random.Range(7, 10) * Shape.shapeModifier;
 		
 		CastRange = Shape.castRange;
-
+		SpellPowerModifier = 1.0f;
 	}
 
 	public Spell (string shape) : this() {
@@ -49,10 +52,10 @@ public class Spell {
 				continue;
 			}
 			if (GameTools.Map.map_unit_occupy[coordinates[i,0], coordinates[i,1]] != null) {
-				GameTools.Map.map_unit_occupy[coordinates[i,0], coordinates[i,1]].getHitByMagic(this);
+				GameTools.Map.map_unit_occupy[coordinates[i,0], coordinates[i,1]].GetHitByMagic(this);
 			}
 			if (coordinates[i,0] == GameTools.Player.Map_position_x && coordinates[i,1] == GameTools.Player.Map_position_y) {
-				GameTools.Player.getHitByMagic(this);
+				GameTools.Player.GetHitByMagic(this);
 			}
 
 		}

@@ -163,7 +163,6 @@ public class GameInstance : Cleanable {
 	//loop over units and display animations
     void actionAnimationRunning() {
 		IsAnimationDone = true;
-		Debug.Log ("animationrunning");
 
 		//Check if the player is dead before animating his inputs
 		if (player.IsDead) {
