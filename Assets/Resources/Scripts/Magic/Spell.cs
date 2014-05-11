@@ -5,8 +5,9 @@ public class Spell {
 	public Shape Shape {get; private set;}
 	public Colour SpellColour {get; private set;}
 	public float Power {get; private set;}
+    public int CastRange {get; private set;}
 
-	private int[] loadedOrigin;
+    private int[] loadedOrigin;
 	private int[] loadedDestination;
 	private bool hasLoadInfo = false;
 
@@ -16,6 +17,8 @@ public class Spell {
 		Shape = new Shape();
 
 		Power = Random.Range(7, 10) * Shape.shapeModifier;
+
+        CastRange = Shape.castRange;
 
 	}
 

@@ -15,6 +15,7 @@ using System.Collections;
 	Vector3 currentTileCoord;
 
 	public Transform selectionCube;
+    //Pos_x and Pos_z to get the position in logic map (not worldspace coordinates)
 	public int Pos_x {get;set;}
 	public int Pos_z {get;set;}
 	public bool IsOnMap {get;set;}
