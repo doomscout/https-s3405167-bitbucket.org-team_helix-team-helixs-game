@@ -32,6 +32,18 @@ public class DataTileMap {
 	 * 5 = Pink
 	 * 6 = Purple
 	 */
+
+
+	/*
+	 * 0 = sea
+	 * 1 = grass
+	 * 2 = mountian
+	 * 3 = forest
+	 * 4 = road
+	 * 
+	 * 
+	 * 
+	 */
 	
 	public DataTileMap(int size_x, int size_y, int percentAreEmpty) {
 		this.Size_x = size_x;
