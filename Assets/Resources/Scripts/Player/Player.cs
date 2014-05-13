@@ -18,6 +18,7 @@ public class Player : Entity {
 	}
 
 	protected override void InitStats() {
+		base.InitStats();
 		Max_Health = 200.0f;
 		Health = Max_Health;
 	}
@@ -46,6 +47,7 @@ public class Player : Entity {
 	}
 
 	protected override void InitMagic() {
+		base.InitMagic();
 		deckManager = new ItemManager();
 		MainSpell = deckManager.peekTopSpell();
 	}
@@ -177,14 +179,12 @@ public class Player : Entity {
 
 	}
 
-	public bool checkIfDead() {
-		if (Health <= 0) {
-			Debug.Log ("player ded");
-			IsDead = true;
-			FinishedAnimation = true;
-			return true;
+	public new bool IsDead() {
+		bool isDead = base.IsDead();
+		if (isDead) {
+			Debug.Log ("Player is dead");
 		}
-		return false;
+		return isDead;
 	}
 
 	public override void animation_tick() {

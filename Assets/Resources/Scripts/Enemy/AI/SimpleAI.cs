@@ -51,6 +51,7 @@ public class SimpleAI {
 
 		halt2attack.Transition_Action = new Action(actionTransitionAttack);
 		seek2attack.Transition_Action = new Action(actionTransitionAttack);
+		halt2seek.Transition_Action = new Action(actionTransitionSeek);
 
         state_halt.addTransition(halt2die);
         state_halt.addTransition(halt2seek);
@@ -71,6 +72,10 @@ public class SimpleAI {
 		unit.determineNextMove();
     }
 
+	void actionTransitionSeek() {
+		unit.determineNextMove();
+	}
+
 	void actionTransitionAttack() {
 		unit.CastMainSpell();
 	}
@@ -90,10 +95,11 @@ public class SimpleAI {
     }
 
     bool transitionInSeekRange() {
-		return AStar
+		return true;
+				/*AStar
 				.fromPosition(unit.Map_position_x, unit.Map_position_y)
 				.euclidianDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) < 8.0f ||
-				unit.Max_Health != unit.Health;
+				unit.Max_Health != unit.Health; */
     }
 
     bool transitionInAttackRange() {

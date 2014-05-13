@@ -75,10 +75,6 @@ public class GameInstance : Cleanable {
         }
     }
 
-    public void signalDeath(Unit unit) {
-		list_dead_units.Add(unit);
-    }
-
     void initSM() {
         State state_player = new State();
         State state_animation = new State();
@@ -129,7 +125,7 @@ public class GameInstance : Cleanable {
 	}
 
 	void actionPlayerEntry() {
-
+		player.Prelogic_tick();
 	}
 	                        
     void actionPlayerRunning() {
@@ -165,20 +161,32 @@ public class GameInstance : Cleanable {
 		IsAnimationDone = true;
 
 		//Check if the player is dead before animating his inputs
-		if (player.IsDead) {
+		if (player.IsDead()) {
 			//Wow, the player is dead, let's do his death animation only
 			player.death_tick();
 			IsAnimationDone = player.FinishedAnimation;
 			return;
 		}
+
+		//Check enemy is dead before animating enemy
+		foreach (Unit unit in list_live_units) {
+			if (unit.IsDead()) {
+				list_dead_units.Add (unit);
+			}
+		}
+		//We'll animate the death of the enemies
+		foreach (Unit unit in list_dead_units) {
+			list_live_units.Remove(unit);
+			unit.death_tick();
+			if (!unit.FinishedAnimation) {
+				IsAnimationDone = false;
+			}
+		}
+		list_dead_units = new List<Unit>();
+
 		//Player isn't dead, let's run his animation tick
 		player.animation_tick();
 		IsAnimationDone = player.FinishedAnimation;
-
-		ProjectileManager.getInstance().fireProjectiles();
-		if (!ProjectileManager.getInstance().FinishedAnimation) {
-			IsAnimationDone = false;
-		}
 
 		//Animate live enemy units
 		foreach (Unit unit in list_live_units) {
@@ -187,20 +195,10 @@ public class GameInstance : Cleanable {
 				IsAnimationDone = false;
 			}
 		}
-		//Check if player is dead after enemy animations
-		if (player.checkIfDead()) {
-			//We need to go back to start of function to animate death of player
-			IsAnimationDone = false;
-			return;
-		}
 
-		//If the player isn't dead, we'll animate the death of the enemies
-		foreach (Unit unit in list_dead_units) {
-			list_live_units.Remove(unit);
-			unit.death_tick();
-			if (!unit.FinishedAnimation) {
-				IsAnimationDone = false;
-			}
+		ProjectileManager.getInstance().fireProjectiles();
+		if (!ProjectileManager.getInstance().FinishedAnimation) {
+			IsAnimationDone = false;
 		}
     }
 
@@ -213,6 +211,7 @@ public class GameInstance : Cleanable {
     void actionEnemyEntry() {
         //Determine enemy actions
 		foreach (Unit unit in list_live_units) {
+			unit.Prelogic_tick();
 			unit.logic_tick();
 			unit.FinishedAnimation = false;
 		}

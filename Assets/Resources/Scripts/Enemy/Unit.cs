@@ -39,17 +39,20 @@ public class Unit : Entity{
 
 
 	public void logic_tick() {
-		brain.tick();
+		if (!IsDead()) {
+			brain.tick();
+		}
+	}
+
+	public new bool IsDead() {
+		bool isDead = base.IsDead();
+		if (isDead) {
+			GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = null;
+		}
+		return isDead;
 	}
 	
 	public override void animation_tick() {
-		if (Health <= 0) {
-			//IsDead = true;
-			FinishedAnimation = true;
-			GameTools.GI.signalDeath(this);
-			GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = null;
-			return;
-		}
 		if (current_target == Direction.None) {
 			if (list_directions.Count > 0) {
 				if (list_directions[0] == Direction.None) {

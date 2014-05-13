@@ -274,7 +274,7 @@ public class GameManager : MonoBehaviour{
 
 	bool conditionLose() {
 		//return  Input.GetKeyDown("down");
-		return turn_manager.IsAnimationDone && GameTools.Player.IsDead;
+		return turn_manager.IsAnimationDone && GameTools.Player.IsDead();
 	}
 
     bool conditionTrue() {

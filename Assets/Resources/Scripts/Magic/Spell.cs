@@ -7,9 +7,6 @@ public class Spell {
 	public float Power {get; private set;}
     public int CastRange {get; private set;}
 
-	//increase power or something, no touching
-	public float SpellPowerModifier {get;set;}
-
     private int[] loadedOrigin;
 	private int[] loadedDestination;
 	private bool hasLoadInfo = false;
@@ -22,7 +19,6 @@ public class Spell {
 		Power = Random.Range(7, 10) * Shape.shapeModifier;
 		
 		CastRange = Shape.castRange;
-		SpellPowerModifier = 1.0f;
 	}
 
 	public Spell (string shape) : this() {
