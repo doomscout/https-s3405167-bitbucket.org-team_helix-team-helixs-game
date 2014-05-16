@@ -144,7 +144,7 @@ public class GameManager : MonoBehaviour{
         temp = main_menu.GetComponent<MainMenu>();
         Gameexit = temp.exit;
         if (Gameexit) {
-            Debug.Log("asdasdasd");
+            Debug.Log("actionMenyRunningGameexit");
         }
 	}
 

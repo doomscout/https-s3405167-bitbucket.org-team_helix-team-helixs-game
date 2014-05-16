@@ -5,7 +5,7 @@ public class SpellIndicator : Cleanable{
 	private GameObject[] pool;
 	public bool IsShowingIndicator {get; private set;}
 	private int refill = 0;
-	private int max_pool_size = 20;
+	private int max_pool_size;
 	private CastRangeIndicator RangeIndicator;
 
 	public SpellIndicator(int maxPoolSize) {
@@ -89,7 +89,9 @@ public class SpellIndicator : Cleanable{
 			Indicator script = pool[i].GetComponent<Indicator>();
 			script.changeColour(ColourManager.toColor(spell.SpellColour));
 		}
-		refill = coordinates.GetLength(0);
+		if (coordinates.GetLength(0) != 0) {
+			refill = coordinates.GetLength(0);
+		}
 		if (RangeIndicator != null) {
 			RangeIndicator.updateSpellCoOrds(coordinates);
 		}

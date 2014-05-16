@@ -43,7 +43,9 @@ public class CastRangeIndicator {
     }
 
 	public void updateSpellCoOrds(int[,] sc) {
-		SpellCoOrds = sc;
+		if (sc.GetLength(0) != 0) {
+			SpellCoOrds = sc;
+		}
 	}
 
     private void doublePool() {
@@ -77,7 +79,6 @@ public class CastRangeIndicator {
 
 	private bool addCastRange(Entity u) {
         int castRange = u.MainSpell.CastRange;
-        Debug.Log("Cast range is " + castRange);
         if (castRange < 1) {
             return false;
         }

@@ -10,7 +10,7 @@ public class Player : Entity {
 	private CastRangeIndicator PlayerCastIndicator;
 
 	public Player() {
-		spellIndicator = new SpellIndicator(20);
+		spellIndicator = new SpellIndicator(40);
 		PlayerCastIndicator = new CastRangeIndicator();
 		spellIndicator.link(PlayerCastIndicator);
 
@@ -119,6 +119,7 @@ public class Player : Entity {
 		}
 
 		//Check to see if player is going somewhere invalid
+		/*
 		switch (current_target) {
 			case Direction.Down:
 				if (GameTools.Map.isOutOfBounds(Map_position_x, Map_position_y-1)) {
@@ -171,7 +172,7 @@ public class Player : Entity {
 			case Direction.None:
 			break;
 		}
-
+		*/
 		//Mouse
 		if (Input.GetMouseButtonDown(0)) {
 			if (spellIndicator.IsShowingIndicator) {

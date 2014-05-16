@@ -6,6 +6,7 @@ public class Spell {
 	public Colour SpellColour {get; private set;}
 	public float Power {get; private set;}
     public int CastRange {get; private set;}
+	public StatusEffects StatusEffect {get; private set;}
 
     private int[] loadedOrigin;
 	private int[] loadedDestination;
@@ -13,24 +14,24 @@ public class Spell {
 
 	public Spell () {
 		SpellColour = ColourManager.getRandomColour();
-
 		Shape = new Shape();
+		Power = Random.Range(7, 10) /* Shape.shapeModifier*/;
 
-		Power = Random.Range(7, 10) * Shape.shapeModifier;
-		
-		CastRange = Shape.castRange;
+
+		CastRange = Shape.CastRange;
+
 	}
 
-	public Spell (string shape) : this() {
+	public Spell (ShapeType shape) : this() {
 		Shape = new Shape(shape);
-		CastRange = Shape.castRange;
+		CastRange = Shape.CastRange;
 	}
 
 	public Spell (Colour c) : this() {
 		SpellColour = c;
 	}
 
-	public Spell (string shape, Colour c) : this(shape) {
+	public Spell (ShapeType shape, Colour c) : this(shape) {
 		SpellColour = c;
 	}
 

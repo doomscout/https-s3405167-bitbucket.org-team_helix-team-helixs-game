@@ -60,7 +60,7 @@ public abstract class Entity : Cleanable {
 
 	protected virtual void InitMagic() {
 		MainColour = ColourManager.getRandomColour();
-		MainSpell = new Spell("single", MainColour);
+		MainSpell = new Spell(ShapeType.Single, MainColour);
 		ListStatus = new List<Status>();
 		TickedStatus = new List<Status>[System.Enum.GetNames(typeof(StatusEffects)).Length];
 		for (int i = 0; i < TickedStatus.Length; i++) {
