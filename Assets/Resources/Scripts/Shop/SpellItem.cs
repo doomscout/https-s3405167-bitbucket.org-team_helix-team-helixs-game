@@ -8,7 +8,7 @@ public class SpellItem {
 
 	public SpellItem() {
 		s = new Spell();
-		price = Random.Range(1, 10);
+		price = Random.Range(20, 30);
 	}
 
 	public override bool Equals (object obj) {

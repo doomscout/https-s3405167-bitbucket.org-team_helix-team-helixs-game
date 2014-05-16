@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -31,7 +32,8 @@ public class Shop : Cleanable {
 		}
 	}
 
-	public bool TryToBuySpell(Player p, SpellItem s) {
+	//Sell a spell to player
+	public bool TryToSellSpell(Player p, SpellItem s) {
 		if (!SpellStock.Contains(s)) {
 			Debug.Log ("Cannot find spell in shop");
 			return false;
@@ -43,6 +45,12 @@ public class Shop : Cleanable {
 		SpellStock.Remove(s);
 		//Everything is successful
 		return true;
+	}
+
+	//Buy a spell from player
+	public bool TryToBuySpell(Player p, Spell s) {
+		float price = Random.Range(20, 30);
+		return p.SellSpell(s, price);
 	}
 
 	public void CleanUp() {

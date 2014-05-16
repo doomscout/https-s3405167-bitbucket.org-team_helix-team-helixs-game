@@ -55,7 +55,7 @@ public class Player : Entity {
 	protected override void InitCleanable () {
 		CleanTools.GetInstance().SubscribeCleanable(this, true);
 	}
-
+	//Only the shop should call this
 	public bool BuySpell(SpellItem s) {
 		if (Money - s.price < 0) {
 			Debug.Log ("Can't buy. Current Money: " + Money + ", Price: " + s.price);
@@ -63,6 +63,20 @@ public class Player : Entity {
 		}
 		Money -= s.price;
 		deckManager.inv.Add(s.s);
+		return true;
+	}
+	//Only the shop should call this
+	public bool SellSpell(Spell s, float price) {
+		if (deckManager.deck.Contains(s)) {
+			Debug.Log ("Unequip spell before selling");
+			return false;
+		}
+		if (!deckManager.inv.Contains(s)) {
+			Debug.Log ("Player does not have that spell to sell");
+			return false;
+		}
+		Money += price;
+		deckManager.inv.Remove(s);
 		return true;
 	}
 
