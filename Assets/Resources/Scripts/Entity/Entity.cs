@@ -16,11 +16,12 @@ public abstract class Entity : Cleanable {
 	//Magic
 	public Spell MainSpell;
 	public Colour MainColour;
-
-
 	public List<Status> ListStatus;
 	private List<Status>[] TickedStatus;
-	
+
+	//Money
+	public float Money;
+
 	//Map
 	public int Map_position_x{ get; protected set;}
 	public int Map_position_y{ get; protected set;}
@@ -35,12 +36,14 @@ public abstract class Entity : Cleanable {
 		InitAnimation();
 		//Magic
 		InitMagic();
+		//Money
+		InitMoney();
 		//Map
 		InitMapPosition();
 		//GameObject
 		InitGameObject();
-
-		CleanTools.GetInstance().SubscribeCleanable(this);
+		//InitCleanable
+		InitCleanable();
 	}
 
 	protected virtual void InitAnimation() {
@@ -51,7 +54,7 @@ public abstract class Entity : Cleanable {
 	}
 
 	protected virtual void InitStats() {
-		Max_Health = 10.0f;
+		Max_Health = 1.0f;
 		Health = Max_Health;
 	}
 
@@ -67,6 +70,10 @@ public abstract class Entity : Cleanable {
 		//Sample status effect
 		//ListStatus.Add(new PoisionStatus(3, 5.0f));				
 		//ListStatus.Add(new PoisionStatus(3, 5.0f));
+	}
+
+	protected virtual void InitMoney() {
+		Money = Random.Range(7, 12);
 	}
 	
 	public void CleanUp() {
@@ -144,5 +151,6 @@ public abstract class Entity : Cleanable {
 	
 	protected abstract void InitMapPosition();
 	protected abstract void InitGameObject();
+	protected abstract void InitCleanable();
 	public abstract void animation_tick();
 }

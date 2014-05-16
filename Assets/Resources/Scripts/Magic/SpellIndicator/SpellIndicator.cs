@@ -11,7 +11,7 @@ public class SpellIndicator : Cleanable{
 	public SpellIndicator(int maxPoolSize) {
 		max_pool_size = maxPoolSize;
 		initSpellIndicator();
-		CleanTools.GetInstance().SubscribeCleanable(this);
+		CleanTools.GetInstance().SubscribeCleanable(this, true);
 	}
 
 	public void CleanUp() {

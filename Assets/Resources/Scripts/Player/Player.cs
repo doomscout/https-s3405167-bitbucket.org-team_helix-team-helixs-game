@@ -52,6 +52,20 @@ public class Player : Entity {
 		MainSpell = deckManager.peekTopSpell();
 	}
 
+	protected override void InitCleanable () {
+		CleanTools.GetInstance().SubscribeCleanable(this, true);
+	}
+
+	public bool BuySpell(SpellItem s) {
+		if (Money - s.price < 0) {
+			Debug.Log ("Can't buy. Current Money: " + Money + ", Price: " + s.price);
+			return false;
+		}
+		Money -= s.price;
+		deckManager.inv.Add(s.s);
+		return true;
+	}
+
 	public void loadIntoGame() {
 		InitMapPosition();
 		InitGameObject();

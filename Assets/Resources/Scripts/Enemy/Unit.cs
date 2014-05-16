@@ -37,6 +37,9 @@ public class Unit : Entity{
 		GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = this;
 	}
 
+	protected override void InitCleanable () {
+		CleanTools.GetInstance().SubscribeCleanable(this);
+	}
 
 	public void logic_tick() {
 		if (!IsDead()) {

@@ -13,6 +13,8 @@ public class GameInstance : Cleanable {
 	public CastRangeIndicator UnitCastIndicator;
 	Player player;
 	GameObject tileMapPrefab;
+	Shop shop;
+
 
     private bool validInput = false;
 	private bool showDamageIndicators = true;
@@ -21,6 +23,7 @@ public class GameInstance : Cleanable {
 
     public GameInstance(Player player) {
 		this.player = player;
+		this.shop = new Shop();
 
         list_live_units = new List<Unit>();
 		list_dead_units = new List<Unit>();
