@@ -3,14 +3,15 @@ using System.Collections;
 
 public enum StatusEffects {Poison, Slow, ReducedDefence}
 
-public abstract class Status {
+public class Status {
 	public int TickCount {get; protected set;}
 	public float Power {get; protected set;}
 	public StatusEffects StatusEffect {get; protected set;}
 
-	protected Status(int tickCount, float power) {
+	public Status(int tickCount, float power, StatusEffects se) {
 		TickCount = tickCount;
 		Power = power;
+		StatusEffect = se;
 	}
 
 	public bool TickDown() {
@@ -33,25 +34,4 @@ public abstract class Status {
 		return StatusEffect.ToString().GetHashCode() << 16 | ((int)Power);
 	}
 
-}
-
-public class PoisionStatus : Status {
-
-	public PoisionStatus(int tickCount, float power) : base(tickCount, power) {
-		StatusEffect = StatusEffects.Poison;
-	}
-}
-
-public class SlowStatus : Status {
-	
-	public SlowStatus(int tickCount, float power) : base(tickCount, power) {
-		StatusEffect = StatusEffects.Slow;
-	}
-}
-
-public class ReducedDefenceStatus : Status {
-	
-	public ReducedDefenceStatus(int tickCount, float power) : base(tickCount, power) {
-		StatusEffect = StatusEffects.ReducedDefence;
-	}
 }

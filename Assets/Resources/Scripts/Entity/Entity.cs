@@ -112,6 +112,9 @@ public abstract class Entity : Cleanable {
 		status_tick();
 		// Status modifier (poison)
 		for (int i = 0; i < TickedStatus[(int)StatusEffects.Poison].Count; i++) {
+			if (TickedStatus[(int)StatusEffects.Poison][i].StatusEffect != StatusEffects.Poison) {
+				Debug.LogError("Poison tick error");
+			}
 			dmg += TickedStatus[(int)StatusEffects.Poison][i].Power;
 		}
 		Health -= dmg;
@@ -144,7 +147,7 @@ public abstract class Entity : Cleanable {
 	
 	public virtual void death_tick() {
 		//display death animation (if any)
-		float death = 0;
+		float errorpopupindebug = 0;
 		GameObject.Destroy(game_object);
 		FinishedAnimation = true;			//temp no animation, just return immediately
 	}
