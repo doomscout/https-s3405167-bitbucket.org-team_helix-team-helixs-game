@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class Shop : Cleanable {
 
 	public int SpellStockMaxLevel = 4;
-	public List<SpellItem> SpellStock {get; private set;}
+	public List<Spell> SpellStock {get; private set;}
 
 	public Shop() {
 		RefreshStock();
@@ -15,9 +15,9 @@ public class Shop : Cleanable {
 	}
 
 	public void RefreshStock() {
-		SpellStock = new List<SpellItem>();
+		SpellStock = new List<Spell>();
 		for (int i = 0; i < SpellStockMaxLevel; i++) {
-			SpellStock.Add(new SpellItem());
+			SpellStock.Add(new Spell());
 		}
 	}
 
@@ -28,12 +28,12 @@ public class Shop : Cleanable {
 		}
 		int originalSpellLevel = SpellStock.Count;
 		for (int i = 0; i < originalSpellLevel; i++) {
-			SpellStock.Add(new SpellItem());
+			SpellStock.Add(new Spell());
 		}
 	}
 
 	//Sell a spell to player
-	public bool TryToSellSpell(Player p, SpellItem s) {
+	public bool TryToSellSpell(Player p, Spell s) {
 		if (!SpellStock.Contains(s)) {
 			Debug.Log ("Cannot find spell in shop");
 			return false;
@@ -49,8 +49,7 @@ public class Shop : Cleanable {
 
 	//Buy a spell from player
 	public bool TryToBuySpell(Player p, Spell s) {
-		float price = Random.Range(20, 30);
-		return p.SellSpell(s, price);
+		return p.SellSpell(s);
 	}
 
 	public void CleanUp() {

@@ -9,7 +9,7 @@ public static class ColourManager {
 	//public static readonly float StrengthModifier = 1.25f;
 
 	public static Colour getRandomColour() {
-		return (Colour)Random.Range(1, System.Enum.GetNames(typeof(Colour)).Length - 1);
+		return (Colour)Random.Range(1, System.Enum.GetNames(typeof(Colour)).Length);
 	}
 
 	public static Color toColor(Colour c) {

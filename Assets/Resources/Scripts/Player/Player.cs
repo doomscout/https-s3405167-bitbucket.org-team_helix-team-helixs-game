@@ -56,17 +56,17 @@ public class Player : Entity {
 		CleanTools.GetInstance().SubscribeCleanable(this, true);
 	}
 	//Only the shop should call this
-	public bool BuySpell(SpellItem s) {
-		if (Money - s.price < 0) {
-			Debug.Log ("Can't buy. Current Money: " + Money + ", Price: " + s.price);
+	public bool BuySpell(Spell s) {
+		if (Money - s.SpellRating < 0) {
+			Debug.Log ("Can't buy. Current Money: " + Money + ", Price: " + s.SpellRating);
 			return false;
 		}
-		Money -= s.price;
-		deckManager.inv.Add(s.s);
+		Money -= s.SpellRating;
+		deckManager.inv.Add(s);
 		return true;
 	}
 	//Only the shop should call this
-	public bool SellSpell(Spell s, float price) {
+	public bool SellSpell(Spell s) {
 		if (deckManager.deck.Contains(s)) {
 			Debug.Log ("Unequip spell before selling");
 			return false;
@@ -75,7 +75,7 @@ public class Player : Entity {
 			Debug.Log ("Player does not have that spell to sell");
 			return false;
 		}
-		Money += price;
+		Money += s.SpellRating;
 		deckManager.inv.Remove(s);
 		return true;
 	}
@@ -119,7 +119,7 @@ public class Player : Entity {
 		}
 
 		//Check to see if player is going somewhere invalid
-		/*
+
 		switch (current_target) {
 			case Direction.Down:
 				if (GameTools.Map.isOutOfBounds(Map_position_x, Map_position_y-1)) {
@@ -172,7 +172,7 @@ public class Player : Entity {
 			case Direction.None:
 			break;
 		}
-		*/
+
 		//Mouse
 		if (Input.GetMouseButtonDown(0)) {
 			if (spellIndicator.IsShowingIndicator) {

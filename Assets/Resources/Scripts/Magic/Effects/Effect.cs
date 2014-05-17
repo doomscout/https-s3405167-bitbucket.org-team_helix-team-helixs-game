@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum StatusEffects {Poison, Slow, ReducedDefence}
+public enum EffectType {Poison, Slow, ReducedDefence}
 
-public class Status {
+public class Effect {
 	public int TickCount {get; protected set;}
 	public float Power {get; protected set;}
-	public StatusEffects StatusEffect {get; protected set;}
+	public EffectType StatusEffect {get; protected set;}
 
-	public Status(int tickCount, float power, StatusEffects se) {
+	public Effect(int tickCount, float power, EffectType se) {
 		TickCount = tickCount;
 		Power = power;
 		StatusEffect = se;
@@ -26,7 +26,7 @@ public class Status {
 		if (obj == null || this.GetType() != obj.GetType()) {
 			return false;
 		}
-		Status newStatus = (Status)obj;
+		Effect newStatus = (Effect)obj;
 		return this.StatusEffect == newStatus.StatusEffect;
 	}
 	

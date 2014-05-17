@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -16,8 +16,8 @@ public abstract class Entity : Cleanable {
 	//Magic
 	public Spell MainSpell;
 	public Colour MainColour;
-	public List<Status> ListStatus;
-	private List<Status>[] TickedStatus;
+	public List<Effect> ListStatus;
+	private List<Effect>[] TickedStatus;
 
 	//Money
 	public float Money;
@@ -61,10 +61,10 @@ public abstract class Entity : Cleanable {
 	protected virtual void InitMagic() {
 		MainColour = ColourManager.getRandomColour();
 		MainSpell = new Spell(ShapeType.Single, MainColour);
-		ListStatus = new List<Status>();
-		TickedStatus = new List<Status>[System.Enum.GetNames(typeof(StatusEffects)).Length];
+		ListStatus = new List<Effect>();
+		TickedStatus = new List<Effect>[System.Enum.GetNames(typeof(EffectType)).Length];
 		for (int i = 0; i < TickedStatus.Length; i++) {
-			TickedStatus[i] = new List<Status>();
+			TickedStatus[i] = new List<Effect>();
 
 		}
 		//Sample status effect
@@ -83,12 +83,12 @@ public abstract class Entity : Cleanable {
 	}
 
 	public virtual void status_tick() {
-		List<Status> toBeRemoved = new List<Status>();
+		List<Effect> toBeRemoved = new List<Effect>();
 		int count = ListStatus.Count;
 
 		//Reset status list
 		for (int i = 0; i < TickedStatus.Length; i++) {
-			TickedStatus[i] = new List<Status>();
+			TickedStatus[i] = new List<Effect>();
 		}
 
 		//Populate status list for this turn
@@ -101,7 +101,7 @@ public abstract class Entity : Cleanable {
 		}
 
 		//Remove status that have been timed out
-		foreach (Status s in toBeRemoved) {
+		foreach (Effect s in toBeRemoved) {
 			ListStatus.Remove(s);
 		}
 	}
@@ -111,17 +111,18 @@ public abstract class Entity : Cleanable {
 		//populate all the statuses
 		status_tick();
 		// Status modifier (poison)
-		for (int i = 0; i < TickedStatus[(int)StatusEffects.Poison].Count; i++) {
-			if (TickedStatus[(int)StatusEffects.Poison][i].StatusEffect != StatusEffects.Poison) {
+		for (int i = 0; i < TickedStatus[(int)EffectType.Poison].Count; i++) {
+			if (TickedStatus[(int)EffectType.Poison][i].StatusEffect != EffectType.Poison) {
 				Debug.LogError("Poison tick error");
 			}
-			dmg += TickedStatus[(int)StatusEffects.Poison][i].Power;
+			dmg += TickedStatus[(int)EffectType.Poison][i].Power;
 		}
 		Health -= dmg;
 	}
 
 	public virtual void CastMainSpell() {
 		/* We can add in another status in here */
+
 	}
 
 	public virtual float GetHitByMagic(Spell taken_spell) {
@@ -133,7 +134,7 @@ public abstract class Entity : Cleanable {
 		}
 		// Status modifier (reduced defence)
 		for (int i = 0; i < TickedStatus[2].Count; i++) {
-			modifier *= TickedStatus[(int)StatusEffects.ReducedDefence][i].Power;
+			modifier *= TickedStatus[(int)EffectType.ReducedDefence][i].Power;
 		}
 
 		float dmg = taken_spell.Power * modifier;

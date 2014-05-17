@@ -6,7 +6,8 @@ public class Spell {
 	public Colour SpellColour {get; private set;}
 	public float Power {get; private set;}
     public int CastRange {get; private set;}
-	public StatusEffects StatusEffect {get; private set;}
+	public Effect SpellStatus {get; private set;}
+	public float SpellRating {get; private set;}
 
     private int[] loadedOrigin;
 	private int[] loadedDestination;
@@ -15,11 +16,12 @@ public class Spell {
 	public Spell () {
 		SpellColour = ColourManager.getRandomColour();
 		Shape = new Shape();
-		Power = Random.Range(7, 10) /* Shape.shapeModifier*/;
-
-
+		Power = Random.Range(7, 10);
+		SpellStatus = new Effect (	Random.Range(0, 10), /* tick count */
+		                   			Random.Range(1, 5),  /* power */
+		                   		  	(EffectType)Random.Range(1, System.Enum.GetNames(typeof(EffectType)).Length));
 		CastRange = Shape.CastRange;
-
+		SpellRating = calculateRating();
 	}
 
 	public Spell (ShapeType shape) : this() {
@@ -33,6 +35,41 @@ public class Spell {
 
 	public Spell (ShapeType shape, Colour c) : this(shape) {
 		SpellColour = c;
+	}
+
+	private float calculateRating() {
+		/* Variables:
+		 * power
+		 * cast range
+		 * affected tiles
+		 * isPlayerCentred
+		 * status - tickCount
+		 * status - power
+		 * status - effect
+		 */
+
+		/* Direct damage weights */
+		float powerWeight = 1.0f;
+		float castRangeWeight = 1.2f;
+		float affectedTilesWeight = 1.2f;
+		/* status weights */
+		float tickCountWeight = 1.0f;
+		float statusPowerWeight = 1.5f;
+		/* additional modifiers */
+		float powerModifier = 1.0f;
+		float statusEffectModifier = 0.50f;
+
+		float rating = 0;
+		/* Direct damage */
+		rating += 	((Power * powerWeight) + 
+					(CastRange * castRangeWeight) + 
+		            (Shape.numberOfOnes *affectedTilesWeight)) * powerModifier;
+
+		/* status */
+		rating += 	((SpellStatus.TickCount * tickCountWeight) *
+					(SpellStatus.Power * statusPowerWeight)) * statusEffectModifier;
+
+		return rating;
 	}
 
 	public void loadInfo(int[] origin, int[] position) {
