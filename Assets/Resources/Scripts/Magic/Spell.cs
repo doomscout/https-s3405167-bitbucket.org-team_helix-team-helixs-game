@@ -6,7 +6,7 @@ public class Spell {
 	public Colour SpellColour {get; private set;}
 	public float Power {get; private set;}
     public int CastRange {get; private set;}
-	public Effect SpellStatus {get; private set;}
+	public Effect SpellEffect {get; private set;}
 	public float SpellRating {get; private set;}
 
     private int[] loadedOrigin;
@@ -17,9 +17,9 @@ public class Spell {
 		SpellColour = ColourManager.getRandomColour();
 		Shape = new Shape();
 		Power = Random.Range(7, 10);
-		SpellStatus = new Effect (	Random.Range(0, 10), /* tick count */
-		                   			Random.Range(1, 5),  /* power */
-		                   		  	(EffectType)Random.Range(1, System.Enum.GetNames(typeof(EffectType)).Length));
+		SpellEffect = new StatusEffect (	Random.Range(0, 10), /* tick count */
+		                   					Random.Range(1, 5),  /* power */
+		                   		  			(StatusType)Random.Range(1, System.Enum.GetNames(typeof(StatusType)).Length));
 		CastRange = Shape.CastRange;
 		SpellRating = calculateRating();
 	}
@@ -66,8 +66,8 @@ public class Spell {
 		            (Shape.numberOfOnes *affectedTilesWeight)) * powerModifier;
 
 		/* status */
-		rating += 	((SpellStatus.TickCount * tickCountWeight) *
-					(SpellStatus.Power * statusPowerWeight)) * statusEffectModifier;
+		rating += 	((SpellEffect.TickCount * tickCountWeight) *
+		            (SpellEffect.Power * statusPowerWeight)) * statusEffectModifier;
 
 		return rating;
 	}

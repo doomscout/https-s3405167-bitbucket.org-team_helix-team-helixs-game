@@ -16,8 +16,8 @@ public abstract class Entity : Cleanable {
 	//Magic
 	public Spell MainSpell;
 	public Colour MainColour;
-	public List<Effect> ListStatus;
-	private List<Effect>[] TickedStatus;
+	public List<StatusEffect> ListStatus;
+	private List<StatusEffect>[] TickedStatus;
 
 	//Money
 	public float Money;
@@ -61,10 +61,10 @@ public abstract class Entity : Cleanable {
 	protected virtual void InitMagic() {
 		MainColour = ColourManager.getRandomColour();
 		MainSpell = new Spell(ShapeType.Single, MainColour);
-		ListStatus = new List<Effect>();
-		TickedStatus = new List<Effect>[System.Enum.GetNames(typeof(EffectType)).Length];
+		ListStatus = new List<StatusEffect>();
+		TickedStatus = new List<StatusEffect>[System.Enum.GetNames(typeof(StatusType)).Length];
 		for (int i = 0; i < TickedStatus.Length; i++) {
-			TickedStatus[i] = new List<Effect>();
+			TickedStatus[i] = new List<StatusEffect>();
 
 		}
 		//Sample status effect
@@ -83,17 +83,17 @@ public abstract class Entity : Cleanable {
 	}
 
 	public virtual void status_tick() {
-		List<Effect> toBeRemoved = new List<Effect>();
+		List<StatusEffect> toBeRemoved = new List<StatusEffect>();
 		int count = ListStatus.Count;
 
 		//Reset status list
 		for (int i = 0; i < TickedStatus.Length; i++) {
-			TickedStatus[i] = new List<Effect>();
+			TickedStatus[i] = new List<StatusEffect>();
 		}
 
 		//Populate status list for this turn
 		for (int i = 0; i < count; i++) {
-			TickedStatus[(int)ListStatus[i].StatusEffect].Add(ListStatus[i]);
+			TickedStatus[(int)ListStatus[i].Status].Add(ListStatus[i]);
 			ListStatus[i].TickDown();
 			if (ListStatus[i].TickCount <= 0) {
 				toBeRemoved.Add (ListStatus[i]);
@@ -101,7 +101,7 @@ public abstract class Entity : Cleanable {
 		}
 
 		//Remove status that have been timed out
-		foreach (Effect s in toBeRemoved) {
+		foreach (StatusEffect s in toBeRemoved) {
 			ListStatus.Remove(s);
 		}
 	}
@@ -111,11 +111,11 @@ public abstract class Entity : Cleanable {
 		//populate all the statuses
 		status_tick();
 		// Status modifier (poison)
-		for (int i = 0; i < TickedStatus[(int)EffectType.Poison].Count; i++) {
-			if (TickedStatus[(int)EffectType.Poison][i].StatusEffect != EffectType.Poison) {
+		for (int i = 0; i < TickedStatus[(int)StatusType.Poison].Count; i++) {
+			if (TickedStatus[(int)StatusType.Poison][i].Status != StatusType.Poison) {
 				Debug.LogError("Poison tick error");
 			}
-			dmg += TickedStatus[(int)EffectType.Poison][i].Power;
+			dmg += TickedStatus[(int)StatusType.Poison][i].Power;
 		}
 		Health -= dmg;
 	}
@@ -127,6 +127,8 @@ public abstract class Entity : Cleanable {
 
 	public virtual float GetHitByMagic(Spell taken_spell) {
 		float modifier = 1.0f;
+		/* Receive status effects */
+
 		// Colour modifier
 		if (ColourManager.getWeakness(taken_spell.SpellColour) == MainColour) {
 			//The spell is weak against our colour
@@ -134,7 +136,7 @@ public abstract class Entity : Cleanable {
 		}
 		// Status modifier (reduced defence)
 		for (int i = 0; i < TickedStatus[2].Count; i++) {
-			modifier *= TickedStatus[(int)EffectType.ReducedDefence][i].Power;
+			modifier *= TickedStatus[(int)StatusType.ReducedDefence][i].Power;
 		}
 
 		float dmg = taken_spell.Power * modifier;

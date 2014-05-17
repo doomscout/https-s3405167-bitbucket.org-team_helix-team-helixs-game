@@ -9,7 +9,7 @@ public class Player : Entity {
 	private SpellIndicator spellIndicator;
 	private CastRangeIndicator PlayerCastIndicator;
 
-	public Player() {
+	public Player() : base(){
 		spellIndicator = new SpellIndicator(40);
 		PlayerCastIndicator = new CastRangeIndicator();
 		spellIndicator.link(PlayerCastIndicator);

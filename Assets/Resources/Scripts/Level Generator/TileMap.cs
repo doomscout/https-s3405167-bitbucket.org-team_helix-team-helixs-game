@@ -88,14 +88,13 @@ public class TileMap : MonoBehaviour, Cleanable {
 				texture.SetPixels(x*tileResolution, y*tileResolution, tileResolution, tileResolution, p);
 			}
 		}
-		
+
 		texture.filterMode = FilterMode.Point;
 		texture.wrapMode = TextureWrapMode.Clamp;
 		texture.Apply();
-		
+
 		MeshRenderer mesh_renderer = GetComponent<MeshRenderer>();
 		mesh_renderer.sharedMaterials[0].mainTexture = texture;
-		
 		Debug.Log ("Done Texture!");
 
 		store_data = new Colour[size_x, size_z];
@@ -169,6 +168,7 @@ public class TileMap : MonoBehaviour, Cleanable {
 
 		//Generate and test maps
 		List<DataTileMap> list_of_generated_maps = new List<DataTileMap>();
+
 		DataTileMap bestMap = null;
 		while (bestMap == null) {
 			for (int i = 0; i < 10; i++) {
@@ -177,8 +177,11 @@ public class TileMap : MonoBehaviour, Cleanable {
 			}
 			bestMap = testMaps(list_of_generated_maps);
 		}
-		BuildTexture(bestMap);
 
+
+		//DataTileMap bestMap = new DataTileMap(size_x, size_z, percentAreTile);
+
+		BuildTexture(bestMap);
 		//PrintDebug();
 	}
 

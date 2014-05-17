@@ -9,7 +9,7 @@ public class Unit : Entity{
 	private List<float> list_of_damage_taken;
 	private List<Colour> list_of_colour_taken;
 	
-	public Unit() {
+	public Unit() : base(){
 		brain = new SimpleAI(this);
 
 		list_of_damage_taken = new List<float>();
