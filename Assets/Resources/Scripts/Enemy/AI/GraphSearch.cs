@@ -2,21 +2,25 @@
 using System.Collections;
 using System.Collections.Generic;
 
-//Singleton AStar implementation with lazy loading.
-public class AStar {
+public delegate void ActionOnVisit(int[,] graph, int x, int y);
 
-	private static AStar instance = null;
+//Singleton AStar implementation with lazy loading.
+public class GraphSearch {
+
+	public static ActionOnVisit NoAction = new ActionOnVisit(Nothing);
+
+	private static GraphSearch instance = null;
 	private static int x;
 	private static int y;
 	private static float heavyWeight = 250.0f;
 
-	private AStar() {
+	private GraphSearch() {
 
 	}
 
-	public static AStar fromPosition(int x1, int y1) {
+	public static GraphSearch fromPosition(int x1, int y1) {
 		if (instance == null) {
-			instance = new AStar();
+			instance = new GraphSearch();
 		}
 		x = x1;
 		y = y1;
@@ -89,6 +93,73 @@ public class AStar {
 		return path;
 	}
 
+	public int depthFirst(int[,] Map_data_passable, int impassableValue, ActionOnVisit action) {
+		int count = 0;
+		int newX = 0;
+		int newY = 0;
+		GraphNode neighbour;
+
+		Stack<GraphNode> openSet = new Stack<GraphNode>();
+		HashSet<GraphNode> closedSet = new HashSet<GraphNode>();
+		
+		GraphNode originNode = new GraphNode(x, y);
+		openSet.Push(originNode);
+		
+		while (openSet.Count > 0) {
+			GraphNode n = openSet.Pop();
+			closedSet.Add(n);
+			action(Map_data_passable, n.x, n.y);
+			
+			count++;
+			if (count > 10000) {
+				Debug.LogError("Infinite Loop");
+				break;
+			}
+			
+			newX = n.x+1;
+			newY = n.y;
+			neighbour = new GraphNode(newX, newY);
+			if (!MapTools.IsOutOfBounds(newX, newY) && 
+			    Map_data_passable[newX, newY] != impassableValue && 
+			    !closedSet.Contains(neighbour) &&
+			    !openSet.Contains(neighbour)) {
+				openSet.Push (neighbour);
+			}
+			
+			newX = n.x-1;
+			newY = n.y;
+			neighbour = new GraphNode(newX, newY);
+			if (!MapTools.IsOutOfBounds(newX, newY) && 
+			    Map_data_passable[newX, newY] != impassableValue && 
+			    !closedSet.Contains(neighbour) &&
+			    !openSet.Contains(neighbour)) {
+				openSet.Push (neighbour);
+			}
+			
+			newX = n.x;
+			newY = n.y+1;
+			neighbour = new GraphNode(newX, newY);
+			if (!MapTools.IsOutOfBounds(newX, newY) && 
+			    Map_data_passable[newX, newY] != impassableValue && 
+			    !closedSet.Contains(neighbour) &&
+			    !openSet.Contains(neighbour)) {
+				openSet.Push (neighbour);
+			}
+			
+			newX = n.x;
+			newY = n.y-1;
+			neighbour = new GraphNode(newX, newY);
+			if (!MapTools.IsOutOfBounds(newX, newY) && 
+			    Map_data_passable[newX, newY] != impassableValue && 
+			    !closedSet.Contains(neighbour) &&
+			    !openSet.Contains(neighbour)) {
+				openSet.Push (neighbour);
+			}
+			
+		}		
+		return count;
+	}
+
 	//This function is also used in simpleAI
 	public float euclidianDistanceFromTarget(float target_x, float target_y) {
 		float ans = Mathf.Sqrt((target_x - x) * (target_x - x) + 
@@ -104,61 +175,82 @@ public class AStar {
 		float ans = Mathf.Max(target_x, target_y);
 		return ans;
 	}
+
+	private static void Nothing(int[,] map, int x, int y) {
+
+	}
 	
 	private List<AStarNode> findNeighbours(AStarNode a) {
 		List<AStarNode> listOfNeighbours = new List<AStarNode>();
 		float weight = 1.0f;	//default weight
 		float distanceFromPlayer = 0.0f;
 		int node_x = a.CoOrds[0], node_y = a.CoOrds[1];
+		int newX = 0;
+		int newY = 0;
 		AStarNode newNode;
 		
 		//Logic to find valid neighbours
 		weight = 1.0f;
 		distanceFromPlayer = chessboardDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) / 5.0f;
-		if (node_x >= 0 && node_x + 1 < GameTools.Map.size_x && node_y >= 0 && node_y + 1 < GameTools.Map.size_z ) {
-			if (node_x - 1 >= 0 && GameTools.Map.store_data[node_x - 1, node_y] != Colour.None) {
-				if (GameTools.Map.map_unit_occupy[node_x - 1, node_y] != null) {
-					weight = heavyWeight/(distanceFromPlayer * distanceFromPlayer);
-				}
-				newNode = new AStarNode(node_x - 1, node_y, a.getFScore() + weight, chessboardDistanceFromTarget(node_x - 1, node_y), Direction.Left);
-				newNode.Prev = a;
-				listOfNeighbours.Add (newNode);
-			}
-			if ( node_x + 1 < GameTools.Map.size_x && GameTools.Map.store_data[node_x + 1, node_y] != Colour.None) {
+		newX = node_x + 1;
+		newY = node_y;
+		if (!MapTools.IsOutOfBounds(newX, newY)) {
+			if (TileTools.IsLand(GameTools.Map.TileMapData[newX, newY])) {
 				weight = 1.0f;
-				if (GameTools.Map.map_unit_occupy[node_x + 1, node_y] != null) {
+				if (GameTools.Map.map_unit_occupy[newX, newY] != null) {
 					weight = heavyWeight/(distanceFromPlayer * distanceFromPlayer);
 				}
-				newNode = new AStarNode(node_x + 1, node_y, a.getFScore() + weight, chessboardDistanceFromTarget(node_x + 1, node_y), Direction.Right);
-				newNode.Prev = a;
-				listOfNeighbours.Add (newNode);
-			}
-			
-			weight = 1.0f;
-			if (node_y - 1 >= 0 && GameTools.Map.store_data[node_x, node_y -1] != Colour.None) {
-				if (GameTools.Map.map_unit_occupy[node_x, node_y - 1] != null) {
-					weight = heavyWeight/(distanceFromPlayer * distanceFromPlayer);
-				}
-				newNode = new AStarNode(node_x, node_y - 1, a.getFScore() + weight, chessboardDistanceFromTarget(node_x, node_y - 1), Direction.Down);
-				newNode.Prev = a;
-				listOfNeighbours.Add (newNode);
-			}
-			
-			weight = 1.0f;
-			if (node_y + 1 < GameTools.Map.size_z && GameTools.Map.store_data[node_x, node_y+1] != Colour.None) {
-				if (GameTools.Map.map_unit_occupy[node_x, node_y + 1] != null) {
-					weight = heavyWeight/(distanceFromPlayer * distanceFromPlayer);
-				}
-				newNode = new AStarNode(node_x, node_y + 1, a.getFScore() + weight, chessboardDistanceFromTarget(node_x, node_y + 1), Direction.Up);
+				newNode = new AStarNode(newX, newY, a.getFScore() + weight, chessboardDistanceFromTarget(newX, newY), Direction.Right);
 				newNode.Prev = a;
 				listOfNeighbours.Add (newNode);
 			}
 		}
+		newX = node_x - 1;
+		newY = node_y;
+		if (!MapTools.IsOutOfBounds(newX, newY)) {
+			if (TileTools.IsLand(GameTools.Map.TileMapData[newX, newY])) {
+				weight = 1.0f;
+				if (GameTools.Map.map_unit_occupy[newX, newY] != null) {
+					weight = heavyWeight/(distanceFromPlayer * distanceFromPlayer);
+				}
+				newNode = new AStarNode(newX, newY, a.getFScore() + weight, chessboardDistanceFromTarget(newX, newY), Direction.Left);
+				newNode.Prev = a;
+				listOfNeighbours.Add (newNode);
+			}
+		}
+		newX = node_x;
+		newY = node_y + 1;
+		if (!MapTools.IsOutOfBounds(newX, newY)) {
+			if (TileTools.IsLand(GameTools.Map.TileMapData[newX, newY])) {
+				weight = 1.0f;
+				if (GameTools.Map.map_unit_occupy[newX, newY] != null) {
+					weight = heavyWeight/(distanceFromPlayer * distanceFromPlayer);
+				}
+				newNode = new AStarNode(newX, newY, a.getFScore() + weight, chessboardDistanceFromTarget(newX, newY), Direction.Up);
+				newNode.Prev = a;
+				listOfNeighbours.Add (newNode);
+			}
+		}
+		newX = node_x;
+		newY = node_y - 1;
+		if (!MapTools.IsOutOfBounds(newX, newY)) {
+			if (TileTools.IsLand(GameTools.Map.TileMapData[newX, newY])) {
+				weight = 1.0f;
+				if (GameTools.Map.map_unit_occupy[newX, newY] != null) {
+					weight = heavyWeight/(distanceFromPlayer * distanceFromPlayer);
+				}
+				newNode = new AStarNode(newX, newY, a.getFScore() + weight, chessboardDistanceFromTarget(newX, newY), Direction.Down);
+				newNode.Prev = a;
+				listOfNeighbours.Add (newNode);
+			}
+		}
+		
 		return listOfNeighbours;
 	}
 
 	
 	/* Debug methods */
+	/*
 	public void printFreeSpots() {
 		int asd = 0;
 		for (int i = 0; i < GameTools.Map.size_x; i++) {
@@ -170,11 +262,5 @@ public class AStar {
 		}
 		Debug.Log ("Bool count" + asd);
 	}
-	
-	//if (x - 1 >= 0 && GameTools.Map.map_unit_occupy[x - 1, y] != true /*GameTools.Map.map.Map_data[x-1, y] != 0*/) {
-	//if (x + 1 < GameTools.Map.size_x && GameTools.Map.map_unit_occupy[x + 1, y] != true /*x + 1 < GameTools.Map.size_x && GameTools.Map.map.Map_data[x+1, y] != 0*/) {
-	//if (y - 1 >= 0 && GameTools.Map.map_unit_occupy[x, y - 1] != true /*y - 1 >= 0 && GameTools.Map.map.Map_data[x, y-1] != 0*/) {
-	//if (y + 1 < GameTools.Map.size_z && GameTools.Map.map_unit_occupy[x, y + 1] != true/*y + 1 < GameTools.Map.size_z && GameTools.Map.map.Map_data[x, y+1] != 0*/) {
-
-
+	*/
 }

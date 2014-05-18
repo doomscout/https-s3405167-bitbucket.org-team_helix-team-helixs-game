@@ -82,7 +82,7 @@ public class Spell {
 		int[,] coordinates = Shape.toCoords(origin, position);
 
 		for (int i = 0; i < coordinates.GetLength(0); i++) {
-			if (GameTools.Map.isOutOfBounds(coordinates[i,0], coordinates[i,1])) {
+			if (MapTools.IsOutOfBounds(coordinates[i,0], coordinates[i,1])) {
 				continue;
 			}
 			if (GameTools.Map.map_unit_occupy[coordinates[i,0], coordinates[i,1]] != null) {

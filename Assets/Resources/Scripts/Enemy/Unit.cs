@@ -21,8 +21,8 @@ public class Unit : Entity{
 		Map_position_y = Random.Range(0, GameTools.Map.size_z);
 
 		while (GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] != null || 
-		       GameTools.Map.store_data[Map_position_x, Map_position_y] == Colour.None ||
-		       AStar.fromPosition(Map_position_x, Map_position_y).manhattanDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) < 10) {
+		       (!TileTools.IsLand(GameTools.Map.TileMapData[Map_position_x, Map_position_y])) ||
+		       GraphSearch.fromPosition(Map_position_x, Map_position_y).manhattanDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) < 10) {
 			Map_position_x = Random.Range(0, GameTools.Map.size_x);
 			Map_position_y = Random.Range(0, GameTools.Map.size_z);
 		}
@@ -136,7 +136,7 @@ public class Unit : Entity{
 	}
 
 	public void determineNextMove() {
-		Stack<Direction> stackOfDirections = AStar
+		Stack<Direction> stackOfDirections = GraphSearch
 												.fromPosition(Map_position_x, Map_position_y)
 												.findPathToPostion(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y);
 		list_directions = new List<Direction>();

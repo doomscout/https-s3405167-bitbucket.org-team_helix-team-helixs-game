@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+ 
 //[ExecuteInEditMode]
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
@@ -10,11 +10,10 @@ using System.Collections.Generic;
 public class TileMap : MonoBehaviour, Cleanable {
 
 	//Declare variable of Size of Map
-	public int size_x = 100;
-	public int size_z = 50;
+	public int size_x;
+	public int size_z;
 	public float tileSize = 1.0f;
-	public int percentAreTile =90;
-	public Colour[,] store_data;
+	public int percentAreTile;
 
 	public Unit[,] map_unit_occupy;
 	public bool hasInit = false;
@@ -24,7 +23,7 @@ public class TileMap : MonoBehaviour, Cleanable {
 	public int tileResolution;
 
 	private DataTileMap map;
-
+	public TileType[,] TileMapData {get; private set;}
 
 	// Use this for initialization
 	void Start () {
@@ -33,14 +32,14 @@ public class TileMap : MonoBehaviour, Cleanable {
 
 	public void init() {
 		if (!hasInit) {
-			BuildMesh();
-
-			map_unit_occupy = new Unit[size_x,size_z];			
+			map_unit_occupy = new Unit[size_x,size_z];
+			TileMapData = new TileType[size_x,size_z];
 			this.transform.Translate(0, 0, size_z);
 			this.transform.Translate(-0.5f, 0f, -0.5f);
 			GameTools.Map = this;
 			CleanTools.GetInstance().SubscribeCleanable(this);
 			hasInit = true;
+			BuildMesh();
 		}
 	}
 
@@ -73,18 +72,21 @@ public class TileMap : MonoBehaviour, Cleanable {
 
 	//import and read image file and chop down each color for each tile.
 
-	void BuildTexture(DataTileMap bestMap) {
-		map = bestMap;
-		
+	void BuildTexture() {
 		int texWidth = size_x * tileResolution;
 		int texHeight = size_z * tileResolution;
 		Texture2D texture = new Texture2D(texWidth, texHeight);
-		
+
 		Color[][] tiles = ChopUpTiles();
 
 		for(int y=0; y < size_z; y++) {
 			for(int x=0; x < size_x; x++) {
-				Color[] p = tiles[ map.GetTileAt(x,y) ];
+				int val = (int)TileMapData[x,y];
+				if (val > 9) {
+					Debug.LogError("Higher for some reason");
+					val = 9;
+				}
+				Color[] p = tiles[ val ];
 				texture.SetPixels(x*tileResolution, y*tileResolution, tileResolution, tileResolution, p);
 			}
 		}
@@ -96,15 +98,7 @@ public class TileMap : MonoBehaviour, Cleanable {
 		MeshRenderer mesh_renderer = GetComponent<MeshRenderer>();
 		mesh_renderer.sharedMaterials[0].mainTexture = texture;
 		Debug.Log ("Done Texture!");
-
-		store_data = new Colour[size_x, size_z];
-		for(int y = 0; y < size_z; y++) {
-			for(int x = 0; x < size_x; x++) {
-				store_data[x, y] = map.Map_data[x,y];
-				//Debug.Log("col = " + (x+1) +" row = "+ (y+1) + " ColorNumber "+ store_data[x, y]); 
-			}
-		}
-
+		return;
 
 	}
 	
@@ -169,37 +163,125 @@ public class TileMap : MonoBehaviour, Cleanable {
 		//Generate and test maps
 		List<DataTileMap> list_of_generated_maps = new List<DataTileMap>();
 
-		DataTileMap bestMap = null;
-		while (bestMap == null) {
+		DataTileMap bestMap1 = null;
+		int debugCount = 0;
+
+		while (bestMap1 == null) {
+			debugCount++;
+			if (debugCount > 5) {
+				Debug.LogError("Infinite loop");
+				break;
+			}
 			for (int i = 0; i < 10; i++) {
 				DataTileMap newMap = new DataTileMap(size_x, size_z, percentAreTile);
 				list_of_generated_maps.Add(newMap);
 			}
-			bestMap = testMaps(list_of_generated_maps);
+			bestMap1 = testMaps(list_of_generated_maps);
 		}
 
-
-		//DataTileMap bestMap = new DataTileMap(size_x, size_z, percentAreTile);
-
-		BuildTexture(bestMap);
+		bestMap1 = new DataTileMap(size_x, size_z, percentAreTile);
+		GenerateHeightMap(bestMap1);
+		BuildTexture();
 		//PrintDebug();
+	}
+
+	private void GenerateHeightMap(DataTileMap map) {
+		int[,] tempIntMap = (int[,])map.Map_data_passable.Clone();
+
+		//Figure out which is ocrean water and which tiles is pool water
+		GraphSearch.fromPosition(0, 0).depthFirst(tempIntMap, 1, new ActionOnVisit(MarkAsOceanWater));
+
+		for (int i = 0; i < size_x; i++) {
+			for (int j = 0; j < size_z; j++) {
+				if (tempIntMap[i,j] == -1) {
+					TileMapData[i,j] = TileTools.OceanTile;
+				} else if (tempIntMap[i,j] == 0) {
+					TileMapData[i,j] = TileTools.PoolTile;
+				}
+				else if (tempIntMap[i,j] > 0) {
+					TileMapData[i,j] = TileTools.InnerLandTile;
+				}
+			}
+		}
+
+		bool changed = false;
+		int debugCount = 0;
+		int debugCount2 = 0;
+		do {
+			changed = false;
+			debugCount++;
+			if (debugCount > 1000) {
+				Debug.LogError ("Infinite loop in here");
+				return;
+			}
+			for (int i = 0; i < size_x; i++) {
+				for (int j = 0; j < size_z; j++) {
+					if (TileTools.IsLand(TileMapData[i,j])) {
+						int newX;
+						int newY;
+						newX = i + 1;
+						newY = j;
+						if (!MapTools.IsOutOfBounds(newX, newY)) {
+							if (TileTools.IsHigherByMoreThanOne(TileMapData[i,j], TileMapData[newX, newY])) {
+								TileMapData[i,j] = TileTools.HeightMappingIncreaseTile(TileMapData[newX, newY]);
+								changed = true;
+							}
+						}
+						newX = i - 1;
+						newY = j;
+						if (!MapTools.IsOutOfBounds(newX, newY)) {
+							if (TileTools.IsHigherByMoreThanOne(TileMapData[i,j], TileMapData[newX, newY])) {
+								TileMapData[i,j] = TileTools.HeightMappingIncreaseTile(TileMapData[newX, newY]);
+								changed = true;
+							}
+						}
+						newX = i;
+						newY = j + 1;
+						if (!MapTools.IsOutOfBounds(newX, newY)) {
+							if (TileTools.IsHigherByMoreThanOne(TileMapData[i,j], TileMapData[newX, newY])) {
+								TileMapData[i,j] = TileTools.HeightMappingIncreaseTile(TileMapData[newX, newY]);
+								changed = true;
+							}
+						}
+						newX = i;
+						newY = j - 1;
+						if (!MapTools.IsOutOfBounds(newX, newY)) {
+							if (TileTools.IsHigherByMoreThanOne(TileMapData[i,j], TileMapData[newX, newY])) {
+								TileMapData[i,j] = TileTools.HeightMappingIncreaseTile(TileMapData[newX, newY]);
+								changed = true;
+							}
+						}
+					}
+				}
+			}
+		} while (changed);
+
+		Debug.Log ("HeightMap complete");
+	}
+
+	private void MarkAsOceanWater(int[,] map, int x, int y) {
+		map[x,y] = -1;
 	}
 
 	private DataTileMap testMaps(List<DataTileMap> list) {
 		DataTileMap bestMap = null;
 		int maxNum = 0;
-
 		for (int i = 0; i < list.Count; i++) {
-			if (!list[i].isAllsConnected()) {
+			/*
+			int depthFirstCount = GraphSearch.fromPosition(list[i].xPosOfTile, list[i].yPosOfTile)
+										.depthFirst(list[i].Map_data_passable, 0, GraphSearch.NoAction);
+
+			if (depthFirstCount != list[i].numberOfLandTiles) {
 				continue;
 			}
+			*/
 			if (bestMap == null) {
 				bestMap = list[i];
-				maxNum = list[i].numberOfColourTiles;
+				maxNum = list[i].numberOfLandTiles;
 			} else {
-				if (list[i].numberOfColourTiles > maxNum) {
+				if (list[i].numberOfLandTiles > maxNum) {
 					bestMap = list[i];
-					maxNum = list[i].numberOfColourTiles;
+					maxNum = list[i].numberOfLandTiles;
 				}
 			}
 		}
@@ -208,15 +290,10 @@ public class TileMap : MonoBehaviour, Cleanable {
 		}
 		return bestMap;
 	}
-
-	public bool isOutOfBounds(int x, int y) {
-		return 	x < 0 || x >= size_x ||
-				y < 0 || y >= size_z;
-	}
 	
 }
 
-
+ 
 
 /*
 		vertices[0] = new Vector3(0,0,0);

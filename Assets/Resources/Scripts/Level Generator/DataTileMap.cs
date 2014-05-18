@@ -14,56 +14,49 @@ public class DataTileMap {
 	//Percent for fill EmptyTile
 	int PercentAreEmpty{get;set;}
 	public int[,] Map_data_passable;
-	public Colour[,] Map_data;
-	//public int[,] Store_data;
-
 	
-	public int numberOfColourTiles = 0;
-	private bool foundOneColourTile = false;
-	private int xPosOfTile = 0;
-	private int yPosOfTile = 0;
-	
-	/*
-	 * 0 = null or white
-	 * 1 = red
-	 * 2 = blue
-	 * 3 = Yellow
-	 * 4 = Green
-	 * 5 = Pink
-	 * 6 = Purple
-	 */
+	public int numberOfLandTiles = 0;
+	public int xPosOfTile = 0;
+	public int yPosOfTile = 0;
 
-
-	/*
-	 * 0 = sea
-	 * 1 = grass
-	 * 2 = mountian
-	 * 3 = forest
-	 * 4 = road
-	 * 
-	 * 
-	 * 
-	 */
-	
 	public DataTileMap(int size_x, int size_y, int percentAreEmpty) {
 		this.Size_x = size_x;
 		this.Size_y = size_y;
 		Map_data_passable = new int[size_x,size_y];
-		Map_data = new Colour[size_x,size_y];
 		this.PercentAreEmpty = percentAreEmpty;
 		//GetTileAt(size_x, size_y);
 		//MakeTile();
 		RandomFillMap();
 		MakeTile();
-		GeneratorColorTile();
+		countLandTiles();
+		//GeneratorColorTile();
 //		PrintDebug();
 	}
 
 	public int GetTileAt(int x, int y) {
-		return (int)Map_data[x,y];
+		return Map_data_passable[x,y];
 	}
-			
 
+	public void countLandTiles() {
+		int num = 0;
+		bool foundLandTile = false;
+		for (int i = 0; i < Size_x; i++) {
+			for (int j = 0; j < Size_y; j++) {
+				if (Map_data_passable[i,j] > 0) {
+					if (!foundLandTile) {
+						xPosOfTile = i;
+						yPosOfTile = j;
+						foundLandTile = true;
+					}
+					num++;
+				}
+			}
+		}
+		numberOfLandTiles = num;
+	}
+
+	/* Commenting this out since we're not making coloured maps anymore
+	 * private bool foundOneColourTile = false;
 	public void GeneratorColorTile()
 	{
 		numberOfColourTiles = 0;
@@ -86,7 +79,7 @@ public class DataTileMap {
 			}
 		}
 	}
-
+	*/
 
 	public void MakeTile()
 	{
@@ -239,74 +232,7 @@ public class DataTileMap {
 		}
 		return 0;
 	}
-
-	//Testing functions
-	public bool isAllsConnected() {
-		int count = 0;
-		int newX = 0;
-		int newY = 0;
-		GraphNode neighbour;
-		
-		Stack<GraphNode> openSet = new Stack<GraphNode>();
-		HashSet<GraphNode> closedSet = new HashSet<GraphNode>();
-		
-		GraphNode originNode = new GraphNode(xPosOfTile, yPosOfTile);
-		openSet.Push(originNode);
-		
-		while (openSet.Count > 0) {
-			GraphNode n = openSet.Pop();
-			closedSet.Add(n);
-			count++;
-			
-			if (count > 5000) {
-				Debug.LogError("Infinite Loop");
-				break;
-			}
-			
-			newX = n.x+1;
-			newY = n.y;
-			neighbour = new GraphNode(newX, newY);
-			if (!IsOutOfBounds(newX, newY) && 
-			    Map_data[newX, newY] != Colour.None && 
-			    !closedSet.Contains(neighbour) &&
-			    !openSet.Contains(neighbour)) {
-				openSet.Push (neighbour);
-			}
-			
-			newX = n.x-1;
-			newY = n.y;
-			neighbour = new GraphNode(newX, newY);
-			if (!IsOutOfBounds(newX, newY) && 
-			    Map_data[newX, newY] != Colour.None && 
-			    !closedSet.Contains(neighbour) &&
-			    !openSet.Contains(neighbour)) {
-				openSet.Push (neighbour);
-			}
-			
-			newX = n.x;
-			newY = n.y+1;
-			neighbour = new GraphNode(newX, newY);
-			if (!IsOutOfBounds(newX, newY) && 
-			    Map_data[newX, newY] != Colour.None && 
-			    !closedSet.Contains(neighbour) &&
-			    !openSet.Contains(neighbour)) {
-				openSet.Push (neighbour);
-			}
-			
-			newX = n.x;
-			newY = n.y-1;
-			neighbour = new GraphNode(newX, newY);
-			if (!IsOutOfBounds(newX, newY) && 
-			    Map_data[newX, newY] != Colour.None && 
-			    !closedSet.Contains(neighbour) &&
-			    !openSet.Contains(neighbour)) {
-				openSet.Push (neighbour);
-			}
-			
-		}
-		
-		return numberOfColourTiles == count;
-	}
+	
 }
 
 /*

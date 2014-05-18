@@ -29,7 +29,7 @@ public class Player : Entity {
 		}
 		for (int i = 0; i < GameTools.Map.size_z; i++) {
 			for (int j = 0; j < GameTools.Map.size_x; j++) {
-				if (GameTools.Map.store_data[j, i] != Colour.None) {
+				if (TileTools.IsLand(GameTools.Map.TileMapData[j, i])) {
 					Map_position_x = j;
 					Map_position_y = i;
 					break;
@@ -122,48 +122,48 @@ public class Player : Entity {
 
 		switch (current_target) {
 			case Direction.Down:
-				if (GameTools.Map.isOutOfBounds(Map_position_x, Map_position_y-1)) {
+				if (MapTools.IsOutOfBounds(Map_position_x, Map_position_y-1)) {
 					current_target = Direction.None;
 					validInput = false;
 				} else {
 					if (GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y-1] != null ||
-				    	GameTools.Map.store_data[Map_position_x, Map_position_y-1] == Colour.None) {
+				    	(!TileTools.IsLand(GameTools.Map.TileMapData[Map_position_x, Map_position_y-1]))) {
 						current_target = Direction.None;
 						validInput = false;
 					}
 				}
 				break;
 			case Direction.Up:
-				if (GameTools.Map.isOutOfBounds(Map_position_x, Map_position_y+1)) {
+				if (MapTools.IsOutOfBounds(Map_position_x, Map_position_y+1)) {
 					current_target = Direction.None;
 					validInput = false;
 				} else {
 					if (GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y+1] != null ||
-					    GameTools.Map.store_data[Map_position_x, Map_position_y+1] == Colour.None) {
+					    (!TileTools.IsLand(GameTools.Map.TileMapData[Map_position_x, Map_position_y+1]))) {
 							current_target = Direction.None;
 							validInput = false;
 						}
 				}
 				break;
 			case Direction.Left:
-				if (GameTools.Map.isOutOfBounds(Map_position_x-1, Map_position_y)) {
+				if (MapTools.IsOutOfBounds(Map_position_x-1, Map_position_y)) {
 					current_target = Direction.None;
 					validInput = false;
 				} else {
 					if (GameTools.Map.map_unit_occupy[Map_position_x-1, Map_position_y] != null ||
-					    GameTools.Map.store_data[Map_position_x-1, Map_position_y] == Colour.None) {
+					    (!TileTools.IsLand(GameTools.Map.TileMapData[Map_position_x-1, Map_position_y]))) {
 							current_target = Direction.None;
 							validInput = false;
 						}
 				}
 				break;
 			case Direction.Right:
-				if (GameTools.Map.isOutOfBounds(Map_position_x+1, Map_position_y)) {
+				if (MapTools.IsOutOfBounds(Map_position_x+1, Map_position_y)) {
 					current_target = Direction.None;
 					validInput = false;
 				} else {
 					if (GameTools.Map.map_unit_occupy[Map_position_x+1, Map_position_y] != null ||
-					    GameTools.Map.store_data[Map_position_x+1, Map_position_y] == Colour.None) {
+					    (!TileTools.IsLand(GameTools.Map.TileMapData[Map_position_x+1, Map_position_y]))) {
 							current_target = Direction.None;
 							validInput = false;
 						}
