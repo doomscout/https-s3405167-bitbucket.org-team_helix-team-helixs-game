@@ -10,8 +10,6 @@ public class SimpleAI {
     Unit unit;
 	Statemachine simple_ai;
 
-	public bool IsHit = false;
-
     public SimpleAI(Unit enemy) {
         unit = enemy;
 		initSM ();
@@ -97,7 +95,7 @@ public class SimpleAI {
 		unit.CastMainSpell();
 	}
 
-	int temp = 2;
+	int temp = 3;
 	void actionFollowRunning() {
 		List<Entity> neighbourhood = new List<Entity>();
 		int newX = 0, newY = 0;
@@ -109,6 +107,11 @@ public class SimpleAI {
 					}
 					if (GameTools.Map.map_unit_occupy[unit.Map_position_x + i, unit.Map_position_y + j] != null) {
 						neighbourhood.Add(GameTools.Map.map_unit_occupy[unit.Map_position_x + i, unit.Map_position_y + j]);
+						/*
+						if (((Unit)GameTools.Map.map_unit_occupy[unit.Map_position_x + i, unit.Map_position_y + j]).IsHit) {
+							unit.IsHit = true;
+						}
+						*/
 					}
 				}
 			}
@@ -128,7 +131,7 @@ public class SimpleAI {
     }
 
     bool transitionInSeekRange() {
-		return  IsHit;
+		return  unit.IsHit;
 				/*AStar
 				.fromPosition(unit.Map_position_x, unit.Map_position_y)
 				.euclidianDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) < 8.0f ||

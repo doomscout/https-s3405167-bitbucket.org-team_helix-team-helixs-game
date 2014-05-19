@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class Unit : Entity{
 	List<Direction> list_directions = new List<Direction>();
 	SimpleAI brain;
+	public bool IsHit = false;
 
 	Direction Alignment = Direction.None;
 
@@ -120,9 +121,26 @@ public class Unit : Entity{
 		float dmg = base.GetHitByMagic(taken_spell);
 		list_of_damage_taken.Add(dmg);
 		list_of_colour_taken.Add(taken_spell.SpellColour);
-		brain.IsHit = true;
-		Debug.Log ("Got hit");
+		IsHit = true;
+		alertNeighbourhood();
 		return dmg;
+	}
+
+	int temp = 3;
+	public void alertNeighbourhood() {
+		int newX = 0, newY = 0;
+		for(int i = -temp; i <= temp; i++) {
+			for(int j = -temp; j <= temp; j++) {
+				if (!MapTools.IsOutOfBounds(Map_position_x + i, Map_position_y + j)) {
+					if (GameTools.Map.map_unit_occupy[Map_position_x + i, Map_position_y + j] == this) {
+						continue;
+					}
+					if (GameTools.Map.map_unit_occupy[Map_position_x + i, Map_position_y + j] != null) {
+						((Unit)(GameTools.Map.map_unit_occupy[Map_position_x + i, Map_position_y + j])).IsHit = true;
+					}
+				}
+			}
+		}
 	}
 
 	/* Maybe make the unit search for a valid target before shooting, as opposed to always shooting at the player */
@@ -155,41 +173,13 @@ public class Unit : Entity{
 		float avgX = 0;
 		float avgY = 0;
 		for (int i = 0; i < neighbourhood.Count; i++) {
-			avgX += neighbourhood[i].Map_position_x - Map_position_x;
-			avgY += neighbourhood[i].Map_position_y - Map_position_y;
+			avgX += neighbourhood[i].Map_position_x;
+			avgY += neighbourhood[i].Map_position_y;
 		}
 		avgX /= neighbourhood.Count;
 		avgY /= neighbourhood.Count;
 
 		return new Vector2(avgX, avgY);
-	}
-
-	public Vector2 NeighbourhoodAlignment(List<Entity> neighbourhood) {
-		Vector2 v = new Vector2(0,0);
-		if (neighbourhood.Count == 0) {
-			return new Vector2(0,0);
-		}
-		for (int i = 0; i < neighbourhood.Count; i++) {
-			Direction otherD = ((Unit)neighbourhood[i]).Alignment;
-			if (otherD != Direction.None) {
-				Debug.Log ("In herererere");
-				switch(otherD) {
-				case Direction.Down:
-					v += new Vector2(0, -1);
-					break;
-				case Direction.Up:
-					v += new Vector2(0, 1);
-					break;
-				case Direction.Right:
-					v += new Vector2(1, 0);
-					break;
-				case Direction.Left:
-					v += new Vector2(-1, 0);
-					break;
-				}
-			}
-		}
-		return v;
 	}
 
 	public void MoveWithNeighbours(List<Entity> neighbourhood) {
@@ -202,32 +192,58 @@ public class Unit : Entity{
 		if (goal.x == 0 && goal.y == 0) {
 			return;
 		}
-		goal.Normalize();
+		Vector2 goalDir = new Vector2(goal.x - Map_position_x, goal.y - Map_position_y);
+		goalDir.Normalize();
 
 		Heap<DirectionWeight> orderedList = new Heap<DirectionWeight>(new DirectionWeightComparer());
 		Direction calculatedDirection = Direction.None;
 
-		if (goal.y >= 0) {
-			orderedList.insert(new DirectionWeight(Direction.Up, ((int)(1.0f - Mathf.Abs(goal.y)) * 10000), 0, 0, 0, 0));
-			orderedList.insert(new DirectionWeight(Direction.Down, ((int)(Mathf.Abs(goal.y)) * 10000), 0, 0, 0, 0));
+		int newX = 0, newY = 0;
+		
+		if (goalDir.y >= 0) {
+			newX = Map_position_x;
+			newY = Map_position_y + 1;
+			orderedList.insert(new DirectionWeight(Direction.Up, ((int)((-Mathf.Abs(goalDir.y)) * 10)), 
+			                                       newX, newY, Mathf.RoundToInt(goal.x), Mathf.RoundToInt(goal.y)));
+			newX = Map_position_x;
+			newY = Map_position_y - 1;
+			orderedList.insert(new DirectionWeight(Direction.Down, ((int)(Mathf.Abs(goalDir.y)) * 10),
+			                                       newX, newY, Mathf.RoundToInt(goal.x), Mathf.RoundToInt(goal.y)));
 		} else {
-			orderedList.insert(new DirectionWeight(Direction.Down, ((int)(1.0 - Mathf.Abs(goal.y)) * 10000), 0, 0, 0, 0));
-			orderedList.insert(new DirectionWeight(Direction.Up, ((int)(Mathf.Abs(goal.y)) * 10000), 0, 0, 0, 0));
-
+			newX = Map_position_x;
+			newY = Map_position_y - 1;
+			orderedList.insert(new DirectionWeight(Direction.Down, ((int)((-Mathf.Abs(goalDir.y)) * 10)),
+			                                       newX, newY, Mathf.RoundToInt(goal.x), Mathf.RoundToInt(goal.y)));
+			newX = Map_position_x;
+			newY = Map_position_y + 1;
+			orderedList.insert(new DirectionWeight(Direction.Up, ((int)(Mathf.Abs(goalDir.y)) * 10), 
+			                                       newX, newY, Mathf.RoundToInt(goal.x), Mathf.RoundToInt(goal.y)));
 		}
-		if (goal.x >= 0) {
-			orderedList.insert(new DirectionWeight(Direction.Right, ((int)(1.0f - Mathf.Abs(goal.x)) * 10000), 0, 0, 0, 0));
-			orderedList.insert(new DirectionWeight(Direction.Left, ((int)(Mathf.Abs(goal.x)) * 10000), 0, 0, 0, 0));
+		if (goalDir.x >= 0) {
+			newX = Map_position_x + 1;
+			newY = Map_position_y;
+			orderedList.insert(new DirectionWeight(Direction.Right, ((int)((-Mathf.Abs(goalDir.x)) * 10)), 
+			                                      	newX, newY, Mathf.RoundToInt(goal.x), Mathf.RoundToInt(goal.y)));
+			newX = Map_position_x - 1;
+			newY = Map_position_y;
+			orderedList.insert(new DirectionWeight(Direction.Left, ((int)(Mathf.Abs(goalDir.x)) * 10), 
+			                                       newX, newY, Mathf.RoundToInt(goal.x), Mathf.RoundToInt(goal.y)));
 		} else {
-			orderedList.insert(new DirectionWeight(Direction.Left, ((int)(1.0f - Mathf.Abs(goal.x)) * 100), 0, 0, 0, 0));
-			orderedList.insert(new DirectionWeight(Direction.Right, ((int)(Mathf.Abs(goal.x)) * 10000), 0, 0, 0, 0));
+			newX = Map_position_x - 1;
+			newY = Map_position_y;
+			orderedList.insert(new DirectionWeight(Direction.Left, ((int)((-Mathf.Abs(goalDir.x)) * 10)),
+			                                       newX, newY, Mathf.RoundToInt(goal.x), Mathf.RoundToInt(goal.y)));
+			newX = Map_position_x + 1;
+			newY = Map_position_y;
+			orderedList.insert(new DirectionWeight(Direction.Right, ((int)(Mathf.Abs(goalDir.x)) * 10),
+			                                       newX, newY, Mathf.RoundToInt(goal.x), Mathf.RoundToInt(goal.y)));
 		}	
 
 
 		bool validMove = false;
 		
 		int orderedCount = orderedList.length();
-		int newX = 0, newY = 0;
+
 		for (int i = 0; i < orderedCount; i++) {
 			Direction d = orderedList.extract().d;
 			switch (d) {
@@ -250,7 +266,7 @@ public class Unit : Entity{
 			}
 			if (GameTools.Map.WeightedMap[newX, newY] != 0 &&
 				GameTools.Map.map_unit_occupy[newX, newY] == null &&
-			    (GameTools.Player.Map_position_x != newX || GameTools.Player.Map_position_y != newY)) {
+			    (GameTools.Player.Map_position_x != newX || GameTools.Player.Map_position_y != newY) ) {
 				validMove = true;
 				list_directions.Add(d);
 				break;
