@@ -39,15 +39,9 @@ public class Projectile : MonoBehaviour {
 
 	public void showDamage() {
 		if (!hasShownDamage) {
+
 			hasShownDamage = true;
-			GameObject o = Object.Instantiate(Resources.Load("Prefabs/DamagePopupPrefab", typeof(GameObject))) as GameObject;
-			DamagePopup script = o.GetComponent<DamagePopup>();
-			script.setText(s.Power + "");
-			script.setColor(ColourManager.toColor(s.SpellColour));
-			o.transform.position = new Vector3(destPos.x, 0, destPos.z + 1.0f);
-			if (!s.cast()) {
-				Debug.LogError("Tried casting without loading first, bug");
-			}
+			s.cast();
 			ProjectileManager.getInstance().signalCompletion(gameObject);
 		}
 	}

@@ -3,7 +3,7 @@ using System.Collections;
 
 public abstract class Effect {
 	public int TickCount {get; protected set;}
-	public float Power {get; protected set;}
+	public float Power {get; set;}
 	
 	public Effect(int tickCount, float power) {
 		TickCount = tickCount;
@@ -17,4 +17,6 @@ public abstract class Effect {
 		}
 		return true;
 	}
+
+	public abstract string EffectName();
 }

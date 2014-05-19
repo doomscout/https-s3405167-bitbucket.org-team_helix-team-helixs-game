@@ -67,9 +67,6 @@ public abstract class Entity : Cleanable {
 			TickedStatus[i] = new List<StatusEffect>();
 
 		}
-		//Sample status effect
-		//ListStatus.Add(new PoisionStatus(3, 5.0f));				
-		//ListStatus.Add(new PoisionStatus(3, 5.0f));
 	}
 
 	protected virtual void InitMoney() {
@@ -94,6 +91,7 @@ public abstract class Entity : Cleanable {
 		//Populate status list for this turn
 		for (int i = 0; i < count; i++) {
 			TickedStatus[(int)ListStatus[i].Status].Add(ListStatus[i]);
+			Debug.Log ("Type: " + ListStatus[i].EffectName() + " Power: " + ListStatus[i].Power + " Tick " + ListStatus[i].TickCount);
 			ListStatus[i].TickDown();
 			if (ListStatus[i].TickCount <= 0) {
 				toBeRemoved.Add (ListStatus[i]);
@@ -102,7 +100,12 @@ public abstract class Entity : Cleanable {
 
 		//Remove status that have been timed out
 		foreach (StatusEffect s in toBeRemoved) {
-			ListStatus.Remove(s);
+			if (!ListStatus.Remove(s)) {
+				Debug.Log ("Can't remove");
+			} else {
+				Debug.Log ("Removed");
+			}
+
 		}
 	}
 
@@ -116,32 +119,55 @@ public abstract class Entity : Cleanable {
 				Debug.LogError("Poison tick error");
 			}
 			dmg += TickedStatus[(int)StatusType.Poison][i].Power;
+			ShowText("Poisoned " + dmg, Color.green, i - 2);
 		}
 		Health -= dmg;
 	}
 
 	public virtual void CastMainSpell() {
 		/* We can add in another status in here */
-
 	}
 
 	public virtual float GetHitByMagic(Spell taken_spell) {
 		float modifier = 1.0f;
 		/* Receive status effects */
-
+		if (taken_spell.SpellEffect.TickCount > 0 && taken_spell.SpellEffect.GetType() == typeof(StatusEffect)) {
+			StatusEffect se = (StatusEffect)taken_spell.SpellEffect;
+			ListStatus.Add(new StatusEffect(se.TickCount, se.Power, se.Status));
+		}
 		// Colour modifier
 		if (ColourManager.getWeakness(taken_spell.SpellColour) == MainColour) {
 			//The spell is weak against our colour
 			modifier = ColourManager.WeaknessModifier;
 		}
 		// Status modifier (reduced defence)
-		for (int i = 0; i < TickedStatus[2].Count; i++) {
-			modifier *= TickedStatus[(int)StatusType.ReducedDefence][i].Power;
+		// Entity takes extra damage from spells when under this debuff
+		for (int i = 0; i < TickedStatus[(int)StatusType.ReducedDefence].Count; i++) {
+			modifier += TickedStatus[(int)StatusType.ReducedDefence][i].Power * 5.0f;
+		}
+		//status modifier (ensnare)
+		// Entity will be unable to move unless the ensare is destroyed by magic
+		// The ensare hp is its power
+		if (TickedStatus[(int)StatusType.Ensnare].Count > 0) {
+			TickedStatus[(int)StatusType.Ensnare][0].Power -= taken_spell.Power;
+			if (TickedStatus[(int)StatusType.Ensnare][0].Power < 0) {
+				TickedStatus[(int)StatusType.Ensnare].RemoveAt(0);
+			}
 		}
 
 		float dmg = taken_spell.Power * modifier;
 		Health -= dmg;
 		return dmg;
+	}
+
+	public virtual bool animation_tick(){
+		if (TickedStatus[(int)StatusType.Ensnare].Count > 0) {
+			if (!FinishedAnimation) {
+				ShowText("Ensnared: " + (TickedStatus[(int)StatusType.Ensnare][0].TickCount + 1), Color.white, -1);
+			}
+			return false;
+		}
+		return true;
 	}
 
 	public virtual bool IsDead() {
@@ -154,9 +180,17 @@ public abstract class Entity : Cleanable {
 		GameObject.Destroy(game_object);
 		FinishedAnimation = true;			//temp no animation, just return immediately
 	}
-	
+
+	protected void ShowText(string text, Color c, int offset) {
+		GameObject o = Object.Instantiate(Resources.Load("Prefabs/DamagePopupPrefab", typeof(GameObject))) as GameObject;
+		DamagePopup script = o.GetComponent<DamagePopup>();
+		script.setText(text);
+		script.setColor(c);
+		o.transform.position = new Vector3(game_object.transform.position.x, 0, game_object.transform.position.z + 1.0f + offset/2.0f);
+	}
+
 	protected abstract void InitMapPosition();
 	protected abstract void InitGameObject();
 	protected abstract void InitCleanable();
-	public abstract void animation_tick();
+
 }

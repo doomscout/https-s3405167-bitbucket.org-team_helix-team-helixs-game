@@ -14,6 +14,8 @@ public class ProjectileManager : Cleanable{
 	private Vector3 minV;
 	private Vector3 maxV;
 
+	private float totalTime;
+
 	private ProjectileManager() {
 		init();
 
@@ -56,11 +58,18 @@ public class ProjectileManager : Cleanable{
 				maxV = Vector3.Max(maxV, Vector3.Max(script.initPos, script.destPos));
 			}
 			GameTools.GameCamera.moveCameraProjectiles(minV, maxV);
+			totalTime = projectiles.Count * 0.5f + 1.5f;
 			hasFired = true;
 		}
 		if (projectiles.Count == 0) {
 			init();
 			GameTools.GameCamera.moveCameraNormal();
+		} else {
+			totalTime -= Time.deltaTime;
+			if (totalTime < 0) {
+				init ();
+				GameTools.GameCamera.moveCameraNormal();
+			}
 		}
 	}
 

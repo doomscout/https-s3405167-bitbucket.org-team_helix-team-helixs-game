@@ -55,6 +55,13 @@ public class Player : Entity {
 	protected override void InitCleanable () {
 		CleanTools.GetInstance().SubscribeCleanable(this, true);
 	}
+
+	public override float GetHitByMagic(Spell taken_spell) {
+		float dmg = base.GetHitByMagic(taken_spell);
+		base.ShowText(dmg + "", ColourManager.toColor(taken_spell.SpellColour), 0);
+		return dmg;
+	}
+
 	//Only the shop should call this
 	public bool BuySpell(Spell s) {
 		if (Money - s.SpellRating < 0) {
@@ -216,11 +223,15 @@ public class Player : Entity {
 		return isDead;
 	}
 
-	public override void animation_tick() {
+	public override bool animation_tick() {
+		if (!base.animation_tick()) {
+			FinishedAnimation = true;
+			return true;
+		}
 		if (current_target == Direction.None) {
 			//there's no current target
 			FinishedAnimation = true;
-			return;
+			return true;
 		}
 		switch (current_target) {
 			case Direction.Up:
@@ -263,5 +274,6 @@ public class Player : Entity {
 			current_target = Direction.None;
 			remainingDistance = 1.0f;
 		}
+		return false;
 	}
 }

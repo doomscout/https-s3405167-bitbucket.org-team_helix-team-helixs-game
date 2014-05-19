@@ -168,7 +168,7 @@ public class TileMap : MonoBehaviour, Cleanable {
 
 		while (bestMap1 == null) {
 			debugCount++;
-			if (debugCount > 5) {
+			if (debugCount > 2) {
 				Debug.LogError("Infinite loop");
 				break;
 			}

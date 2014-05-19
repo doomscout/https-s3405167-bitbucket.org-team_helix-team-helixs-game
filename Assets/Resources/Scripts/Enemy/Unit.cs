@@ -55,12 +55,16 @@ public class Unit : Entity{
 		return isDead;
 	}
 	
-	public override void animation_tick() {
+	public override bool animation_tick() {
+		if (!base.animation_tick()) {
+			FinishedAnimation = true;
+			return true;
+		}
 		if (current_target == Direction.None) {
 			if (list_directions.Count > 0) {
 				if (list_directions[0] == Direction.None) {
 					FinishedAnimation = true;
-					return;
+					return true;
 				}
 				current_target = list_directions[0];
 				list_directions.RemoveAt(0);
@@ -69,7 +73,7 @@ public class Unit : Entity{
 			} else {
 				//there's no current target and there's no directions in the directions list
 				FinishedAnimation = true;
-				return;
+				return true;
 			}
 		}
 		
@@ -99,6 +103,7 @@ public class Unit : Entity{
 			
 			current_target = Direction.None;
 		}
+		return false;
 	}
 
 	public new float GetHitByMagic(Spell taken_spell) {
@@ -120,16 +125,11 @@ public class Unit : Entity{
 	
 	public void showDamageTakenAnimation() {
 		for (int i = 0; i < list_of_damage_taken.Count; i++) {
-			GameObject o = Object.Instantiate(Resources.Load("Prefabs/DamagePopupPrefab", typeof(GameObject))) as GameObject;
-			DamagePopup script = o.GetComponent<DamagePopup>();
 			Color c = Color.white;
 			if (ColourManager.getWeakness(list_of_colour_taken[i]) == MainColour) {
 				c = Color.magenta;
 			}
-			script.setText(list_of_damage_taken[i] + "");
-			script.setColor(c);
-			o.transform.position = new Vector3(game_object.transform.position.x, 0, game_object.transform.position.z + 1.0f + i/2.0f);
-
+			base.ShowText(list_of_damage_taken[i] + "", c, i);
 		}
 		list_of_damage_taken = new List<float>();
 		list_of_colour_taken = new List<Colour>();
