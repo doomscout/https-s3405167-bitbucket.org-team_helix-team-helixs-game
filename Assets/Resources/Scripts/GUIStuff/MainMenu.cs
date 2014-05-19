@@ -12,7 +12,7 @@ public class MainMenu : MonoBehaviour {
 	
 	// Update is called once per frame
     void OnGUI(){
-       if ( GUI.Button(new Rect(10,45,200,20), "Hello")){
+       if ( GUI.Button(new Rect(10,45,200,20), "Start")){
             Debug.Log("ButtonPressed");
             exit = true;
             Destroy(gameObject);

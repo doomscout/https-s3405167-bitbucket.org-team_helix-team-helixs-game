@@ -9,6 +9,7 @@ public class Pause : MonoBehaviour {
         resume = false;
     }
 void OnGUI(){
+        GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");
         GUI.Box(new Rect(Screen.width/2,Screen.height/2,120,120), "Pause");
 
         if (GUI.Button(new Rect(Screen.width/2, Screen.height/2 + 30, 120, 30), "Resume")){
