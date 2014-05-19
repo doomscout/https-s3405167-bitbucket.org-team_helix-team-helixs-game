@@ -27,10 +27,10 @@ public class CastRangeIndicator {
 						}
 					}
 				}
+				if (count >= Pool.Count) {
+					doublePool();
+				}
 				if (isAble) {
-                	if (count >= Pool.Count) {
-                    	doublePool();
-                	}
                 	Pool[count].transform.position = new Vector3(kvp.Key.First, 0, kvp.Key.Second);
 				} else {
 					Pool[count].transform.position = new Vector3(-110, count, 0);
