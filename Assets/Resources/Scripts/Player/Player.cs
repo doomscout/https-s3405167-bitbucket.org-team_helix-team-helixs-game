@@ -115,67 +115,78 @@ public class Player : Entity {
             validInput = true;
         } else if (Input.GetKey("space")){	//skips turn
 			current_target = Direction.None;
-			//stats.Health += stats.Healing;
 			validInput = true;
 		}  else  if (Input.GetKeyUp("1")){
 			spellIndicator.toggleIndicator();
-			PlayerCastIndicator.ToggleUnit(this);
+			//PlayerCastIndicator.ToggleUnit(this);
 			current_target = Direction.None;
 		} else {
 			current_target = Direction.None;
 		}
 
 		//Check to see if player is going somewhere invalid
-
+		int newX = 0, newY = 0;
 		switch (current_target) {
 			case Direction.Down:
-				if (MapTools.IsOutOfBounds(Map_position_x, Map_position_y-1)) {
+			newX = Map_position_x;
+			newY = Map_position_y-1;
+			if (MapTools.IsOutOfBounds(newX, newY)) {
+				current_target = Direction.None;
+				validInput = false;
+			} else {
+				if ((GameTools.Map.map_unit_occupy[newX, newY] != null &&
+				     !GameTools.Map.map_unit_occupy[newX, newY].EntityAbleToMoveHere(this))||
+				    (!TileTools.IsLand(GameTools.Map.TileMapData[newX, newY]))) {
 					current_target = Direction.None;
 					validInput = false;
-				} else {
-					if (GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y-1] != null ||
-				    	(!TileTools.IsLand(GameTools.Map.TileMapData[Map_position_x, Map_position_y-1]))) {
-						current_target = Direction.None;
-						validInput = false;
-					}
 				}
-				break;
+			}
+			break;
 			case Direction.Up:
-				if (MapTools.IsOutOfBounds(Map_position_x, Map_position_y+1)) {
+			newX = Map_position_x;
+			newY = Map_position_y+1;
+			if (MapTools.IsOutOfBounds(newX, newY)) {
+				current_target = Direction.None;
+				validInput = false;
+			} else {
+				if ((GameTools.Map.map_unit_occupy[newX, newY] != null &&
+				     !GameTools.Map.map_unit_occupy[newX, newY].EntityAbleToMoveHere(this))||
+				    (!TileTools.IsLand(GameTools.Map.TileMapData[newX, newY]))) {
 					current_target = Direction.None;
 					validInput = false;
-				} else {
-					if (GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y+1] != null ||
-					    (!TileTools.IsLand(GameTools.Map.TileMapData[Map_position_x, Map_position_y+1]))) {
-							current_target = Direction.None;
-							validInput = false;
-						}
 				}
-				break;
+			}
+			break;
 			case Direction.Left:
-				if (MapTools.IsOutOfBounds(Map_position_x-1, Map_position_y)) {
+			newX = Map_position_x-1;
+			newY = Map_position_y;
+				if (MapTools.IsOutOfBounds(newX, newY)) {
 					current_target = Direction.None;
 					validInput = false;
 				} else {
-					if (GameTools.Map.map_unit_occupy[Map_position_x-1, Map_position_y] != null ||
-					    (!TileTools.IsLand(GameTools.Map.TileMapData[Map_position_x-1, Map_position_y]))) {
+				if ((GameTools.Map.map_unit_occupy[newX, newY] != null &&
+				     !GameTools.Map.map_unit_occupy[newX, newY].EntityAbleToMoveHere(this))||
+				    (!TileTools.IsLand(GameTools.Map.TileMapData[newX, newY]))) {
 							current_target = Direction.None;
 							validInput = false;
 						}
 				}
 				break;
 			case Direction.Right:
-				if (MapTools.IsOutOfBounds(Map_position_x+1, Map_position_y)) {
+			newX = Map_position_x+1;
+			newY = Map_position_y;
+			if (MapTools.IsOutOfBounds(newX, newY)) {
+				current_target = Direction.None;
+				validInput = false;
+			} else {
+				if ((GameTools.Map.map_unit_occupy[newX, newY] != null &&
+				     !GameTools.Map.map_unit_occupy[newX, newY].EntityAbleToMoveHere(this))||
+				    (!TileTools.IsLand(GameTools.Map.TileMapData[newX, newY]))) {
 					current_target = Direction.None;
 					validInput = false;
-				} else {
-					if (GameTools.Map.map_unit_occupy[Map_position_x+1, Map_position_y] != null ||
-					    (!TileTools.IsLand(GameTools.Map.TileMapData[Map_position_x+1, Map_position_y]))) {
-							current_target = Direction.None;
-							validInput = false;
-						}
 				}
-				break;
+			}
+			break;
 			case Direction.None:
 			break;
 		}

@@ -32,6 +32,14 @@ public static class TileTools {
 		return found && i > 1;
 	}
 
+	public static bool IsLand(int t) {
+		return t > 1;
+	}
+
+	public static bool IsNotLand(int t) {
+		return !IsLand(t);
+	}
+
 	public static bool IsHigherByMoreThanOne(TileType higher, TileType lower) {
 		int lowerIndex = 0;
 		int higherIndex = 0;

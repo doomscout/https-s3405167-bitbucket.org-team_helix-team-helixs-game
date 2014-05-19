@@ -6,14 +6,24 @@ public class Unit : Entity{
 	List<Direction> list_directions = new List<Direction>();
 	SimpleAI brain;
 
+	Direction Alignment = Direction.None;
+
 	private List<float> list_of_damage_taken;
 	private List<Colour> list_of_colour_taken;
-	
+
+	private int id = 0;
+
 	public Unit() : base(){
 		brain = new SimpleAI(this);
 
+
 		list_of_damage_taken = new List<float>();
 		list_of_colour_taken = new List<Colour>();
+	}
+
+	public Unit(int i) : this(){
+		id = i;
+		game_object.name = i + "";
 	}
 
 	protected override void InitMapPosition() {
@@ -47,7 +57,7 @@ public class Unit : Entity{
 		}
 	}
 
-	public new bool IsDead() {
+	public override bool IsDead() {
 		bool isDead = base.IsDead();
 		if (isDead) {
 			GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = null;
@@ -106,16 +116,19 @@ public class Unit : Entity{
 		return false;
 	}
 
-	public new float GetHitByMagic(Spell taken_spell) {
+	public override float GetHitByMagic(Spell taken_spell) {
 		float dmg = base.GetHitByMagic(taken_spell);
 		list_of_damage_taken.Add(dmg);
 		list_of_colour_taken.Add(taken_spell.SpellColour);
+		brain.IsHit = true;
+		Debug.Log ("Got hit");
 		return dmg;
 	}
 
 	/* Maybe make the unit search for a valid target before shooting, as opposed to always shooting at the player */
-	public new void CastMainSpell() {
+	public override void CastMainSpell() {
 		base.CastMainSpell();
+		Alignment = Direction.None;
 		/* new animation */
 		ProjectileManager.getInstance().queueProjectile(MainSpell, game_object.transform.position, GameTools.Player.game_object.transform.position);
 		MainSpell.loadInfo(	new int[2]{ Map_position_x, Map_position_y},
@@ -135,69 +148,237 @@ public class Unit : Entity{
 		list_of_colour_taken = new List<Colour>();
 	}
 
-	public void determineNextMove() {
-		Stack<Direction> stackOfDirections = GraphSearch
-												.fromPosition(Map_position_x, Map_position_y)
-												.findPathToPostion(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y);
-		list_directions = new List<Direction>();
-		if (stackOfDirections.Count == 0) {
-			list_directions.Add(Direction.None);
-			return;
+	public Vector2 GroupCenterOfMass(List<Entity> neighbourhood) {
+		if (neighbourhood.Count == 0) {
+			return new Vector2(0,0);
 		}
-		Direction d = stackOfDirections.Pop();
-		if (d == Direction.None) {
-			if (stackOfDirections.Count == 0) {
-				//Can't move anywhere, let's not move
-				list_directions.Add(Direction.None);
-				return;
-			}
-			d = stackOfDirections.Pop ();
-			if (d == Direction.None) {
-				Debug.LogError("Two Nones in a row, something's wrong");
-			} else {	//We can loop over the whole path here, if we want
-				int old_x = Map_position_x, old_y = Map_position_y;
-				//We're moving, so un-occupy our current position
-				GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = null;
-				list_directions.Add (d);
+		float avgX = 0;
+		float avgY = 0;
+		for (int i = 0; i < neighbourhood.Count; i++) {
+			avgX += neighbourhood[i].Map_position_x - Map_position_x;
+			avgY += neighbourhood[i].Map_position_y - Map_position_y;
+		}
+		avgX /= neighbourhood.Count;
+		avgY /= neighbourhood.Count;
 
-				switch (d) {
-				case Direction.Up:
-					Map_position_y++;
-					break;
+		return new Vector2(avgX, avgY);
+	}
+
+	public Vector2 NeighbourhoodAlignment(List<Entity> neighbourhood) {
+		Vector2 v = new Vector2(0,0);
+		if (neighbourhood.Count == 0) {
+			return new Vector2(0,0);
+		}
+		for (int i = 0; i < neighbourhood.Count; i++) {
+			Direction otherD = ((Unit)neighbourhood[i]).Alignment;
+			if (otherD != Direction.None) {
+				Debug.Log ("In herererere");
+				switch(otherD) {
 				case Direction.Down:
-					Map_position_y--;
+					v += new Vector2(0, -1);
 					break;
-				case Direction.Left: 
-					Map_position_x--;
+				case Direction.Up:
+					v += new Vector2(0, 1);
 					break;
 				case Direction.Right:
-					Map_position_x++;
+					v += new Vector2(1, 0);
+					break;
+				case Direction.Left:
+					v += new Vector2(-1, 0);
 					break;
 				}
-
-				//Don't let the enemy move on top of the player
-				if (Map_position_x == GameTools.Player.Map_position_x && Map_position_y == GameTools.Player.Map_position_y) {
-					Map_position_x = old_x;
-					Map_position_y = old_y;
-					list_directions.Remove(d);
-				}
-				//Don't let the enemy move on top of each other
-				if (GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y]  != null) {
-					Map_position_x = old_x;
-					Map_position_y = old_y;
-					list_directions.Remove(d);
-				}
-				//Occupy the new position (it might be the same one thanks to old_x and old_y)
-				GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = this;
 			}
+		}
+		return v;
+	}
+
+	public void MoveWithNeighbours(List<Entity> neighbourhood) {
+		if (neighbourhood.Count == 0) {
+			return;
+		}
+		list_directions = new List<Direction>();
+
+		Vector2 goal = GroupCenterOfMass(neighbourhood);
+		if (goal.x == 0 && goal.y == 0) {
+			return;
+		}
+		goal.Normalize();
+
+		Heap<DirectionWeight> orderedList = new Heap<DirectionWeight>(new DirectionWeightComparer());
+		Direction calculatedDirection = Direction.None;
+
+		if (goal.y >= 0) {
+			orderedList.insert(new DirectionWeight(Direction.Up, ((int)(1.0f - Mathf.Abs(goal.y)) * 10000), 0, 0, 0, 0));
+			orderedList.insert(new DirectionWeight(Direction.Down, ((int)(Mathf.Abs(goal.y)) * 10000), 0, 0, 0, 0));
 		} else {
-			Debug.LogError("No initial none direction, something's wrong");
+			orderedList.insert(new DirectionWeight(Direction.Down, ((int)(1.0 - Mathf.Abs(goal.y)) * 10000), 0, 0, 0, 0));
+			orderedList.insert(new DirectionWeight(Direction.Up, ((int)(Mathf.Abs(goal.y)) * 10000), 0, 0, 0, 0));
+
+		}
+		if (goal.x >= 0) {
+			orderedList.insert(new DirectionWeight(Direction.Right, ((int)(1.0f - Mathf.Abs(goal.x)) * 10000), 0, 0, 0, 0));
+			orderedList.insert(new DirectionWeight(Direction.Left, ((int)(Mathf.Abs(goal.x)) * 10000), 0, 0, 0, 0));
+		} else {
+			orderedList.insert(new DirectionWeight(Direction.Left, ((int)(1.0f - Mathf.Abs(goal.x)) * 100), 0, 0, 0, 0));
+			orderedList.insert(new DirectionWeight(Direction.Right, ((int)(Mathf.Abs(goal.x)) * 10000), 0, 0, 0, 0));
+		}	
+
+
+		bool validMove = false;
+		
+		int orderedCount = orderedList.length();
+		int newX = 0, newY = 0;
+		for (int i = 0; i < orderedCount; i++) {
+			Direction d = orderedList.extract().d;
+			switch (d) {
+			case Direction.Right:
+				newX = Map_position_x + 1;
+				newY = Map_position_y;
+				break;
+			case Direction.Left:
+				newX = Map_position_x - 1;
+				newY = Map_position_y;
+				break;
+			case Direction.Up:
+				newX = Map_position_x;
+				newY = Map_position_y + 1;
+				break;
+			case Direction.Down:
+				newX = Map_position_x;
+				newY = Map_position_y - 1;
+				break;
+			}
+			if (GameTools.Map.WeightedMap[newX, newY] != 0 &&
+				GameTools.Map.map_unit_occupy[newX, newY] == null &&
+			    (GameTools.Player.Map_position_x != newX || GameTools.Player.Map_position_y != newY)) {
+				validMove = true;
+				list_directions.Add(d);
+				break;
+			}
+		}
+		
+		//Occupy the new position (it might be the same one thanks to old_x and old_y)
+		if (validMove) {
+			GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = null;
+			GameTools.Map.map_unit_occupy[newX, newY] = this;
+			Map_position_x = newX;
+			Map_position_y = newY;
 		}
 	}
 
-	public void OnClickAction() {		
-		GameTools.GI.UnitCastIndicator.ToggleUnit(this);
+	public void MoveRandomly() {
+		int newX = 0, newY = 0;
+		for (int i = 0; i < 10; i++) {
+			Direction d = (Direction)Random.Range(1, 5);
+			switch (d) {
+			case Direction.Right:
+				newX = Map_position_x + 1;
+				newY = Map_position_y;
+				break;
+			case Direction.Left:
+				newX = Map_position_x - 1;
+				newY = Map_position_y;
+				break;
+			case Direction.Up:
+				newX = Map_position_x;
+				newY = Map_position_y + 1;
+				break;
+			case Direction.Down:
+				newX = Map_position_x;
+				newY = Map_position_y - 1;
+				break;
+			default:
+				Debug.LogError("Defaulted");
+				break;
+			}
+			if (GameTools.Map.map_unit_occupy[newX, newY] == null &&
+			    (GameTools.Player.Map_position_x != newX || GameTools.Player.Map_position_y != newY)) {
+				list_directions.Add(d);
+				break;
+			}
+		}
 	}
 
+	public void determineNextMove() {
+		list_directions = new List<Direction>();
+		int currVal = GameTools.Map.WeightedMap[Map_position_x, Map_position_y];
+		Heap<DirectionWeight> orderedList = new Heap<DirectionWeight>(new DirectionWeightComparer());
 
+		int newX, newY;
+		newX = Map_position_x + 1;
+		newY = Map_position_y;
+		if ((!MapTools.IsOutOfBounds(newX, newY)) &&
+		    GameTools.Map.WeightedMap[newX, newY] != 0) {
+			orderedList.insert(new DirectionWeight(Direction.Right, GameTools.Map.WeightedMap[newX, newY], newX, newY, 
+			                                       GameTools.Player.Map_position_x, GameTools.Player.Map_position_y));
+		}
+		newX = Map_position_x - 1;
+		newY = Map_position_y;
+		if ((!MapTools.IsOutOfBounds(newX, newY)) &&
+		    GameTools.Map.WeightedMap[newX, newY] != 0) {
+			orderedList.insert(new DirectionWeight(Direction.Left, GameTools.Map.WeightedMap[newX, newY], newX, newY, 
+			                                       GameTools.Player.Map_position_x, GameTools.Player.Map_position_y));
+		}
+		newX = Map_position_x;
+		newY = Map_position_y + 1;
+		if ((!MapTools.IsOutOfBounds(newX, newY)) &&
+		    GameTools.Map.WeightedMap[newX, newY] != 0) {
+			orderedList.insert(new DirectionWeight(Direction.Up, GameTools.Map.WeightedMap[newX, newY], newX, newY, 
+			                                        GameTools.Player.Map_position_x, GameTools.Player.Map_position_y));
+		}
+		newX = Map_position_x;
+		newY = Map_position_y - 1;
+		if ((!MapTools.IsOutOfBounds(newX, newY)) &&
+		    GameTools.Map.WeightedMap[newX, newY] != 0) {
+			orderedList.insert(new DirectionWeight(Direction.Down, GameTools.Map.WeightedMap[newX, newY], newX, newY, 
+			                                       GameTools.Player.Map_position_x, GameTools.Player.Map_position_y));
+		}
+
+
+		bool validMove = false;
+
+		int orderedCount = orderedList.length();
+		for (int i = 0; i < orderedCount; i++) {
+			Direction d = orderedList.extract().d;
+			switch (d) {
+			case Direction.Right:
+				newX = Map_position_x + 1;
+				newY = Map_position_y;
+				break;
+			case Direction.Left:
+				newX = Map_position_x - 1;
+				newY = Map_position_y;
+				break;
+			case Direction.Up:
+				newX = Map_position_x;
+				newY = Map_position_y + 1;
+				break;
+			case Direction.Down:
+				newX = Map_position_x;
+				newY = Map_position_y - 1;
+				break;
+			}
+			if (GameTools.Map.map_unit_occupy[newX, newY] == null &&
+			    (GameTools.Player.Map_position_x != newX || GameTools.Player.Map_position_y != newY)) {
+				validMove = true;
+				list_directions.Add(d);
+				Alignment = d;
+				break;
+			}
+		}
+
+		//Occupy the new position (it might be the same one thanks to old_x and old_y)
+		if (validMove) {
+			GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = null;
+			GameTools.Map.map_unit_occupy[newX, newY] = this;
+			Map_position_x = newX;
+			Map_position_y = newY;
+		}
+	
+	}
+
+	public override void OnClickAction() {		
+		GameTools.GI.ToggleUnitIndicator(this);
+	}
+	
 }

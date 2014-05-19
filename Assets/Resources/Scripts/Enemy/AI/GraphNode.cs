@@ -5,6 +5,7 @@ public class GraphNode {
 
 	public int x {get;set;}
 	public int y {get;set;}
+	public GraphNode Prev {get;set;}
 
 	public GraphNode(int x, int y) {
 		this.x = x;

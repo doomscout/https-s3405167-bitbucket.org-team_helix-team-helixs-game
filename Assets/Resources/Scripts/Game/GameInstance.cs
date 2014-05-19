@@ -10,7 +10,7 @@ public class GameInstance : Cleanable {
 	public List<Unit> all_units {get;set;}
 	public List<Unit> list_live_units {get; private set;}
 	List<Unit> list_dead_units;		
-	public CastRangeIndicator UnitCastIndicator;
+	private CastRangeIndicator UnitCastIndicator;
 	Player player;
 	GameObject tileMapPrefab;
 	Shop shop;
@@ -20,6 +20,12 @@ public class GameInstance : Cleanable {
 	private bool showDamageIndicators = true;
 
 	public bool IsAnimationDone{get; private set;}
+
+	// States
+	private State state_player;
+	private State state_animation;
+	private State state_enemy;
+	private State state_start;
 
     public GameInstance(Player player) {
 		this.player = player;
@@ -52,10 +58,16 @@ public class GameInstance : Cleanable {
 		script.init ();
 		player.loadIntoGame();
 		//populate map with enemies
-		for (int i = 0; i < 10; i++) {
-			Unit u = new Unit();
+		for (int i = 0; i < 100; i++) {
+			Unit u = new Unit(i);
 			list_live_units.Add(u);
 			all_units.Add (u);
+		}
+	}
+
+	public void ToggleUnitIndicator(Unit u) {
+		if (turn_manager.current_state == state_player) {
+			UnitCastIndicator.ToggleUnit(u);
 		}
 	}
 
@@ -79,10 +91,10 @@ public class GameInstance : Cleanable {
     }
 
     void initSM() {
-        State state_player = new State();
-        State state_animation = new State();
-        State state_enemy = new State();
-		State state_start = new State();
+        state_player = new State();
+        state_animation = new State();
+        state_enemy = new State();
+		state_start = new State();
 
         Transition player2animation = new Transition();
         Transition animation2enemy = new Transition();
@@ -148,6 +160,7 @@ public class GameInstance : Cleanable {
 			}
 		}
 		UnitCastIndicator.ResetIndicators();
+		GameTools.Map.UpdateWeightMap();
         turn_player = false;
         turn_enemy = true;
 		player.FinishedAnimation = false;
@@ -213,7 +226,13 @@ public class GameInstance : Cleanable {
 
     void actionEnemyEntry() {
         //Determine enemy actions
+		Heap<Unit> orderedList = new Heap<Unit>(new UnitDistanceComparer());
 		foreach (Unit unit in list_live_units) {
+			orderedList.insert(unit);
+		}
+		int orderedCount = orderedList.length();
+		for (int i = 0; i < orderedCount; i++) {
+			Unit unit = orderedList.extract();
 			unit.Prelogic_tick();
 			unit.logic_tick();
 			unit.FinishedAnimation = false;

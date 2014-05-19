@@ -55,8 +55,8 @@ using System.Collections;
 		}
 		if (HasClickedOnUnit()) {
 			if (GameTools.Map != null) {
-				Unit u = GameTools.Map.map_unit_occupy[GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z];
-				u.OnClickAction();
+				Entity e = GameTools.Map.map_unit_occupy[GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z];
+				e.OnClickAction();
 			}
 		}
 	}

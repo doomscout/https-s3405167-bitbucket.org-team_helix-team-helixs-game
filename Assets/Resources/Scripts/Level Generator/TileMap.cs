@@ -15,7 +15,7 @@ public class TileMap : MonoBehaviour, Cleanable {
 	public float tileSize = 1.0f;
 	public int percentAreTile;
 
-	public Unit[,] map_unit_occupy;
+	public Entity[,] map_unit_occupy;
 	public bool hasInit = false;
 
 	//Declare variable of Texture and texture resolution
@@ -24,6 +24,8 @@ public class TileMap : MonoBehaviour, Cleanable {
 
 	private DataTileMap map;
 	public TileType[,] TileMapData {get; private set;}
+	public int[,] PassableMapData {get; private set;}
+	public int[,] WeightedMap {get; private set;}
 
 	// Use this for initialization
 	void Start () {
@@ -34,6 +36,7 @@ public class TileMap : MonoBehaviour, Cleanable {
 		if (!hasInit) {
 			map_unit_occupy = new Unit[size_x,size_z];
 			TileMapData = new TileType[size_x,size_z];
+			WeightedMap =  new int[size_x, size_z];
 			this.transform.Translate(0, 0, size_z);
 			this.transform.Translate(-0.5f, 0f, -0.5f);
 			GameTools.Map = this;
@@ -185,12 +188,19 @@ public class TileMap : MonoBehaviour, Cleanable {
 		//PrintDebug();
 	}
 
+	public void UpdateWeightMap() {
+		WeightedMap = (int[,])PassableMapData.Clone();
+		GraphSearch	.fromPosition(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y)
+					.BreadthFirstFlood(WeightedMap, GraphSearch.DefaultPassable, GraphSearch.FillWeights);
+	}
+
 	private void GenerateHeightMap(DataTileMap map) {
 		int[,] tempIntMap = (int[,])map.Map_data_passable.Clone();
+		PassableMapData = (int[,])map.Map_data_passable.Clone();
 
 		//Figure out which is ocrean water and which tiles is pool water
-		GraphSearch.fromPosition(0, 0).depthFirst(tempIntMap, 1, new ActionOnVisit(MarkAsOceanWater));
-
+		int count = GraphSearch.fromPosition(0, 0).DepthFirstFlood(tempIntMap, new CheckPassable(GraphSearch.DefaultNotPassable), new ActionOnVisit(MarkAsOceanWater)).CountedTiles;
+		Debug.Log("counted  " + count);
 		for (int i = 0; i < size_x; i++) {
 			for (int j = 0; j < size_z; j++) {
 				if (tempIntMap[i,j] == -1) {
@@ -259,8 +269,8 @@ public class TileMap : MonoBehaviour, Cleanable {
 		Debug.Log ("HeightMap complete");
 	}
 
-	private void MarkAsOceanWater(int[,] map, int x, int y) {
-		map[x,y] = -1;
+	private void MarkAsOceanWater(int[,] map, GraphNode currNode) {
+		map[currNode.x, currNode.y] = -1;
 	}
 
 	private DataTileMap testMaps(List<DataTileMap> list) {
@@ -269,7 +279,7 @@ public class TileMap : MonoBehaviour, Cleanable {
 		for (int i = 0; i < list.Count; i++) {
 			/*
 			int depthFirstCount = GraphSearch.fromPosition(list[i].xPosOfTile, list[i].yPosOfTile)
-										.depthFirst(list[i].Map_data_passable, 0, GraphSearch.NoAction);
+										.DepthFirstFlood(list[i].Map_data_passable, 0, GraphSearch.NoAction).CountedTiles;
 
 			if (depthFirstCount != list[i].numberOfLandTiles) {
 				continue;

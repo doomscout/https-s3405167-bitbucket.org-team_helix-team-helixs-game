@@ -54,7 +54,7 @@ public abstract class Entity : Cleanable {
 	}
 
 	protected virtual void InitStats() {
-		Max_Health = 1.0f;
+		Max_Health = 100.0f;
 		Health = Max_Health;
 	}
 
@@ -128,13 +128,17 @@ public abstract class Entity : Cleanable {
 		/* We can add in another status in here */
 	}
 
-	public virtual float GetHitByMagic(Spell taken_spell) {
-		float modifier = 1.0f;
+	public virtual void ApplyStatusOnHit(Spell taken_spell) {
 		/* Receive status effects */
 		if (taken_spell.SpellEffect.TickCount > 0 && taken_spell.SpellEffect.GetType() == typeof(StatusEffect)) {
 			StatusEffect se = (StatusEffect)taken_spell.SpellEffect;
 			ListStatus.Add(new StatusEffect(se.TickCount, se.Power, se.Status));
 		}
+	}
+
+	public virtual float GetHitByMagic(Spell taken_spell) {
+		float modifier = 1.0f;
+		ApplyStatusOnHit(taken_spell);
 		// Colour modifier
 		if (ColourManager.getWeakness(taken_spell.SpellColour) == MainColour) {
 			//The spell is weak against our colour
@@ -179,6 +183,12 @@ public abstract class Entity : Cleanable {
 		float errorpopupindebug = 0;
 		GameObject.Destroy(game_object);
 		FinishedAnimation = true;			//temp no animation, just return immediately
+	}
+
+	public virtual void OnClickAction() {}
+
+	public virtual bool EntityAbleToMoveHere(Entity e) {
+		return false;
 	}
 
 	protected void ShowText(string text, Color c, int offset) {
