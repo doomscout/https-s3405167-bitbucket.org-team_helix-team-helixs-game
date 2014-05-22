@@ -8,7 +8,7 @@ public class Shape {
 	public int CastRange {get; private set;}
 	public bool IsPlayerCentered;
 	public int numberOfOnes;
-	private int[,] shapeIntArray;
+	public int[,] shapeIntArray;
 
 	public Shape() {
 		setRandomShape();

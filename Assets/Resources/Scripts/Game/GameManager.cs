@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour{
     GameObject pause_menu;
     GameObject winScreen;
     GameObject loseScreen;
+    GameObject shopScreen;
     bool Gameexit;
     MainMenu temp;
 
@@ -180,6 +181,7 @@ public class GameManager : MonoBehaviour{
 	void actionWinEntry() {
 		//Display Win GUI
         winScreen = Instantiate(Resources.Load("Prefabs/Win")) as GameObject;
+        shopScreen = Instantiate(Resources.Load("Prefabs/ShopPrefab")) as GameObject;
 		if (numberOfWins == 0) {
 			turn_manager.saveData();
 		}
@@ -270,7 +272,8 @@ public class GameManager : MonoBehaviour{
 	}
 
 	bool conditionWin() {
-		return turn_manager.list_live_units.Count == 0;
+        return Input.GetKeyDown("left");
+		//return turn_manager.list_live_units.Count == 0;
 	}
 
 	bool conditionLose() {
