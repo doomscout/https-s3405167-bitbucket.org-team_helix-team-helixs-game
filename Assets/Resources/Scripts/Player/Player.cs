@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Player : Entity {
 	public ItemManager deckManager;
-
+	private Animator playerAnimation;
 	private bool castedSpell = false;
 	private SpellIndicator spellIndicator;
 	private CastRangeIndicator PlayerCastIndicator;
@@ -40,10 +40,11 @@ public class Player : Entity {
 
 	protected override void InitGameObject() {
 		if (base.game_object == null) {
-			base.game_object = Object.Instantiate(Resources.Load("Prefabs/PlayerPrefab", typeof(GameObject))) as GameObject;
+			base.game_object = Object.Instantiate(Resources.Load("Prefabs/slime", typeof(GameObject))) as GameObject;
 		}
+		playerAnimation = game_object.GetComponent<Animator> ();
 		game_object.transform.position = new Vector3(Map_position_x, 0, Map_position_y);
-		game_object.renderer.material.color = ColourManager.toColor(MainColour);
+		//game_object.renderer.material.color = ColourManager.toColor(MainColour);
 	}
 
 	protected override void InitMagic() {
@@ -193,6 +194,7 @@ public class Player : Entity {
 		base.CastMainSpell ();
 		MainSpell.cast(		new int[2] {Map_position_x, Map_position_y},
 							new int[2] {GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z});
+		playerAnimation.SetBool ("Cast", true);
 		castedSpell = true;
 		deckManager.popTopSpell();
 		MainSpell = deckManager.peekTopSpell();
@@ -220,6 +222,7 @@ public class Player : Entity {
 		if (isDead) {
 			Debug.Log ("Player is dead");
 		}
+		playerAnimation.SetBool ("Death", true);
 		return isDead;
 	}
 
@@ -233,18 +236,23 @@ public class Player : Entity {
 			FinishedAnimation = true;
 			return true;
 		}
+		playerAnimation.SetBool ("Cast", false);
 		switch (current_target) {
 			case Direction.Up:
 				game_object.transform.Translate(0, 0, MoveSpeed * Time.deltaTime, null);
+				playerAnimation.SetInteger("Direction", 0);
 				break;
 			case Direction.Down:
 				game_object.transform.Translate(0, 0, -MoveSpeed * Time.deltaTime, null);
+				playerAnimation.SetInteger("Direction", 1);
 				break;
 			case Direction.Left:
 				game_object.transform.Translate(-MoveSpeed * Time.deltaTime, 0, 0, null);
+				playerAnimation.SetInteger("Direction", 2);
 				break;
 			case Direction.Right:
 				game_object.transform.Translate(MoveSpeed * Time.deltaTime, 0, 0, null);
+				playerAnimation.SetInteger("Direction", 3);
 				break;
 			default:
 				Debug.Log ("player animation tick no direction!!");
@@ -253,6 +261,7 @@ public class Player : Entity {
 		remainingDistance -= MoveSpeed * Time.deltaTime;
 		if (remainingDistance <= 0) {
 			//We've arrived at our destination, but may have overshot, so lets correct it
+			playerAnimation.SetInteger("Direction", 4);
 			Vector3 temp = game_object.transform.position;
 			game_object.transform.position = new Vector3(Mathf.Round(temp.x), temp.y, Mathf.Round(temp.z));
             switch (current_target) {

@@ -95,7 +95,7 @@ public class SimpleAI {
     }
 
     bool transitionInSeekRange() {
-		return false;//true;
+		return true;
 				/*AStar
 				.fromPosition(unit.Map_position_x, unit.Map_position_y)
 				.euclidianDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) < 8.0f ||

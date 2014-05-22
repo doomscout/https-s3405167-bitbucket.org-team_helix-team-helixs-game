@@ -48,7 +48,7 @@ public abstract class Entity : Cleanable {
 
 	protected virtual void InitAnimation() {
 		FinishedAnimation = false;
-		MoveSpeed = 10.0f;
+		MoveSpeed = 5.0f;
 		remainingDistance = 1.0f;
 		current_target = Direction.None;
 	}
@@ -177,7 +177,7 @@ public abstract class Entity : Cleanable {
 	public virtual void death_tick() {
 		//display death animation (if any)
 		float errorpopupindebug = 0;
-		GameObject.Destroy(game_object);
+		GameObject.Destroy(game_object, 2.0f);
 		FinishedAnimation = true;			//temp no animation, just return immediately
 	}
 
