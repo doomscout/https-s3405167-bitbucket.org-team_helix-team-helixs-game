@@ -4,10 +4,15 @@ using System.Collections;
 public class InventoryGUI : MonoBehaviour {
     public bool inventoryEnabled;
     public int  numberInv;
+    public GUISkin skin01;
+    public GUISkin skin02;
+    public float screenWidth;
+    public float screenHeight;
     Inventory inventory;
     ItemManager deck;
     void Update()
-    {
+    {    
+
         if (Input.GetKeyDown("i")){
             inventoryEnabled = !inventoryEnabled;
         }
@@ -15,26 +20,33 @@ public class InventoryGUI : MonoBehaviour {
         inventory = GameTools.Player.deckManager.inv;
             deck = GameTools.Player.deckManager;
         }
+        screenWidth = Screen.width;
+        screenHeight = Screen.height;
     }
  void OnGUI()
     {
+      //  GUI.skin = skin01;
 		if (GameTools.Player != null) {
             //DeckGUI
-	        GUI.Box(new Rect(700,200,100,100),"Current Spell:" + "\nShape: " + deck.peekTopSpell().Shape.SpellShape 
-                    + "\nColour: " + deck.peekTopSpell().SpellColour.ToString() + "\nPower: " + deck.getDeckSpell(0).Power);
-			GUI.Box(new Rect(700,100,100,100),"\nShape: " + deck.getDeckSpell(1).Shape.SpellShape 
+            GUI.depth = 20;
+           
+            GUI.depth = 5;
+            GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.12f,100f,100f),"\nShape: " + deck.getDeckSpell(1).Shape.SpellShape 
                     + "\nColour: " + deck.getDeckSpell(1).SpellColour.ToString() + "\nPower: " + deck.getDeckSpell(0).Power );
-			GUI.Box(new Rect(700,0,100,100),"\nShape: " + deck.getDeckSpell(2).Shape.SpellShape 
+            GUI.depth = 10;
+            GUI.Box(new Rect((Screen.width * 0.85f),0 ,100f,100f),"\nShape: " + deck.getDeckSpell(2).Shape.SpellShape 
                     + "\nColour: " + deck.getDeckSpell(2).SpellColour.ToString() + "\nPower: " + deck.getDeckSpell(1).Power);
-
-            if(GUI.Button(new Rect(700, 300, 150, 30), "Add Spell to Inevntory"))
+           
+            GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.24f,100f,100f),"Current Spell:" + "\nShape: " + deck.peekTopSpell().Shape.SpellShape 
+                    + "\nColour: " + deck.peekTopSpell().SpellColour.ToString() + "\nPower: " + deck.getDeckSpell(0).Power);
+            if(GUI.Button(new Rect((Screen.width * 0.85f), Screen.height * 0.36f, 150f, 30f ), "Add Spell to Inevntory"))
             {
                 if (deck.deck.Count > 3){
                 GameTools.Player.deckManager.moveSpellDeckToInventory( GameTools.Player.deckManager.getDeckSpell(0));
                 }
              
             }
-
+          //  GUI.skin = skin02;
             if (inventoryEnabled){
                 //Debug.Log("pressed i");
                 if (inventory.size != 0)

@@ -14,6 +14,9 @@ public class Unit : Entity{
 
 	private int id = 0;
 
+	private Animator enemyAnimation;
+	private float countDown =3.0f;
+	
 	public Unit() : base(){
 		brain = new SimpleAI(this);
 
@@ -41,11 +44,12 @@ public class Unit : Entity{
 	
 	protected override void InitGameObject() {
 		if (base.game_object == null) {
-			base.game_object = Object.Instantiate(Resources.Load("Prefabs/EnemyPrefab", typeof(GameObject))) as GameObject;
+			base.game_object = Object.Instantiate(Resources.Load("Prefabs/enemy", typeof(GameObject))) as GameObject;
 		}
-		base.game_object.transform.position = new Vector3(Map_position_x, 0, Map_position_y);
-		game_object.renderer.material.color = ColourManager.toColor(MainColour);
+		base.game_object.transform.position = new Vector3(Map_position_x, 0.1f, Map_position_y);
+		//game_object.renderer.material.color = ColourManager.toColor(MainColour);
 		GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = this;
+		enemyAnimation = game_object.GetComponent<Animator> ();
 	}
 
 	protected override void InitCleanable () {
@@ -65,12 +69,19 @@ public class Unit : Entity{
 		}
 		return isDead;
 	}
+
+	public override void death_tick () {
+			enemyAnimation.SetBool ("Death", true);
+			base.death_tick();
+
+	}
 	
 	public override bool animation_tick() {
 		if (!base.animation_tick()) {
 			FinishedAnimation = true;
 			return true;
 		}
+		enemyAnimation.SetBool ("Cast", false);
 		if (current_target == Direction.None) {
 			if (list_directions.Count > 0) {
 				if (list_directions[0] == Direction.None) {
@@ -91,15 +102,19 @@ public class Unit : Entity{
 		switch (current_target) {
 		case Direction.Up:
 			game_object.transform.Translate(0, 0, MoveSpeed * Time.deltaTime, null);
+			enemyAnimation.SetInteger("Direction", 0);
 			break;
 		case Direction.Down:
 			game_object.transform.Translate(0, 0, -MoveSpeed * Time.deltaTime, null);
+			enemyAnimation.SetInteger("Direction", 1);
 			break;
 		case Direction.Left:
 			game_object.transform.Translate(-MoveSpeed * Time.deltaTime, 0, 0, null);
+			enemyAnimation.SetInteger("Direction", 2);
 			break;
 		case Direction.Right:
 			game_object.transform.Translate(MoveSpeed * Time.deltaTime, 0, 0, null);
+			enemyAnimation.SetInteger("Direction", 3);
 			break;
 		default:
 			Debug.Log ("Defaulted");
@@ -111,7 +126,7 @@ public class Unit : Entity{
 			//correct overshooting
 			Vector3 temp = game_object.transform.position;
 			game_object.transform.position = new Vector3(Mathf.Round(temp.x), temp.y, Mathf.Round(temp.z));
-			
+			enemyAnimation.SetInteger("Direction", 4);
 			current_target = Direction.None;
 		}
 		return false;
@@ -151,7 +166,8 @@ public class Unit : Entity{
 		ProjectileManager.getInstance().queueProjectile(MainSpell, game_object.transform.position, GameTools.Player.game_object.transform.position);
 		MainSpell.loadInfo(	new int[2]{ Map_position_x, Map_position_y},
 							new int[2] {GameTools.Player.Map_position_x, GameTools.Player.Map_position_y});
-		game_object.transform.LookAt(new Vector3(GameTools.Player.Map_position_x, 0, GameTools.Player.Map_position_y));
+		enemyAnimation.SetBool ("Cast", true);
+
 	}
 	
 	public void showDamageTakenAnimation() {
