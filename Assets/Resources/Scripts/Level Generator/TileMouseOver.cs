@@ -59,6 +59,13 @@ using System.Collections;
 				e.OnClickAction();
 			}
 		}
+		if (HasRightClikedTrap()) {
+			if (GameTools.Map != null) {
+				if (GameTools.Map.TrapData[GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z].Count > 0) {
+					GameTools.Map.TrapData[GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z][0].Detonate();
+				}
+			}
+		}
 	}
 
 	public void CleanUp() {
@@ -78,6 +85,13 @@ using System.Collections;
 		    	IsOnMap &&
 		    	GameTools.Map != null &&
 				GameTools.Map.map_unit_occupy[GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z] != null;
+	}
+
+	public bool HasRightClikedTrap() {
+		return Input.GetMouseButtonUp(1) &&
+				IsOnMap &&
+				GameTools.Map != null &&
+				GameTools.Map.TrapData[GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z].Count > 0;
 	}
 
 	/*

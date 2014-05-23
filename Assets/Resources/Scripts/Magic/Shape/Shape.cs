@@ -22,7 +22,7 @@ public class Shape {
 
 	private void init() {
 		if (SpellShape == ShapeType.Single || SpellShape == ShapeType.Circle) {
-			CastRange = 50;
+			CastRange = Random.Range(1, 10);
 		} else {
 			CastRange = 0;
 		}

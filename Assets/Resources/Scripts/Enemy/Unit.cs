@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Unit : Entity{
 	List<Direction> list_directions = new List<Direction>();
 	SimpleAI brain;
-	public bool IsHit = false;
+	public bool IsAggroed = false;
 
 	Direction Alignment = Direction.None;
 
@@ -134,28 +134,10 @@ public class Unit : Entity{
 
 	public override float GetHitByMagic(Spell taken_spell) {
 		float dmg = base.GetHitByMagic(taken_spell);
-		list_of_damage_taken.Add(dmg);
-		list_of_colour_taken.Add(taken_spell.SpellColour);
-		IsHit = true;
-		alertNeighbourhood();
+		Health -= dmg;
+		base.ShowText("-" + dmg, Color.black, 0);
+		IsAggroed = true;
 		return dmg;
-	}
-
-	int temp = 3;
-	public void alertNeighbourhood() {
-		int newX = 0, newY = 0;
-		for(int i = -temp; i <= temp; i++) {
-			for(int j = -temp; j <= temp; j++) {
-				if (!MapTools.IsOutOfBounds(Map_position_x + i, Map_position_y + j)) {
-					if (GameTools.Map.map_unit_occupy[Map_position_x + i, Map_position_y + j] == this) {
-						continue;
-					}
-					if (GameTools.Map.map_unit_occupy[Map_position_x + i, Map_position_y + j] != null) {
-						((Unit)(GameTools.Map.map_unit_occupy[Map_position_x + i, Map_position_y + j])).IsHit = true;
-					}
-				}
-			}
-		}
 	}
 
 	/* Maybe make the unit search for a valid target before shooting, as opposed to always shooting at the player */
@@ -168,18 +150,6 @@ public class Unit : Entity{
 							new int[2] {GameTools.Player.Map_position_x, GameTools.Player.Map_position_y});
 		enemyAnimation.SetBool ("Cast", true);
 
-	}
-	
-	public void showDamageTakenAnimation() {
-		for (int i = 0; i < list_of_damage_taken.Count; i++) {
-			Color c = Color.white;
-			if (ColourManager.getWeakness(list_of_colour_taken[i]) == MainColour) {
-				c = Color.magenta;
-			}
-			base.ShowText(list_of_damage_taken[i] + "", c, i);
-		}
-		list_of_damage_taken = new List<float>();
-		list_of_colour_taken = new List<Colour>();
 	}
 
 	public Vector2 GroupCenterOfMass(List<Entity> neighbourhood) {

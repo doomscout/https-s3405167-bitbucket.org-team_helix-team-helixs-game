@@ -24,6 +24,8 @@ public class TileMap : MonoBehaviour, Cleanable {
 
 	private DataTileMap map;
 	public TileType[,] TileMapData {get; private set;}
+	public BonusTile[,] BonusTileData {get; private set;}
+	public List<Trap>[,] TrapData {get; set;}
 	public int[,] PassableMapData {get; private set;}
 	public int[,] WeightedMap {get; private set;}
 
@@ -43,6 +45,8 @@ public class TileMap : MonoBehaviour, Cleanable {
 			CleanTools.GetInstance().SubscribeCleanable(this);
 			hasInit = true;
 			BuildMesh();
+			GenerateBonusTiles();
+			InitTrapMap();
 		}
 	}
 
@@ -54,6 +58,31 @@ public class TileMap : MonoBehaviour, Cleanable {
 		gameObject.transform.position = new Vector3(-100, -100, -100);
 		Object.Destroy(gameObject);
 		Debug.Log ("TileMap cleaned up");
+	}
+
+	private void GenerateBonusTiles() {
+		BonusTileData = new BonusTile[size_x,size_z];
+
+		for (int i = 0; i < size_x; i++) {
+			for (int j = 0; j < size_z; j++) {
+				if (TileTools.IsLand(TileMapData[i,j])) {
+					if (TileMapData[i,j] == TileType.DarkGreen) {
+						if (Random.Range (1,100) <= 5) {
+							BonusTileData[i,j] = new BonusTile(i, j);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void InitTrapMap() {
+		TrapData = new List<Trap>[size_x,size_z];
+		for (int i = 0; i < size_x; i++) {
+			for (int j = 0; j < size_z; j++) {
+				TrapData[i,j] = new List<Trap>();
+			}
+		}
 	}
 
 	//import and read image file and chop down each color for each tile.

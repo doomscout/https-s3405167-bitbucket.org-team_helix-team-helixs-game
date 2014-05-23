@@ -95,7 +95,7 @@ public class SimpleAI {
 		unit.CastMainSpell();
 	}
 
-	int temp = 3;
+	int temp = 2;
 	void actionFollowRunning() {
 		List<Entity> neighbourhood = new List<Entity>();
 		int newX = 0, newY = 0;
@@ -106,12 +106,10 @@ public class SimpleAI {
 						continue;
 					}
 					if (GameTools.Map.map_unit_occupy[unit.Map_position_x + i, unit.Map_position_y + j] != null) {
-						neighbourhood.Add(GameTools.Map.map_unit_occupy[unit.Map_position_x + i, unit.Map_position_y + j]);
-						/*
-						if (((Unit)GameTools.Map.map_unit_occupy[unit.Map_position_x + i, unit.Map_position_y + j]).IsHit) {
-							unit.IsHit = true;
+						if (((Unit)GameTools.Map.map_unit_occupy[unit.Map_position_x + i, unit.Map_position_y + j]).IsAggroed) {
+							unit.IsAggroed = true;
 						}
-						*/
+						neighbourhood.Add(GameTools.Map.map_unit_occupy[unit.Map_position_x + i, unit.Map_position_y + j]);
 					}
 				}
 			}
@@ -131,7 +129,8 @@ public class SimpleAI {
     }
 
     bool transitionInSeekRange() {
-		return  unit.IsHit;
+		//return true;
+		return  unit.IsAggroed;
 
 				/*AStar
 				.fromPosition(unit.Map_position_x, unit.Map_position_y)

@@ -80,6 +80,7 @@ public class Spell {
 
 	public void cast(int[] origin, int[] position) {
 		int[,] coordinates = Shape.toCoords(origin, position);
+		bool isTrap = true;
 
 
 		for (int i = 0; i < coordinates.GetLength(0); i++) {
@@ -88,11 +89,22 @@ public class Spell {
 			}
 			if (GameTools.Map.map_unit_occupy[coordinates[i,0], coordinates[i,1]] != null) {
 				GameTools.Map.map_unit_occupy[coordinates[i,0], coordinates[i,1]].GetHitByMagic(this);
+				isTrap = false;
+			}
+			if (GameTools.Map.BonusTileData[coordinates[i,0], coordinates[i,1]] != null) {
+				GameTools.Map.BonusTileData[coordinates[i,0], coordinates[i,1]].GetHitByMagic(this);
+				isTrap = false;
 			}
 			if (coordinates[i,0] == GameTools.Player.Map_position_x && coordinates[i,1] == GameTools.Player.Map_position_y) {
 				GameTools.Player.GetHitByMagic(this);
+				isTrap = false;
 			}
-
+		}
+		if (isTrap) {
+			for (int i = 0; i < coordinates.GetLength(0); i++) {
+				int tempX = coordinates[i,0], tempY = coordinates[i,1];
+				new Trap(this, tempX, tempY);
+			}
 		}
 	}
 

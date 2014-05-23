@@ -54,7 +54,7 @@ public abstract class Entity : Cleanable {
 	}
 
 	protected virtual void InitStats() {
-		Max_Health = 100.0f;
+		Max_Health = 1.0f;
 		Health = Max_Health;
 	}
 

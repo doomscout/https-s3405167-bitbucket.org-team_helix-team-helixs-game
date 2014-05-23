@@ -43,7 +43,7 @@ public class Player : Entity {
 			base.game_object = Object.Instantiate(Resources.Load("Prefabs/slime", typeof(GameObject))) as GameObject;
 		}
 		playerAnimation = game_object.GetComponent<Animator> ();
-		game_object.transform.position = new Vector3(Map_position_x, 0, Map_position_y);
+		game_object.transform.position = new Vector3(Map_position_x, 0.1f, Map_position_y);
 		//game_object.renderer.material.color = ColourManager.toColor(MainColour);
 	}
 
@@ -55,6 +55,16 @@ public class Player : Entity {
 
 	protected override void InitCleanable () {
 		CleanTools.GetInstance().SubscribeCleanable(this, true);
+	}
+	
+	public void loadIntoGame() {
+		InitMapPosition();
+		InitGameObject();
+	}
+	
+	public new void CleanUp() {
+		base.CleanUp();
+		GameTools.Player = null;
 	}
 
 	public override float GetHitByMagic(Spell taken_spell) {
@@ -88,16 +98,6 @@ public class Player : Entity {
 		return true;
 	}
 
-	public void loadIntoGame() {
-		InitMapPosition();
-		InitGameObject();
-	}
-
-	public new void CleanUp() {
-		base.CleanUp();
-		GameTools.Player = null;
-	}
-
 	public bool listenInput() {
         bool validInput = false;
 		castedSpell = false;
@@ -119,7 +119,7 @@ public class Player : Entity {
 			validInput = true;
 		}  else  if (Input.GetKeyUp("1")){
 			spellIndicator.toggleIndicator();
-			//PlayerCastIndicator.ToggleUnit(this);
+			PlayerCastIndicator.ToggleUnit(this);
 			current_target = Direction.None;
 		} else {
 			current_target = Direction.None;
@@ -232,8 +232,9 @@ public class Player : Entity {
 		bool isDead = base.IsDead();
 		if (isDead) {
 			Debug.Log ("Player is dead");
+			playerAnimation.SetBool ("Death", true);
 		}
-		playerAnimation.SetBool ("Death", true);
+
 		return isDead;
 	}
 

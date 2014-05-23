@@ -14,6 +14,7 @@ public class GameInstance : Cleanable {
 	Player player;
 	GameObject tileMapPrefab;
 	Shop shop;
+	public int NumberOfTurnsUntilWin {get; private set;}
 
 
     private bool validInput = false;
@@ -63,6 +64,7 @@ public class GameInstance : Cleanable {
 			list_live_units.Add(u);
 			all_units.Add (u);
 		}
+		NumberOfTurnsUntilWin = 100;
 	}
 
 	public void ToggleUnitIndicator(Unit u) {
@@ -149,15 +151,27 @@ public class GameInstance : Cleanable {
 		validInput = player.listenInput();
         
 		UnitCastIndicator.ShowIndicators();
+
+		foreach (Unit unit in list_live_units) {
+			if (unit.IsDead()) {
+				list_dead_units.Add (unit);
+			}
+		}
+		//We'll animate the death of the enemies
+		foreach (Unit unit in list_dead_units) {
+			list_live_units.Remove(unit);
+			unit.death_tick();
+			if (!unit.FinishedAnimation) {
+				IsAnimationDone = false;
+			}
+		}
+		list_dead_units = new List<Unit>();
     }
 
     void actionPlayerExit() {
 		player.showIndicatorAnimation();
-		if (showDamageIndicators) {
-			//player.showDamageTakenAnimation();
-			foreach(Unit u in list_live_units) {
-				u.showDamageTakenAnimation();
-			}
+		if (GameTools.Map.BonusTileData[player.Map_position_x, player.Map_position_y] != null) {
+			GameTools.Map.BonusTileData[player.Map_position_x, player.Map_position_y].TickDown(player);
 		}
 		UnitCastIndicator.ResetIndicators();
 		GameTools.Map.UpdateWeightMap();
@@ -165,6 +179,8 @@ public class GameInstance : Cleanable {
         turn_enemy = true;
 		player.FinishedAnimation = false;
         validInput = false;
+		NumberOfTurnsUntilWin--;
+		Debug.Log ("NumberOfTurnsUntilWin: " + NumberOfTurnsUntilWin);
     }
 
 	void actionAnimationEntry() {

@@ -85,7 +85,7 @@ public class SpellIndicator : Cleanable{
 		}
 		int[,] coordinates = spell.Shape.toCoords(fromPosition, toPosition);
 		for (int i = 0; i < coordinates.GetLength(0); i++) {
-			pool[i].transform.position = new Vector3(coordinates[i,0], 0.1f, coordinates[i,1]);
+			pool[i].transform.position = new Vector3(coordinates[i,0], 0.02f, coordinates[i,1]);
 			Indicator script = pool[i].GetComponent<Indicator>();
 			script.changeColour(ColourManager.toColor(spell.SpellColour));
 		}

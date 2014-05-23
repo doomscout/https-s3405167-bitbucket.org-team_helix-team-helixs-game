@@ -272,8 +272,7 @@ public class GameManager : MonoBehaviour{
 	}
 
 	bool conditionWin() {
-        return Input.GetKeyDown("left");
-		//return turn_manager.list_live_units.Count == 0;
+        return Input.GetKeyDown("left") || turn_manager.NumberOfTurnsUntilWin <= 0;
 	}
 
 	bool conditionLose() {
