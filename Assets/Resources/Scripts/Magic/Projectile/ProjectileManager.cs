@@ -58,7 +58,7 @@ public class ProjectileManager : Cleanable{
 				maxV = Vector3.Max(maxV, Vector3.Max(script.initPos, script.destPos));
 			}
 			GameTools.GameCamera.moveCameraProjectiles(minV, maxV);
-			totalTime = projectiles.Count * 0.5f + 1.5f;
+			totalTime = projectiles.Count * 0.5f + 1.0f;
 			hasFired = true;
 		}
 		if (projectiles.Count == 0) {

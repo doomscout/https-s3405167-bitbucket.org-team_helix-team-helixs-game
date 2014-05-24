@@ -47,7 +47,7 @@ public class Projectile : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (shootCounter < 1.0f) {
+		if (shootCounter < 0.75f) {
 			initPos.y += 3 * Time.deltaTime;
 			transform.position = initPos;
 			shootCounter += Time.deltaTime;
