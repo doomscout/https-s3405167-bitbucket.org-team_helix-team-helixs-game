@@ -242,6 +242,7 @@ public class Player : Entity {
 	}
 
 	public override bool animation_tick() {
+		playerAnimation.SetBool ("Cast", false);
 		if (!base.animation_tick()) {
 			FinishedAnimation = true;
 			return true;
@@ -251,7 +252,6 @@ public class Player : Entity {
 			FinishedAnimation = true;
 			return true;
 		}
-		playerAnimation.SetBool ("Cast", false);
 		switch (current_target) {
 			case Direction.Up:
 				game_object.transform.Translate(0, 0, MoveSpeed * Time.deltaTime, null);
