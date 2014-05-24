@@ -66,6 +66,9 @@ using System.Collections;
 				}
 			}
 		}
+		if (HasRotatedMouseShape()) {
+			GameTools.HasRotatedShape = !GameTools.HasRotatedShape;
+		}
 	}
 
 	public void CleanUp() {
@@ -92,6 +95,10 @@ using System.Collections;
 				IsOnMap &&
 				GameTools.Map != null &&
 				GameTools.Map.TrapData[GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z].Count > 0;
+	}
+
+	public bool HasRotatedMouseShape() {
+		return Input.GetKeyUp(KeyCode.R);
 	}
 
 	/*

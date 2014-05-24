@@ -19,10 +19,12 @@ public class Trap {
 		HasDetonated = false;
 
 		Init();
-		InitGameObject();
 	}
 
 	private void Init() {
+		if (MapTools.IsOutOfBounds(x, y)) {
+			return;
+		}
 		int tileTrapCount = GameTools.Map.TrapData[x, y].Count;
 		if (tileTrapCount > 0) {
 			if (GameTools.Map.TrapData[x, y][0].spell.SpellColour != this.spell.SpellColour) {
@@ -34,6 +36,8 @@ public class Trap {
 		}
 		this.count = GameTools.Map.TrapData[x, y].Count;
 		GameTools.Map.TrapData[x,y].Add (this);
+
+		InitGameObject();
 	}
 
 	private void InitGameObject() {

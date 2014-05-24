@@ -17,9 +17,6 @@ public static class GameTools {
 	public static TileMouseOver Mouse {get;set;}
 	public static CameraInitMove GameCamera {get;set;}
 	public static Shop Shop{get;set;}
+	public static bool HasRotatedShape = false;
 
-	//Below are things still need to be implemented
-	/*
-	public static Player Player_One{get;set;}
-	*/
 }

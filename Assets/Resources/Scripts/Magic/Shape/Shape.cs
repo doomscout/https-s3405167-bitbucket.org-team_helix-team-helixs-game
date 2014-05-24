@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public enum ShapeType {Line, Circle, Single, Cone, PCG }
+public enum ShapeType {Line, Circle, Single, Cone, PCG_NEAR, PCG_FAR }
 
 public class Shape {
 	public ShapeType SpellShape {get; private set;}
@@ -39,14 +39,18 @@ public class Shape {
 		case ShapeType.Cone:
 			shapeIntArray = ShapeInt.coneShape;
 			break;
-		case ShapeType.PCG:
+		case ShapeType.PCG_NEAR:
 			shapeIntArray = ShapeInt.GeneratePCGShapeMirror();
+			break;
+		case ShapeType.PCG_FAR:
+			shapeIntArray = ShapeInt.GeneratePCGShapeFourMirror();
+			CastRange = Random.Range(3, 10);
 			break;
 		}
 	}
 
 	private void setRandomShape() {
-		int shapeType = Random.Range(0, 5);
+		int shapeType = Random.Range(0, System.Enum.GetNames(typeof(ShapeType)).Length);
 		SpellShape = (ShapeType)shapeType;
 
 	}
@@ -124,7 +128,12 @@ public class Shape {
 					//do nothing
 				}
 			}
+		} else {
+			if (GameTools.HasRotatedShape) {
+				coordArray = flipDiagonally(coordArray);
+			}
 		}
+
 		
 		//Now move the spell from the origin to the player location
 		if (IsPlayerCentered) {
