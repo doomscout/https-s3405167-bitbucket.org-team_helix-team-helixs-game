@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 01704c2b5ddf653438a6c4d0a96e4571
+guid: c861d87597336a6439f22133371fdf8c
 TextureImporter:
   serializedVersion: 2
   mipmaps:
@@ -41,805 +41,769 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: slime_sheet_red_0
+    - name: slime_sheet_desat_0
       rect:
         serializedVersion: 2
-        x: 2
-        y: 339
+        x: 7
+        y: 352
         width: 20
         height: 21
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_1
+    - name: slime_sheet_desat_1
       rect:
         serializedVersion: 2
-        x: 28
-        y: 339
-        width: 20
+        x: 37
+        y: 349
+        width: 18
         height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_2
+    - name: slime_sheet_desat_2
       rect:
         serializedVersion: 2
-        x: 55
-        y: 339
+        x: 69
+        y: 349
+        width: 18
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_3
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 349
+        width: 18
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_4
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 350
+        width: 18
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_5
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 350
         width: 20
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_6
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 350
+        width: 22
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_7
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 350
+        width: 24
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_8
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 328
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_9
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 328
+        width: 22
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_10
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 325
+        width: 18
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_11
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 324
+        width: 18
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_12
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 327
+        width: 22
         height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_3
+    - name: slime_sheet_desat_13
       rect:
         serializedVersion: 2
-        x: 82
-        y: 337
+        x: 171
+        y: 327
+        width: 22
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_14
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 327
+        width: 22
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_15
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 327
+        width: 22
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_16
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 303
         width: 20
-        height: 20
+        height: 21
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_4
+    - name: slime_sheet_desat_17
       rect:
         serializedVersion: 2
-        x: 112
-        y: 336
-        width: 18
-        height: 23
+        x: 35
+        y: 303
+        width: 22
+        height: 22
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_5
+    - name: slime_sheet_desat_18
       rect:
         serializedVersion: 2
-        x: 140
-        y: 336
-        width: 18
-        height: 23
+        x: 65
+        y: 303
+        width: 25
+        height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_6
+    - name: slime_sheet_desat_19
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 303
+        width: 28
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_20
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 303
+        width: 25
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_21
       rect:
         serializedVersion: 2
         x: 169
-        y: 337
-        width: 18
-        height: 21
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_7
-      rect:
-        serializedVersion: 2
-        x: 196
-        y: 339
-        width: 20
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_8
-      rect:
-        serializedVersion: 2
-        x: 226
-        y: 338
-        width: 20
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_9
-      rect:
-        serializedVersion: 2
-        x: 253
-        y: 338
-        width: 20
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_10
-      rect:
-        serializedVersion: 2
-        x: 2
-        y: 314
-        width: 20
-        height: 21
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_11
-      rect:
-        serializedVersion: 2
-        x: 31
-        y: 314
-        width: 20
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_12
-      rect:
-        serializedVersion: 2
-        x: 57
-        y: 313
-        width: 20
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_13
-      rect:
-        serializedVersion: 2
-        x: 85
-        y: 313
-        width: 20
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_14
-      rect:
-        serializedVersion: 2
-        x: 114
-        y: 313
-        width: 20
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_15
-      rect:
-        serializedVersion: 2
-        x: 142
-        y: 311
-        width: 18
-        height: 23
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_16
-      rect:
-        serializedVersion: 2
-        x: 168
-        y: 312
-        width: 18
-        height: 21
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_17
-      rect:
-        serializedVersion: 2
-        x: 194
-        y: 313
-        width: 20
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_18
-      rect:
-        serializedVersion: 2
-        x: 223
-        y: 313
-        width: 20
-        height: 20
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_19
-      rect:
-        serializedVersion: 2
-        x: 253
-        y: 312
-        width: 20
-        height: 22
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_20
-      rect:
-        serializedVersion: 2
-        x: 2
-        y: 288
-        width: 20
-        height: 21
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_21
-      rect:
-        serializedVersion: 2
-        x: 31
-        y: 288
-        width: 22
-        height: 22
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_22
-      rect:
-        serializedVersion: 2
-        x: 61
-        y: 288
-        width: 25
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_23
-      rect:
-        serializedVersion: 2
-        x: 94
-        y: 288
-        width: 28
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_24
-      rect:
-        serializedVersion: 2
-        x: 131
-        y: 288
-        width: 25
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_25
-      rect:
-        serializedVersion: 2
-        x: 165
-        y: 288
+        y: 303
         width: 23
         height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_26
+    - name: slime_sheet_desat_22
       rect:
         serializedVersion: 2
-        x: 197
-        y: 288
+        x: 201
+        y: 303
         width: 22
         height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_27
+    - name: slime_sheet_desat_23
       rect:
         serializedVersion: 2
-        x: 227
-        y: 288
+        x: 231
+        y: 303
         width: 22
         height: 18
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_28
+    - name: slime_sheet_desat_24
       rect:
         serializedVersion: 2
-        x: 3
-        y: 260
+        x: 7
+        y: 275
         width: 20
         height: 21
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_29
+    - name: slime_sheet_desat_25
       rect:
         serializedVersion: 2
-        x: 31
-        y: 259
+        x: 35
+        y: 274
         width: 22
         height: 22
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_30
+    - name: slime_sheet_desat_26
       rect:
         serializedVersion: 2
-        x: 61
-        y: 260
+        x: 65
+        y: 275
         width: 25
         height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_31
+    - name: slime_sheet_desat_27
       rect:
         serializedVersion: 2
-        x: 93
-        y: 260
+        x: 97
+        y: 275
         width: 28
         height: 15
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_32
+    - name: slime_sheet_desat_28
       rect:
         serializedVersion: 2
-        x: 130
-        y: 260
+        x: 134
+        y: 275
         width: 25
         height: 15
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_33
+    - name: slime_sheet_desat_29
       rect:
         serializedVersion: 2
-        x: 165
-        y: 259
+        x: 169
+        y: 274
         width: 23
         height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_34
+    - name: slime_sheet_desat_30
       rect:
         serializedVersion: 2
-        x: 197
-        y: 259
+        x: 201
+        y: 274
         width: 22
         height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_35
+    - name: slime_sheet_desat_31
       rect:
         serializedVersion: 2
-        x: 229
-        y: 259
+        x: 233
+        y: 274
         width: 22
         height: 18
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_36
+    - name: slime_sheet_desat_32
       rect:
         serializedVersion: 2
-        x: 3
-        y: 233
+        x: 7
+        y: 248
         width: 20
         height: 22
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_37
+    - name: slime_sheet_desat_33
       rect:
         serializedVersion: 2
-        x: 30
-        y: 233
+        x: 34
+        y: 248
         width: 20
         height: 22
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_38
+    - name: slime_sheet_desat_34
       rect:
         serializedVersion: 2
-        x: 56
-        y: 233
+        x: 60
+        y: 248
         width: 21
         height: 21
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_39
+    - name: slime_sheet_desat_35
       rect:
         serializedVersion: 2
-        x: 83
-        y: 233
+        x: 87
+        y: 248
         width: 22
         height: 21
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_40
+    - name: slime_sheet_desat_36
       rect:
         serializedVersion: 2
-        x: 111
-        y: 233
+        x: 115
+        y: 248
         width: 24
         height: 20
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_41
+    - name: slime_sheet_desat_37
       rect:
         serializedVersion: 2
-        x: 140
-        y: 233
+        x: 144
+        y: 248
         width: 26
         height: 17
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_42
+    - name: slime_sheet_desat_38
       rect:
         serializedVersion: 2
-        x: 0
-        y: 209
+        x: 4
+        y: 224
         width: 28
         height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_43
+    - name: slime_sheet_desat_39
       rect:
         serializedVersion: 2
-        x: 33
-        y: 209
+        x: 37
+        y: 224
         width: 27
         height: 18
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_44
+    - name: slime_sheet_desat_40
       rect:
         serializedVersion: 2
-        x: 65
-        y: 209
+        x: 69
+        y: 224
         width: 27
         height: 18
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_45
+    - name: slime_sheet_desat_41
       rect:
         serializedVersion: 2
-        x: 96
-        y: 209
+        x: 100
+        y: 224
         width: 28
         height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_46
+    - name: slime_sheet_desat_42
       rect:
         serializedVersion: 2
-        x: 129
-        y: 209
+        x: 133
+        y: 224
         width: 27
         height: 15
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_47
+    - name: slime_sheet_desat_43
       rect:
         serializedVersion: 2
-        x: 160
-        y: 209
+        x: 164
+        y: 224
         width: 28
         height: 14
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_48
+    - name: slime_sheet_desat_44
       rect:
         serializedVersion: 2
-        x: 192
-        y: 209
+        x: 196
+        y: 224
         width: 28
         height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_49
+    - name: slime_sheet_desat_45
       rect:
         serializedVersion: 2
-        x: 2
-        y: 183
+        x: 6
+        y: 198
         width: 24
         height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_50
+    - name: slime_sheet_desat_46
       rect:
         serializedVersion: 2
-        x: 35
-        y: 183
+        x: 39
+        y: 198
         width: 24
         height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_51
+    - name: slime_sheet_desat_47
       rect:
         serializedVersion: 2
-        x: 69
-        y: 183
+        x: 73
+        y: 198
         width: 24
         height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_52
-      rect:
-        serializedVersion: 2
-        x: 102
-        y: 183
-        width: 24
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_53
-      rect:
-        serializedVersion: 2
-        x: 135
-        y: 183
-        width: 24
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_54
-      rect:
-        serializedVersion: 2
-        x: 3
-        y: 157
-        width: 24
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_55
-      rect:
-        serializedVersion: 2
-        x: 36
-        y: 157
-        width: 24
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_56
-      rect:
-        serializedVersion: 2
-        x: 69
-        y: 157
-        width: 24
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_57
-      rect:
-        serializedVersion: 2
-        x: 103
-        y: 157
-        width: 24
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_58
-      rect:
-        serializedVersion: 2
-        x: 136
-        y: 157
-        width: 24
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_59
-      rect:
-        serializedVersion: 2
-        x: 4
-        y: 132
-        width: 20
-        height: 21
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_60
-      rect:
-        serializedVersion: 2
-        x: 36
-        y: 133
-        width: 24
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_61
-      rect:
-        serializedVersion: 2
-        x: 69
-        y: 133
-        width: 24
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_62
-      rect:
-        serializedVersion: 2
-        x: 102
-        y: 133
-        width: 24
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_63
-      rect:
-        serializedVersion: 2
-        x: 4
-        y: 105
-        width: 20
-        height: 21
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_64
-      rect:
-        serializedVersion: 2
-        x: 36
-        y: 106
-        width: 24
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_65
-      rect:
-        serializedVersion: 2
-        x: 70
-        y: 106
-        width: 24
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_66
-      rect:
-        serializedVersion: 2
-        x: 103
-        y: 107
-        width: 24
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_67
-      rect:
-        serializedVersion: 2
-        x: 3
-        y: 81
-        width: 24
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_68
-      rect:
-        serializedVersion: 2
-        x: 36
-        y: 81
-        width: 24
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_69
-      rect:
-        serializedVersion: 2
-        x: 69
-        y: 81
-        width: 24
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_70
-      rect:
-        serializedVersion: 2
-        x: 105
-        y: 80
-        width: 20
-        height: 21
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_71
-      rect:
-        serializedVersion: 2
-        x: 3
-        y: 55
-        width: 24
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_72
-      rect:
-        serializedVersion: 2
-        x: 36
-        y: 54
-        width: 24
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_73
-      rect:
-        serializedVersion: 2
-        x: 70
-        y: 54
-        width: 24
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_74
+    - name: slime_sheet_desat_48
       rect:
         serializedVersion: 2
         x: 106
-        y: 53
+        y: 198
+        width: 24
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_49
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 198
+        width: 24
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_50
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 172
         width: 20
         height: 21
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_75
+    - name: slime_sheet_desat_51
       rect:
         serializedVersion: 2
-        x: 3
-        y: 29
+        x: 40
+        y: 173
+        width: 24
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_52
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 173
+        width: 24
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_53
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 173
+        width: 24
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_54
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 145
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_55
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 146
+        width: 24
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_56
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 146
+        width: 24
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_57
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 147
+        width: 24
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_58
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 121
+        width: 24
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_59
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 121
+        width: 24
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_60
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 121
+        width: 24
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_61
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 120
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_62
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 95
+        width: 24
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_63
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 94
+        width: 24
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_64
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 94
+        width: 24
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_65
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 93
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_66
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 69
         width: 22
         height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_76
+    - name: slime_sheet_desat_67
       rect:
         serializedVersion: 2
-        x: 33
-        y: 29
+        x: 37
+        y: 69
         width: 20
         height: 21
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_77
+    - name: slime_sheet_desat_68
       rect:
         serializedVersion: 2
-        x: 59
-        y: 29
+        x: 63
+        y: 69
         width: 24
         height: 17
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_78
+    - name: slime_sheet_desat_69
       rect:
         serializedVersion: 2
-        x: 89
-        y: 29
+        x: 93
+        y: 69
         width: 26
         height: 17
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_79
+    - name: slime_sheet_desat_70
       rect:
         serializedVersion: 2
-        x: 122
-        y: 29
+        x: 126
+        y: 69
         width: 28
         height: 17
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_80
+    - name: slime_sheet_desat_71
       rect:
         serializedVersion: 2
-        x: 157
-        y: 29
+        x: 161
+        y: 69
         width: 30
         height: 17
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_81
+    - name: slime_sheet_desat_72
       rect:
         serializedVersion: 2
-        x: 2
-        y: 2
+        x: 6
+        y: 45
         width: 22
         height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_82
+    - name: slime_sheet_desat_73
       rect:
         serializedVersion: 2
-        x: 30
-        y: 2
+        x: 34
+        y: 45
         width: 22
         height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_83
+    - name: slime_sheet_desat_74
       rect:
         serializedVersion: 2
-        x: 60
-        y: 2
+        x: 64
+        y: 45
         width: 22
         height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_84
+    - name: slime_sheet_desat_75
       rect:
         serializedVersion: 2
-        x: 89
-        y: 2
+        x: 93
+        y: 45
         width: 20
         height: 20
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_85
+    - name: slime_sheet_desat_76
       rect:
         serializedVersion: 2
-        x: 117
-        y: 2
+        x: 121
+        y: 45
         width: 19
         height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_86
+    - name: slime_sheet_desat_77
       rect:
         serializedVersion: 2
-        x: 146
-        y: 2
+        x: 150
+        y: 45
         width: 19
         height: 20
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_87
+    - name: slime_sheet_desat_78
       rect:
         serializedVersion: 2
-        x: 171
-        y: 2
+        x: 175
+        y: 45
         width: 20
         height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
-    - name: slime_sheet_red_88
+    - name: slime_sheet_desat_79
       rect:
         serializedVersion: 2
-        x: 197
-        y: 2
+        x: 201
+        y: 45
         width: 21
         height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_80
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 2
+        width: 22
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_81
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 3
+        width: 32
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_82
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 3
+        width: 22
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_83
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 5
+        width: 32
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: slime_sheet_desat_84
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 5
+        width: 28
+        height: 35
       alignment: 0
       pivot: {x: 0, y: 0}
   spritePackingTag: 

@@ -34,7 +34,7 @@ public class Unit : Entity{
 			base.game_object = Object.Instantiate(Resources.Load("Prefabs/enemy", typeof(GameObject))) as GameObject;
 		}
 		base.game_object.transform.position = new Vector3(Map_position_x, 0.1f, Map_position_y);
-		//game_object.renderer.material.color = ColourManager.toColor(MainColour);
+		game_object.renderer.material.color = ColourManager.toColor(MainColour);
 		GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = this;
 		enemyAnimation = game_object.GetComponent<Animator> ();
 	}
