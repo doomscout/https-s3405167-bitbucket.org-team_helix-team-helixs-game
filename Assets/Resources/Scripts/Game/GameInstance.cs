@@ -12,6 +12,7 @@ public class GameInstance : Cleanable {
 	List<Unit> list_dead_units;		
 	private CastRangeIndicator UnitCastIndicator;
 	Player player;
+	PlayerBase Base;
 	GameObject tileMapPrefab;
 	Shop shop;
 	public int NumberOfTurnsUntilWin {get; private set;}
@@ -28,8 +29,9 @@ public class GameInstance : Cleanable {
 	private State state_enemy;
 	private State state_start;
 
-    public GameInstance(Player player) {
+    public GameInstance(Player player, PlayerBase Base) {
 		this.player = player;
+		this.Base = Base;
 		this.shop = new Shop();
 
         list_live_units = new List<Unit>();
@@ -57,14 +59,21 @@ public class GameInstance : Cleanable {
 		tileMapPrefab = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/TileMapPrefab", typeof(GameObject))) as GameObject;
 		TileMap script = tileMapPrefab.GetComponent<TileMap>();
 		script.init ();
-		player.loadIntoGame();
+		loadEntities();
+
+		NumberOfTurnsUntilWin = 100;
+	}
+
+	public void loadEntities() {
+		Base.LoadIntoGame();
+		player.LoadIntoGame();
+
 		//populate map with enemies
 		for (int i = 0; i < 100; i++) {
 			Unit u = new Unit(i);
 			list_live_units.Add(u);
 			all_units.Add (u);
 		}
-		NumberOfTurnsUntilWin = 100;
 	}
 
 	public void ToggleUnitIndicator(Unit u) {
@@ -143,6 +152,7 @@ public class GameInstance : Cleanable {
 
 	void actionPlayerEntry() {
 		player.Prelogic_tick();
+		Base.logic_tick();
 	}
 	                        
     void actionPlayerRunning() {

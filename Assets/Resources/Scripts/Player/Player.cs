@@ -27,15 +27,8 @@ public class Player : Entity {
 		if (GameTools.Map == null) {
 			return;
 		}
-		for (int i = 0; i < GameTools.Map.size_z; i++) {
-			for (int j = 0; j < GameTools.Map.size_x; j++) {
-				if (TileTools.IsLand(GameTools.Map.TileMapData[j, i])) {
-					Map_position_x = j;
-					Map_position_y = i;
-					break;
-				}
-			}
-		}
+		Map_position_x = GameTools.Base.Map_position_x;
+		Map_position_y = GameTools.Base.Map_position_y;
 	}
 
 	protected override void InitGameObject() {
@@ -57,7 +50,7 @@ public class Player : Entity {
 		CleanTools.GetInstance().SubscribeCleanable(this, true);
 	}
 	
-	public void loadIntoGame() {
+	public void LoadIntoGame() {
 		InitMapPosition();
 		InitGameObject();
 	}
@@ -69,7 +62,12 @@ public class Player : Entity {
 
 	public override float GetHitByMagic(Spell taken_spell) {
 		float dmg = base.GetHitByMagic(taken_spell);
-		base.ShowText(dmg + "", ColourManager.toColor(taken_spell.SpellColour), 0);
+		if (GameTools.Base.IsWithinBase(Map_position_x, Map_position_y)) {
+			GameTools.Base.GetHitByMagic(taken_spell);
+		} else {
+			Health -= dmg;
+			base.ShowText("-" + dmg + "Player HP", Color.red, 0);
+		}
 		return dmg;
 	}
 
@@ -136,7 +134,7 @@ public class Player : Entity {
 				validInput = false;
 			} else {
 				if ((GameTools.Map.map_unit_occupy[newX, newY] != null &&
-				     !GameTools.Map.map_unit_occupy[newX, newY].EntityAbleToMoveHere(this))||
+				     !GameTools.Map.map_unit_occupy[newX, newY].IsEntityAbleToMoveHere(this))||
 				    (!TileTools.IsLand(GameTools.Map.TileMapData[newX, newY]))) {
 					current_target = Direction.None;
 					validInput = false;
@@ -151,7 +149,7 @@ public class Player : Entity {
 				validInput = false;
 			} else {
 				if ((GameTools.Map.map_unit_occupy[newX, newY] != null &&
-				     !GameTools.Map.map_unit_occupy[newX, newY].EntityAbleToMoveHere(this))||
+				     !GameTools.Map.map_unit_occupy[newX, newY].IsEntityAbleToMoveHere(this))||
 				    (!TileTools.IsLand(GameTools.Map.TileMapData[newX, newY]))) {
 					current_target = Direction.None;
 					validInput = false;
@@ -166,7 +164,7 @@ public class Player : Entity {
 					validInput = false;
 				} else {
 				if ((GameTools.Map.map_unit_occupy[newX, newY] != null &&
-				     !GameTools.Map.map_unit_occupy[newX, newY].EntityAbleToMoveHere(this))||
+				     !GameTools.Map.map_unit_occupy[newX, newY].IsEntityAbleToMoveHere(this))||
 				    (!TileTools.IsLand(GameTools.Map.TileMapData[newX, newY]))) {
 							current_target = Direction.None;
 							validInput = false;
@@ -181,7 +179,7 @@ public class Player : Entity {
 				validInput = false;
 			} else {
 				if ((GameTools.Map.map_unit_occupy[newX, newY] != null &&
-				     !GameTools.Map.map_unit_occupy[newX, newY].EntityAbleToMoveHere(this))||
+				     !GameTools.Map.map_unit_occupy[newX, newY].IsEntityAbleToMoveHere(this))||
 				    (!TileTools.IsLand(GameTools.Map.TileMapData[newX, newY]))) {
 					current_target = Direction.None;
 					validInput = false;

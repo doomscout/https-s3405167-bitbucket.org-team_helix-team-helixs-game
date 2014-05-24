@@ -4,7 +4,7 @@ using System.Collections;
 public enum TileInteraction {Stand, Damage};
 public enum TileReward {HP, Money};
 
-public class BonusTile {
+public class BonusTile : Cleanable{
 	//stand on bonus tile for money
 	//stand on tile for hp
 	//attack tile for money
@@ -32,6 +32,7 @@ public class BonusTile {
 		this.x = x;
 		this.y = y;
 
+		CleanTools.GetInstance().SubscribeCleanable(this);
 		InitGameObject();
 	}
 
@@ -60,7 +61,7 @@ public class BonusTile {
 				Debug.Log ("Gained Money");
 			} else {
 				GameTools.Player.Health += amount;
-				ShowText("+" + amount, Color.red, 0);
+				ShowText("+" + amount, Color.blue, 0);
 				Debug.Log ("Gained health");
 			}
 			GameObject.Destroy(game_object);
@@ -111,4 +112,9 @@ public class BonusTile {
 		script.setColor(c);
 		o.transform.position = new Vector3(game_object.transform.position.x, 0, game_object.transform.position.z + 1.0f + offset/2.0f);
 	}
+
+	public new void CleanUp() {
+		GameObject.Destroy (game_object);
+	}
 }
+

@@ -39,7 +39,6 @@ public class Projectile : MonoBehaviour {
 
 	public void showDamage() {
 		if (!hasShownDamage) {
-
 			hasShownDamage = true;
 			s.cast();
 			ProjectileManager.getInstance().signalCompletion(gameObject);

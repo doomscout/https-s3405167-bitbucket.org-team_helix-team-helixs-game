@@ -160,7 +160,6 @@ public abstract class Entity : Cleanable {
 		}
 
 		float dmg = taken_spell.Power * modifier;
-		Health -= dmg;
 		return dmg;
 	}
 
@@ -187,7 +186,7 @@ public abstract class Entity : Cleanable {
 
 	public virtual void OnClickAction() {}
 
-	public virtual bool EntityAbleToMoveHere(Entity e) {
+	public virtual bool IsEntityAbleToMoveHere(Entity e) {
 		return false;
 	}
 

@@ -129,8 +129,8 @@ public class SimpleAI {
     }
 
     bool transitionInSeekRange() {
-		//return true;
-		return  unit.IsAggroed;
+		return true;
+		//return  unit.IsAggroed;
 
 				/*AStar
 				.fromPosition(unit.Map_position_x, unit.Map_position_y)
@@ -157,10 +157,10 @@ public class SimpleAI {
 	}
 
     bool transitionInAttackRange() {
-		return false;/*GraphSearch
+		return GraphSearch
 					.fromPosition(unit.Map_position_x, unit.Map_position_y)
-				.manhattanDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) <= 5;//unit.MainSpell.CastRange;
-				*/
+				.manhattanDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) <= unit.MainSpell.CastRange;
+				
 	}
 
 	bool transitionOutAttackRange() {

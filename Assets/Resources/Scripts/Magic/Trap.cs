@@ -60,6 +60,9 @@ public class Trap {
 		if (GameTools.Map.map_unit_occupy[x,y] != null) {
 			GameTools.Map.map_unit_occupy[x,y].GetHitByMagic(spell);
 		}
+		if (x == GameTools.Player.Map_position_x && y == GameTools.Player.Map_position_y) {
+			GameTools.Player.GetHitByMagic(spell);
+		}
 		//~Play animation please~
 		DetonateNeighbours();
 		Destroy ();

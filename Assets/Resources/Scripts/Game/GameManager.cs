@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour{
     GameInstance turn_manager;
 
 	Player player;
+	PlayerBase Base;
 
     GameObject main_menu;
     GameObject pause_menu;
@@ -155,7 +156,10 @@ public class GameManager : MonoBehaviour{
 		if (player == null) {
 			player = new Player();
 		}
-		turn_manager = new GameInstance(player);
+		if (Base == null) {
+			Base = new PlayerBase();
+		}
+		turn_manager = new GameInstance(player, Base);
 		Debug.Log("actionMenuExit");
 		//Temp placement of generate level
 		/* Disable this for now
@@ -199,7 +203,7 @@ public class GameManager : MonoBehaviour{
 		//Cleanup menu
         Destroy(winScreen);
 		CleanTools.GetInstance().CleanRemoveLevel();
-		turn_manager = new GameInstance(player);
+		turn_manager = new GameInstance(player, Base);
         Debug.Log("actionWinExit");
 	}
 
