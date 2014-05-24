@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerBase : Entity {
 
@@ -8,9 +9,11 @@ public class PlayerBase : Entity {
 
 	public int MaxRechargeTime {get;set;}
 	private int RechargeTime;
+	private List<Spell> BufferedSpells;
 
 	public PlayerBase() : base() {
 		GameTools.Base = this;
+		BufferedSpells = new List<Spell>();
 		width = 3;
 		height = 3;
 		MaxRechargeTime = 5;
@@ -60,9 +63,13 @@ public class PlayerBase : Entity {
 
 	public override float GetHitByMagic (Spell taken_spell) {
 		float dmg = base.GetHitByMagic (taken_spell);
+		if (BufferedSpells.Contains(taken_spell)) {
+			return 0.0f;
+		}
 		Health -= dmg;
 		base.ShowText("-" + dmg + " base hp", Color.red,2);
 		BattleLog.GetInstance().AddMessage("[Turn " + GameTools.GI.NumberOfTurnsUntilWin +"] Base took " + dmg + " damage.");
+		BufferedSpells.Add(taken_spell);
 		return dmg;
 	}
 
@@ -76,6 +83,8 @@ public class PlayerBase : Entity {
 	}
 
 	public void logic_tick() {
+		//flush buffered spells
+		BufferedSpells = new List<Spell>();
 		int castRange = 5;
 		if (RechargeTime >= MaxRechargeTime) {
 			for (int i = -castRange; i <= castRange; i++) {

@@ -10,7 +10,10 @@ public class BattleLog {
 
 	private BattleLog() {
 		Log = new Queue<string>();
-		MaxSize = 100;
+		for (int i = 0; i < 15; i++) {
+			Log.Enqueue("");
+		}
+		MaxSize = 16;
 	}
 
 	public static BattleLog GetInstance() {

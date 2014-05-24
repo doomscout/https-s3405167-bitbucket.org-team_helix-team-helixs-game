@@ -12,6 +12,7 @@ public static class GuiManager {
 	public static bool IsShowHelp = false;
 	public static bool isShowInventory = false;
 	public static bool IsShowHealthBar = false;
+	public static bool IsShowBattleLog = false;
 
 	public static void Reset() {
 	 	IsShowMainMenu = false;
@@ -22,5 +23,6 @@ public static class GuiManager {
 	 	IsShowHelp = false;
 	 	isShowInventory = false;
 	 	IsShowHealthBar = false;
+		IsShowBattleLog = false;
 	}
 }

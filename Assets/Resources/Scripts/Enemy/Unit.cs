@@ -132,17 +132,19 @@ public class Unit : Entity{
 	public override void CastMainSpell() {
 		base.CastMainSpell();
 		/* new animation */
-		ProjectileManager.getInstance().queueProjectile(MainSpell, game_object.transform.position, GameTools.Player.game_object.transform.position);
+
 		if (GraphSearch
 		    .fromPosition(Map_position_x, Map_position_y)
 		    .manhattanDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) <= MainSpell.CastRange) {
 			MainSpell.loadInfo(	new int[2]{ Map_position_x, Map_position_y},
 								new int[2] {GameTools.Player.Map_position_x, GameTools.Player.Map_position_y});
+			ProjectileManager.getInstance().queueProjectile(MainSpell, game_object.transform.position, GameTools.Player.game_object.transform.position);
 		} else if (GraphSearch
 		           .fromPosition(Map_position_x, Map_position_y)
 		           .manhattanDistanceFromTarget(GameTools.Base.Map_position_x, GameTools.Base.Map_position_y) <= MainSpell.CastRange){
 			MainSpell.loadInfo(	new int[2]{ Map_position_x, Map_position_y},
 								new int[2] {GameTools.Base.Map_position_x, GameTools.Base.Map_position_y});
+			ProjectileManager.getInstance().queueProjectile(MainSpell, game_object.transform.position, GameTools.Base.game_object.transform.position);
 		} else {
 			Debug.LogError("Not in either range");
 		}
