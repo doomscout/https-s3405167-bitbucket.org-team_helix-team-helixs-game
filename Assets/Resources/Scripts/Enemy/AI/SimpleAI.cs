@@ -98,7 +98,6 @@ public class SimpleAI {
 	int temp = 2;
 	void actionFollowRunning() {
 		List<Entity> neighbourhood = new List<Entity>();
-		int newX = 0, newY = 0;
 		for(int i = -temp; i <= temp; i++) {
 			for(int j = -temp; j <= temp; j++) {
 				if (!MapTools.IsOutOfBounds(unit.Map_position_x + i, unit.Map_position_y + j)) {
@@ -139,8 +138,6 @@ public class SimpleAI {
     }
 
 	bool transitionInFollowRange() {
-
-		int newX = 0, newY = 0;
 		for(int i = -temp; i <= temp; i++) {
 			for(int j = -temp; j <= temp; j++) {
 				if (!MapTools.IsOutOfBounds(unit.Map_position_x + i, unit.Map_position_y + j)) {
@@ -159,7 +156,10 @@ public class SimpleAI {
     bool transitionInAttackRange() {
 		return GraphSearch
 					.fromPosition(unit.Map_position_x, unit.Map_position_y)
-				.manhattanDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) <= unit.MainSpell.CastRange;
+					.manhattanDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) <= unit.MainSpell.CastRange ||
+				GraphSearch
+				.fromPosition(unit.Map_position_x, unit.Map_position_y)
+				.manhattanDistanceFromTarget(GameTools.Base.Map_position_x, GameTools.Base.Map_position_y) <= unit.MainSpell.CastRange;
 				
 	}
 

@@ -52,6 +52,9 @@ public class ProjectileCube : MonoBehaviour {
 		if (c.collider == GameTools.Player.game_object.collider) {
 			transform.parent.GetComponent<Projectile>().showDamage();
 		}
+		if (c.collider == GameTools.Base.game_object.collider) {
+			transform.parent.GetComponent<Projectile>().showDamage();
+		}
 	}
 
 	IEnumerator Fade() {

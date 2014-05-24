@@ -25,6 +25,9 @@ public class Trap {
 		if (MapTools.IsOutOfBounds(x, y)) {
 			return;
 		}
+		if (GameTools.Base.IsWithinBase(x,y)) {
+			return;
+		}
 		int tileTrapCount = GameTools.Map.TrapData[x, y].Count;
 		if (tileTrapCount > 0) {
 			if (GameTools.Map.TrapData[x, y][0].spell.SpellColour != this.spell.SpellColour) {

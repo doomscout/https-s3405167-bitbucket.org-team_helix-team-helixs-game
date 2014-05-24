@@ -113,7 +113,7 @@ public class BonusTile : Cleanable{
 		o.transform.position = new Vector3(game_object.transform.position.x, 0, game_object.transform.position.z + 1.0f + offset/2.0f);
 	}
 
-	public new void CleanUp() {
+	public void CleanUp() {
 		GameObject.Destroy (game_object);
 	}
 }

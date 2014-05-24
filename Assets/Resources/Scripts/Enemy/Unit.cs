@@ -7,26 +7,13 @@ public class Unit : Entity{
 	SimpleAI brain;
 	public bool IsAggroed = false;
 
-	Direction Alignment = Direction.None;
-
-	private List<float> list_of_damage_taken;
-	private List<Colour> list_of_colour_taken;
-
-	private int id = 0;
-
 	private Animator enemyAnimation;
-	private float countDown =3.0f;
 	
 	public Unit() : base(){
 		brain = new SimpleAI(this);
-
-
-		list_of_damage_taken = new List<float>();
-		list_of_colour_taken = new List<Colour>();
 	}
 
 	public Unit(int i) : this(){
-		id = i;
 		game_object.name = i + "";
 	}
 
@@ -136,6 +123,7 @@ public class Unit : Entity{
 		float dmg = base.GetHitByMagic(taken_spell);
 		Health -= dmg;
 		base.ShowText("-" + dmg, Color.black, 0);
+		BattleLog.GetInstance().AddMessage("[Turn " + GameTools.GI.NumberOfTurnsUntilWin +"] Unit took " + dmg + " damage.");
 		IsAggroed = true;
 		return dmg;
 	}
@@ -143,11 +131,22 @@ public class Unit : Entity{
 	/* Maybe make the unit search for a valid target before shooting, as opposed to always shooting at the player */
 	public override void CastMainSpell() {
 		base.CastMainSpell();
-		Alignment = Direction.None;
 		/* new animation */
 		ProjectileManager.getInstance().queueProjectile(MainSpell, game_object.transform.position, GameTools.Player.game_object.transform.position);
-		MainSpell.loadInfo(	new int[2]{ Map_position_x, Map_position_y},
-							new int[2] {GameTools.Player.Map_position_x, GameTools.Player.Map_position_y});
+		if (GraphSearch
+		    .fromPosition(Map_position_x, Map_position_y)
+		    .manhattanDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) <= MainSpell.CastRange) {
+			MainSpell.loadInfo(	new int[2]{ Map_position_x, Map_position_y},
+								new int[2] {GameTools.Player.Map_position_x, GameTools.Player.Map_position_y});
+		} else if (GraphSearch
+		           .fromPosition(Map_position_x, Map_position_y)
+		           .manhattanDistanceFromTarget(GameTools.Base.Map_position_x, GameTools.Base.Map_position_y) <= MainSpell.CastRange){
+			MainSpell.loadInfo(	new int[2]{ Map_position_x, Map_position_y},
+								new int[2] {GameTools.Base.Map_position_x, GameTools.Base.Map_position_y});
+		} else {
+			Debug.LogError("Not in either range");
+		}
+
 		enemyAnimation.SetBool ("Cast", true);
 
 	}
@@ -182,7 +181,6 @@ public class Unit : Entity{
 		goalDir.Normalize();
 
 		Heap<DirectionWeight> orderedList = new Heap<DirectionWeight>(new DirectionWeightComparer());
-		Direction calculatedDirection = Direction.None;
 
 		int newX = 0, newY = 0;
 		
@@ -303,7 +301,6 @@ public class Unit : Entity{
 
 	public void determineNextMove() {
 		list_directions = new List<Direction>();
-		int currVal = GameTools.Map.WeightedMap[Map_position_x, Map_position_y];
 		Heap<DirectionWeight> orderedList = new Heap<DirectionWeight>(new DirectionWeightComparer());
 
 		int newX, newY;
@@ -364,7 +361,6 @@ public class Unit : Entity{
 			    (GameTools.Player.Map_position_x != newX || GameTools.Player.Map_position_y != newY)) {
 				validMove = true;
 				list_directions.Add(d);
-				Alignment = d;
 				break;
 			}
 		}

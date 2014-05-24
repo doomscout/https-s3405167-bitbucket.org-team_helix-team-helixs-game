@@ -62,6 +62,7 @@ public class PlayerBase : Entity {
 		float dmg = base.GetHitByMagic (taken_spell);
 		Health -= dmg;
 		base.ShowText("-" + dmg + " base hp", Color.red,2);
+		BattleLog.GetInstance().AddMessage("[Turn " + GameTools.GI.NumberOfTurnsUntilWin +"] Base took " + dmg + " damage.");
 		return dmg;
 	}
 

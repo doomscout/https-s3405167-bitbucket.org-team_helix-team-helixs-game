@@ -60,6 +60,10 @@ public class Player : Entity {
 		GameTools.Player = null;
 	}
 
+	public void ReloadSpell() {
+		MainSpell = deckManager.peekTopSpell();
+	}
+
 	public override float GetHitByMagic(Spell taken_spell) {
 		float dmg = base.GetHitByMagic(taken_spell);
 		if (GameTools.Base.IsWithinBase(Map_position_x, Map_position_y)) {
@@ -67,6 +71,7 @@ public class Player : Entity {
 		} else {
 			Health -= dmg;
 			base.ShowText("-" + dmg + "Player HP", Color.red, 0);
+			BattleLog.GetInstance().AddMessage("[Turn " + GameTools.GI.NumberOfTurnsUntilWin +"] Player took " + dmg + " damage.");
 		}
 		return dmg;
 	}
@@ -78,14 +83,14 @@ public class Player : Entity {
 			return false;
 		}
 		Money -= s.SpellRating;
-		deckManager.inv.Add(s);
+		deckManager.deck.Add(s);
 		return true;
 	}
 	//Only the shop should call this
 	public bool SellSpell(Spell s) {
 		if (deckManager.deck.Contains(s)) {
-			Debug.Log ("Unequip spell before selling");
-			return false;
+			deckManager.deck.Remove(s);
+			deckManager.inv.Add(s);
 		}
 		if (!deckManager.inv.Contains(s)) {
 			Debug.Log ("Player does not have that spell to sell");
@@ -206,7 +211,7 @@ public class Player : Entity {
 		playerAnimation.SetBool ("Cast", true);
 		castedSpell = true;
 		deckManager.popTopSpell();
-		MainSpell = deckManager.peekTopSpell();
+		ReloadSpell();
 		return true;
 	}
 

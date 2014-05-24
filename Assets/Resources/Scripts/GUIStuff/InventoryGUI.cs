@@ -25,6 +25,9 @@ public class InventoryGUI : MonoBehaviour {
     }
  void OnGUI()
     {
+		if (!GuiManager.isShowInventory) {
+			return;
+		}
       //  GUI.skin = skin01;
 		if (GameTools.Player != null) {
             //DeckGUI

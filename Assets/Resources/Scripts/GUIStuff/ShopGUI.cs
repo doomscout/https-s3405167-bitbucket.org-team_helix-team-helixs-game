@@ -11,18 +11,29 @@ public class ShopGUI : MonoBehaviour {
    string s;
 	void Start()
     {
-        shop = GameTools.Shop;
-        deck = GameTools.Player.deckManager;
-        shapeArray = shop.SpellStock[0].Shape.shapeIntArray;
+        
     }
 
     void OnGUI()
     {
+		if (!GuiManager.IsShowShop) {
+			return;
+		}
+		if (shop == null) {
+			shop = GameTools.Shop;
+		}
+		if (deck == null) {
+			deck = GameTools.Player.deckManager;
+		}
+		if (shapeArray == null) {
+			shapeArray = shop.SpellStock[0].Shape.shapeIntArray;
+		}
+		
         //GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");
         GUI.Box(new Rect(Screen.width * 0.5f, 0,Screen.width * 0.5f, Screen.height ), "Shop" );
         //Shop Display
         float j =1;
-        for(int i = 0; i < shop.SpellStockMaxLevel; i++)
+        for(int i = 0; i < shop.SpellStock.Count; i++)
         {
             spellColour = shop.SpellStock[i].SpellColour.ToString();
             GUI.Box(new Rect(Screen.width * 0.6f, Screen.height * 0.1f * j, 150f, 50f ), "Spell" + shop.SpellStock[i].Shape.SpellShape + " " + spellColour);
@@ -62,7 +73,7 @@ public class ShopGUI : MonoBehaviour {
         //Display Player's Deck/Inventory
         j = 1;
         GUI.Box(new Rect(0, 0, Screen.width * 0.4f, Screen.height), "Deck/Inventory");
-        for(int k = 0; k < 10; k++)
+		for(int k = 0; k < deck.deck.Count; k++)
         {
             spellColour = deck.getDeckSpell(k).SpellColour.ToString();
             GUI.Box(new Rect(Screen.width * 0.1f, Screen.height * 0.1f * j, 300f, 50f ), "Spell" + deck.getDeckSpell(k).Shape.SpellShape + " " + spellColour);
@@ -73,5 +84,9 @@ public class ShopGUI : MonoBehaviour {
             }
             j += 1;
         }
+		if (GUI.Button(new Rect(Screen.width * 0.4f, Screen.height * 0.4f, 100f, 50f), "Leave")) {
+			GuiManager.IsShowShop = false;
+			GuiManager.IsShowWin = true;
+		}
     }
 }

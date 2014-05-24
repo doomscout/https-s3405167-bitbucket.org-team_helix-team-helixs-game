@@ -87,6 +87,7 @@ public class Spell {
 			if (MapTools.IsOutOfBounds(coordinates[i,0], coordinates[i,1])) {
 				continue;
 			}
+			isTrap = true;
 			if (GameTools.Map.map_unit_occupy[coordinates[i,0], coordinates[i,1]] != null) {
 				GameTools.Map.map_unit_occupy[coordinates[i,0], coordinates[i,1]].GetHitByMagic(this);
 				isTrap = false;
@@ -99,13 +100,15 @@ public class Spell {
 				GameTools.Player.GetHitByMagic(this);
 				isTrap = false;
 			}
-		}
-		if (isTrap) {
-			for (int i = 0; i < coordinates.GetLength(0); i++) {
-				int tempX = coordinates[i,0], tempY = coordinates[i,1];
-				new Trap(this, tempX, tempY);
+			if (GameTools.Base.IsWithinBase(coordinates[i,0], coordinates[i,1])) {
+				GameTools.Base.GetHitByMagic(this);
+				isTrap = false;
 			}
-		}
+			if (isTrap) {
+				new Trap(this, coordinates[i,0], coordinates[i,1]);
+			}
+		}			
+
 	}
 
 	public bool cast() {

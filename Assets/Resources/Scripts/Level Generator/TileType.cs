@@ -58,11 +58,9 @@ public static class TileTools {
 	}
 
 	public static TileType HeightMappingIncreaseTile(TileType value) {
-		int val = 0;
 		int i = 0;
 		for (i = 0; i < HeightMapping.Length; i++) {
 			if (value == HeightMapping[i]) {
-				val = i;
 				break;
 			}
 		}

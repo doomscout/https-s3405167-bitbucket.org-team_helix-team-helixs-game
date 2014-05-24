@@ -5,9 +5,14 @@ public class Lose : MonoBehaviour {
 
     void OnGUI()
     {
+		if (!GuiManager.IsShowLose) {
+			return;
+		}
         GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");
-        GUI.Box(new Rect(Screen.width * 0.4f, Screen.height * 0.4f, 180f, 100f), "YOU LOSE" +
-            "\nClick Left Arrow to Continue");
+		if(GUI.Button(new Rect(Screen.width * 0.45f, Screen.height * 0.45f,Screen.width * 0.1f, Screen.height * 0.1f), "YOU LOSE")) {
+			GuiManager.IsShowLose = false;
+			GameTools.GM.QuitGame = true;
+		}
         
     }
 }

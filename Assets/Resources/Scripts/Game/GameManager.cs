@@ -12,15 +12,10 @@ public class GameManager : MonoBehaviour{
 	Player player;
 	PlayerBase Base;
 
-    GameObject main_menu;
-    GameObject pause_menu;
-    GameObject winScreen;
-    GameObject loseScreen;
-    GameObject shopScreen;
-    bool Gameexit;
-    MainMenu temp;
-
-    Pause pauseTemp;
+    public bool GameStart;
+	public bool ResumeGame;
+	public bool QuitGame;
+	public bool GoNextLevel;
 
     TileMap map;
 	int numberOfWins = 0;
@@ -28,9 +23,28 @@ public class GameManager : MonoBehaviour{
 	// Use this for initialization
 	void Start () {
 		initSM();
+		initGui();
         
 		GameTools.GM = this;
 
+	}
+
+	void initGui() {
+		Instantiate(Resources.Load("Prefabs/Gui/MainMenuPrefab"));
+		Instantiate(Resources.Load("Prefabs/Gui/WinPrefab"));
+		Instantiate(Resources.Load("Prefabs/Gui/ShopPrefab"));
+		Instantiate(Resources.Load("Prefabs/Gui/PausePrefab"));
+		Instantiate(Resources.Load("Prefabs/Gui/LosePrefab"));
+		Instantiate(Resources.Load("Prefabs/Gui/HelpPrefab"));
+		Instantiate(Resources.Load("Prefabs/Gui/InventoryPrefab"));
+		Instantiate(Resources.Load("Prefabs/Gui/HealthBarPrefab"));
+	}
+
+	void ResetBools() {
+		GameStart = false;
+		ResumeGame = false;
+		QuitGame = false;
+		GoNextLevel = false;
 	}
 	
 	// Update is called once per frame
@@ -95,6 +109,7 @@ public class GameManager : MonoBehaviour{
 		menu2play.Transition_Action= new Action(actionTransitionClickedPlay);
 		win2play.Transition_Action = new Action(actionTransitionClickedContinue);
 		lose2menu.Transition_Action = new Action(actionTransitionClickedOkay);
+		paused2menu.Transition_Action = new Action(actionTransitionClickedQuit);
 
 		//give states the populated transitions
 		state_menu.addTransition(menu2play);
@@ -112,6 +127,7 @@ public class GameManager : MonoBehaviour{
 		state_menu.addAction(new Action(actionMenuRunning));
 		state_menu.Exit_action = new Action(actionMenuExit);
 		state_play.addAction(new Action(actionPlayRunning));
+		state_play.Exit_action = new Action(actionPlayExit);
 		state_paused.Entry_action = new Action(actionPausedEntry);
 		state_paused.Exit_action = new Action(actionPausedExit);
 		state_win.Entry_action = new Action(actionWinEntry);
@@ -135,24 +151,20 @@ public class GameManager : MonoBehaviour{
 	void actionMenuEntry() {
 		//Display Menu GUI
 		Debug.Log("actionMenuEntry");
-        main_menu = Instantiate(Resources.Load("Prefabs/MainMenuPrefab")) as GameObject;
-
+		this.ResetBools();
+		GuiManager.Reset();
+		GuiManager.IsShowMainMenu = true;
+		GuiManager.IsShowHelp = true;
 	}
 
 	void actionMenuRunning() {
 		//Remove previous level
 		//Load next level
-		//Debug.Log("actionMenuRunning");
-        temp = main_menu.GetComponent<MainMenu>();
-        Gameexit = temp.exit;
-        if (Gameexit) {
-            Debug.Log("actionMenyRunningGameexit");
-        }
 	}
 
 	void actionMenuExit() {
 		//cleanup menu
-		Gameexit = false;
+		GameStart = false;
 		if (player == null) {
 			player = new Player();
 		}
@@ -161,13 +173,7 @@ public class GameManager : MonoBehaviour{
 		}
 		turn_manager = new GameInstance(player, Base);
 		Debug.Log("actionMenuExit");
-		//Temp placement of generate level
-		/* Disable this for now
-		if (map == null) {
-			map = (Instantiate(Resources.Load("Prefabs/NewMap")) as GameObject).GetComponent<TileMap>();
-		}
-		map.BuildMesh();
-		*/
+		//TODO Temp placement of generate level
 	}
 
 	void actionTransitionClickedPlay() {
@@ -176,16 +182,18 @@ public class GameManager : MonoBehaviour{
 	}
 
 	void actionPlayRunning() {
-		//insert ingame state machine here
-		//Debug.Log("actionPlayRunning");
         turn_manager.tick();
-		//Debug.Log ("actionPlayRunning");
+		GuiManager.IsShowHealthBar = true;
+	}
+
+	void actionPlayExit() {
+		GuiManager.IsShowHealthBar = false;
 	}
 
 	void actionWinEntry() {
 		//Display Win GUI
-        winScreen = Instantiate(Resources.Load("Prefabs/Win")) as GameObject;
-        shopScreen = Instantiate(Resources.Load("Prefabs/ShopPrefab")) as GameObject;
+		GuiManager.IsShowWin = true;
+		GuiManager.IsShowHelp = false;
 		if (numberOfWins == 0) {
 			turn_manager.saveData();
 		}
@@ -201,9 +209,10 @@ public class GameManager : MonoBehaviour{
 
 	void actionWinExit() {
 		//Cleanup menu
-        Destroy(winScreen);
 		CleanTools.GetInstance().CleanRemoveLevel();
 		turn_manager = new GameInstance(player, Base);
+		GoNextLevel = false;
+		player.ReloadSpell();
         Debug.Log("actionWinExit");
 	}
 
@@ -214,27 +223,25 @@ public class GameManager : MonoBehaviour{
 
 	void actionPausedEntry() {
 		//Show paused GUI
-        pause_menu = Instantiate(Resources.Load("Prefabs/PausePrefab")) as GameObject;
 		Debug.Log("actionPausedEntry");
+		ResumeGame = false;
+		GuiManager.IsPause = true;
 	}
 
 
 	void actionPausedExit() {
 		//cleanup pause menu
-       
 		Debug.Log("actionPausedExit");
 	}
 
 	void actionLoseEntry() {
 		//Display Lose GUI
-        loseScreen = Instantiate(Resources.Load("Prefabs/Lose")) as GameObject;
 		Debug.Log("actionLoseEntry");
+		GuiManager.IsShowLose = true;
 	}
 
 	void actionLoseExit() {
 		//Hide GUI
-
-        Destroy(loseScreen);
 		CleanTools.GetInstance().CleanRemoveAll();
 		turn_manager = null;
 		player = null;
@@ -247,10 +254,16 @@ public class GameManager : MonoBehaviour{
 		//						If the player wants to keep the character, we can use a different transition).
 		Debug.Log("actionTransitionClickedOkay");
 	}
+
+	void actionTransitionClickedQuit() {
+		CleanTools.GetInstance().CleanRemoveAll();
+		turn_manager = null;
+		player = null;
+	}
 	
 	//dummy functions for trigger_condition
 	bool conditionClickedPlay() {
-		return Gameexit;
+		return GameStart;
 	}
 	
 	bool conditionPressedEsc() {
@@ -258,21 +271,19 @@ public class GameManager : MonoBehaviour{
 	}
 
 	bool conditionClickedQuit() {
-		return Input.GetKeyDown("left");
+		return QuitGame;
 	}
 
 	bool conditionClickedOkay() {
-		return Input.GetKeyDown("left");
+		return QuitGame;
 	}
 
 	bool conditionClickedResume() {
-        Debug.Log("conditionClickedResume");
-        pauseTemp =  pause_menu.GetComponent<Pause>();
-        return  pauseTemp.resume;
+		return ResumeGame;
 	}
 
 	bool conditionClickedContinue() {
-		return Input.GetKeyDown("left");
+		return GoNextLevel;
 	}
 
 	bool conditionWin() {

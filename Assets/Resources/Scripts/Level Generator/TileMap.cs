@@ -245,7 +245,6 @@ public class TileMap : MonoBehaviour, Cleanable {
 
 		bool changed = false;
 		int debugCount = 0;
-		int debugCount2 = 0;
 		do {
 			changed = false;
 			debugCount++;
