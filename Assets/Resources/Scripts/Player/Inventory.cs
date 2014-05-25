@@ -18,10 +18,12 @@ public class Inventory : List<Spell> {
 }
 
 public class Deck : List<Spell> {
-
+    public int size;
 	public Deck() {
 		for(int i = 0; i < 10; i++) {
 			this.Add(SpellGenerator.GetInstance().GetClosestSpell(30));
+
+            size++;
 		}
 	}
 

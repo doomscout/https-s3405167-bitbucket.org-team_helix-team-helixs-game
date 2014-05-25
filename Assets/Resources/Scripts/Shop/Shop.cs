@@ -50,6 +50,7 @@ public class Shop : Cleanable {
 
 	//Buy a spell from player
 	public bool TryToBuySpell(Player p, Spell s) {
+
 		return p.SellSpell(s);
 	}
 

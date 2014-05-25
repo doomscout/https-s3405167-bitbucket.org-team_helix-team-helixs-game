@@ -8,6 +8,8 @@ public class InventoryGUI : MonoBehaviour {
     public GUISkin skin02;
     public float screenWidth;
     public float screenHeight;
+    public int[,] shapeArray;
+    string s;
     Inventory inventory;
     ItemManager deck;
     void Update()
@@ -20,6 +22,7 @@ public class InventoryGUI : MonoBehaviour {
         inventory = GameTools.Player.deckManager.inv;
             deck = GameTools.Player.deckManager;
         }
+
         screenWidth = Screen.width;
         screenHeight = Screen.height;
     }
@@ -28,28 +31,99 @@ public class InventoryGUI : MonoBehaviour {
 		if (!GuiManager.isShowInventory) {
 			return;
 		}
-      //  GUI.skin = skin01;
+     GUI.skin = skin01;
+        GUI.skin.box.fontSize = 12;
 		if (GameTools.Player != null) {
             //DeckGUI
-            GUI.depth = 20;
-           
-            GUI.depth = 5;
-            GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.12f,100f,100f),"\nShape: " + deck.getDeckSpell(1).Shape.SpellShape 
-                    + "\nColour: " + deck.getDeckSpell(1).SpellColour.ToString() + "\nPower: " + deck.getDeckSpell(0).Power );
-            GUI.depth = 10;
-            GUI.Box(new Rect((Screen.width * 0.85f),0 ,100f,100f),"\nShape: " + deck.getDeckSpell(2).Shape.SpellShape 
-                    + "\nColour: " + deck.getDeckSpell(2).SpellColour.ToString() + "\nPower: " + deck.getDeckSpell(1).Power);
-           
-            GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.24f,100f,100f),"Current Spell:" + "\nShape: " + deck.peekTopSpell().Shape.SpellShape 
+       
+            for(int i = 0; i < 3; i++)
+            {
+            
+            
+
+            if (i == 2)
+                {
+            GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.24f*i,Screen.width * 0.1f,150f),"Current Spell:\n"
                     + "\nColour: " + deck.peekTopSpell().SpellColour.ToString() + "\nPower: " + deck.getDeckSpell(0).Power);
-            if(GUI.Button(new Rect((Screen.width * 0.85f), Screen.height * 0.36f, 150f, 30f ), "Add Spell to Inevntory"))
+                     
+                    shapeArray = deck.getDeckSpell(0).Shape.shapeIntArray;
+                    s = "";
+                    for(int l = 0;l < shapeArray.GetLength(0); l++)
+                    {
+                        for (int m = 0; m < shapeArray.GetLength(1); m++)
+                        {
+                            if (shapeArray[l,m] == 1)
+                            {
+                                s += "*"; 
+                            }
+                            else if (shapeArray[l,m] == 0)
+                            {
+                                s += " ";
+                            }
+                            else if (shapeArray[l, m] == -1)
+                            {
+                                s+="P";
+                            }
+                            else {
+                                s+= "M";
+                            }
+                        }
+                        s+= "\n";
+                    }
+                    GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.6f,Screen.width * 0.1f,100f), "Shape:\n" + s);
+                }
+
+                else
+                {
+                    shapeArray = deck.getDeckSpell(2-i).Shape.shapeIntArray;
+                    s = "";
+                    for(int l = 0;l < shapeArray.GetLength(0); l++)
+                    {
+                        for (int m = 0; m < shapeArray.GetLength(1); m++)
+                        {
+                            if (shapeArray[l,m] == 1)
+                            {
+                                s += "*"; 
+                            }
+                            else if (shapeArray[l,m] == 0)
+                            {
+                                s += " ";
+                            }
+                            else if (shapeArray[l, m] == -1)
+                            {
+                                s+="P";
+                            }
+                            else {
+                                s+= "M";
+                            }
+                        }
+                        s+= "\n";
+                    }
+                    GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.24f * i ,Screen.width * 0.1f,150f),
+                        "\nColour: " + deck.getDeckSpell(2-i).SpellColour.ToString() + "\nPower: " + deck.getDeckSpell(2-i).Power);
+                    if (i == 1)
+                    {
+                    GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.32f,Screen.width * 0.1f,100f), "Shape:\n" + s);
+                    }
+                    else
+                    {
+                        GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.08f,Screen.width * 0.1f,100f), "Shape:\n" + s);
+                    }
+                }
+            }
+           
+
+            /*if(GUI.Button(new Rect((Screen.width * 0.85f), Screen.height * 0.36f, 150f, 30f ), "Add Spell to Inevntory"))
             {
                 if (deck.deck.Count > 3){
                 GameTools.Player.deckManager.moveSpellDeckToInventory( GameTools.Player.deckManager.getDeckSpell(0));
                 }
              
             }
-          //  GUI.skin = skin02;
+            */
+            //Displays Player Money
+            GUI.Box(new Rect(Screen.width * 0.4f,Screen.height * 0.0f, 115f, 35f), "Money: " + GameTools.Player.Money);
+           GUI.skin = skin02;
             if (inventoryEnabled){
                 //Debug.Log("pressed i");
                 if (inventory.size != 0)

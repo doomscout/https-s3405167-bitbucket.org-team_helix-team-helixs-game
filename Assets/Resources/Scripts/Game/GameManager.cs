@@ -187,6 +187,7 @@ public class GameManager : MonoBehaviour{
 	void actionPlayRunning() {
         turn_manager.tick();
 		GuiManager.IsShowHealthBar = true;
+        GuiManager.isShowInventory = true;
 		GuiManager.IsShowBattleLog = true;
 	}
 
