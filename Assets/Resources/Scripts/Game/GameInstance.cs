@@ -69,11 +69,6 @@ public class GameInstance : Cleanable {
 		player.LoadIntoGame();
 
 		//populate map with enemies
-		for (int i = 0; i < 100; i++) {
-			Unit u = new Unit(i);
-			list_live_units.Add(u);
-			all_units.Add (u);
-		}
 	}
 
 	public void ToggleUnitIndicator(Unit u) {
@@ -251,6 +246,9 @@ public class GameInstance : Cleanable {
 
     void actionEnemyEntry() {
         //Determine enemy actions
+		foreach(EnemySpawner s in GameTools.Map.Spawners) {
+			s.Tick();
+		}
 		Heap<Unit> orderedList = new Heap<Unit>(new UnitDistanceComparer());
 		foreach (Unit unit in list_live_units) {
 			orderedList.insert(unit);

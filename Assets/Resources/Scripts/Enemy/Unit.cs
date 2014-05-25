@@ -8,6 +8,8 @@ public class Unit : Entity{
 	public bool IsAggroed = false;
 
 	private Animator enemyAnimation;
+	private int possibleX = 0;
+	private int possibleY = 0;
 	
 	public Unit() : base(){
 		brain = new SimpleAI(this);
@@ -17,15 +19,23 @@ public class Unit : Entity{
 		game_object.name = i + "";
 	}
 
-	protected override void InitMapPosition() {
-		Map_position_x = Random.Range(0, GameTools.Map.size_x);
-		Map_position_y = Random.Range(0, GameTools.Map.size_z);
+	public Unit(int x, int y) : base(x,y) {
+		brain = new SimpleAI(this);
+		Map_position_x = x;
+		Map_position_y = y;
+	}
 
-		while (GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] != null || 
-		       (!TileTools.IsLand(GameTools.Map.TileMapData[Map_position_x, Map_position_y])) ||
-		       GraphSearch.fromPosition(Map_position_x, Map_position_y).manhattanDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) < 10) {
+	protected override void InitMapPosition() {
+		if (Map_position_x == 0 && Map_position_y == 0) {
 			Map_position_x = Random.Range(0, GameTools.Map.size_x);
 			Map_position_y = Random.Range(0, GameTools.Map.size_z);
+
+			while (GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] != null || 
+			       (!TileTools.IsLand(GameTools.Map.TileMapData[Map_position_x, Map_position_y])) ||
+			       GraphSearch.fromPosition(Map_position_x, Map_position_y).manhattanDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) < 10) {
+				Map_position_x = Random.Range(0, GameTools.Map.size_x);
+				Map_position_y = Random.Range(0, GameTools.Map.size_z);
+			}
 		}
 	}
 	

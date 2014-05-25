@@ -19,8 +19,9 @@ public class BattleLogGui : MonoBehaviour {
 		if (!GuiManager.IsShowBattleLog) {
 			return;
 		}
+		//Dark box that is the same dimensions as battle log so that battlelog has dark background.
+		GUI.Box(new Rect(0, Screen.height * 0.8f, Screen.width * 0.3f, Screen.height * 0.20f), "");
 		string[] log = BattleLog.GetInstance().Log.ToArray();
-
 		scrollPos = GUI.BeginScrollView(new Rect(0, Screen.height * 0.8f, Screen.width * 0.3f, Screen.height * 0.20f), scrollPos, new Rect(0, 0, Screen.width * 0.3f - 25, 400));
 
 		for (int i = 0; i < log.Length; i++) {

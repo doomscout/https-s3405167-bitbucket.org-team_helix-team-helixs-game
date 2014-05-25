@@ -54,7 +54,6 @@ public class ProjectileCube : MonoBehaviour {
 		} else if (c.collider == GameTools.Base.game_object.collider) {
 			transform.parent.GetComponent<Projectile>().showDamage();
 		} else if (c.collider == c.transform.GetComponent<SphereCollider>()) {
-			Debug.Log ("hit sphere collider");
 			transform.parent.GetComponent<Projectile>().showDamage();
 		}
 	}
