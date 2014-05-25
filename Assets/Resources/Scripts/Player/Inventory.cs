@@ -21,7 +21,7 @@ public class Deck : List<Spell> {
 
 	public Deck() {
 		for(int i = 0; i < 10; i++) {
-			this.Add(new Spell(ShapeType.PCG_FAR));
+			this.Add(SpellGenerator.GetInstance().GetClosestSpell(30));
 		}
 	}
 

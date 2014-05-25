@@ -16,7 +16,7 @@ public class Spell {
 	public Spell () {
 		SpellColour = ColourManager.getRandomColour();
 		Shape = new Shape();
-		Power = Random.Range(7, 10);
+		Power = Random.Range(1, 10);
 		SpellEffect = new StatusEffect (	0, //Random.Range(0, 10), /* tick count */
 		                   					Random.Range(1, 5),  /* power */
 		                                	(StatusType)Random.Range(0, System.Enum.GetNames(typeof(StatusType)).Length - 1)); //TODO:No reduced defence for now

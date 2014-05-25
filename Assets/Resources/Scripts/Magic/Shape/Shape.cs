@@ -47,6 +47,8 @@ public class Shape {
 			CastRange = Random.Range(3, 10);
 			break;
 		}
+
+		SetNumberOfOnes(shapeIntArray);
 	}
 
 	private void setRandomShape() {
@@ -55,19 +57,7 @@ public class Shape {
 
 	}
 
-	public int[,] toCoords(int[] centre, int[] mouse) {
-		return shapeToWorldSpace(centre, mouse, shapeIntArray);
-	}
-
-	//this method assumes that if isplayercentered then intShape is pointing to the right
-	private int[,] shapeToWorldSpace (int[] centre, int[] mouse, int[,] intShape) {
-		int c_x = centre[0];
-		int c_y = centre[1];
-		int x = mouse[0] - c_x;
-		int y = mouse[1] - c_y;
-		int count = 0;
-		int[,] coordArray;
-
+	private void SetNumberOfOnes(int[,] intShape) {
 		numberOfOnes = 0;
 		//Count the number of ones in the shape
 		for (int i = 0; i < intShape.GetLength(0); i++) {
@@ -82,6 +72,20 @@ public class Shape {
 				}
 			}
 		}
+	}
+
+	public int[,] toCoords(int[] centre, int[] mouse) {
+		return shapeToWorldSpace(centre, mouse, shapeIntArray);
+	}
+
+	//this method assumes that if isplayercentered then intShape is pointing to the right
+	private int[,] shapeToWorldSpace (int[] centre, int[] mouse, int[,] intShape) {
+		int c_x = centre[0];
+		int c_y = centre[1];
+		int x = mouse[0] - c_x;
+		int y = mouse[1] - c_y;
+		int count = 0;
+		int[,] coordArray;
 
 		/* this code imposes a limit on range */
 		if (!IsPlayerCentered && Mathf.Abs (x) + Mathf.Abs(y) > CastRange) {
