@@ -29,8 +29,7 @@ public class SpellIndicator : Cleanable{
 
 	public void showCastAnimation() {
 		for (int i = 0; i < refill; i++) {
-			Indicator script = pool[i].transform.GetComponent<Indicator>();
-			script.TriggerAnimation();
+			GameObject.Destroy(pool[i]);
 		}
 		refillPool();
 		IsShowingIndicator = false;

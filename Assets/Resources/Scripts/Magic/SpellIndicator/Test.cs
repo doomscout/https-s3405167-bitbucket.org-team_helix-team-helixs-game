@@ -6,6 +6,7 @@ public class Test : MonoBehaviour {
 	public bool Done {get; private set;}
 	public bool Triggered {get; set;}
 	public Color colour {get;set;}
+	private bool Updated = false;
 
 	// Use this for initialization
 	void Start () {
@@ -26,10 +27,15 @@ public class Test : MonoBehaviour {
 	public void changeColour(Color ca) {
 		ca.a = 0.7f;
 		renderer.material.color = ca;
+		colour = ca;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if (!Updated) {
+			renderer.material.color = colour;
+			Updated = true;
+		}
 		if (Triggered && !Done) {
 			rigidbody.detectCollisions = true;
 			rigidbody.useGravity = true;

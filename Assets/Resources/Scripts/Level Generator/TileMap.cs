@@ -242,7 +242,7 @@ public class TileMap : MonoBehaviour, Cleanable {
 
 	public void UpdateWeightMap() {
 		WeightedMap = (int[,])PassableMapData.Clone();
-		GraphSearch	.fromPosition(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y)
+		GraphSearch	.fromPosition(GameTools.Base.Map_position_x, GameTools.Base.Map_position_y)
 					.BreadthFirstFlood(WeightedMap, GraphSearch.DefaultPassable, GraphSearch.FillWeights);
 	}
 

@@ -45,10 +45,11 @@ public class Trap {
 
 	private void InitGameObject() {
 		if (game_object == null) {
-			game_object = Object.Instantiate(Resources.Load("Prefabs/FlatCube", typeof(GameObject))) as GameObject;
+			game_object = Object.Instantiate(Resources.Load("Prefabs/Cube4", typeof(GameObject))) as GameObject;
 		}
 		game_object.transform.position = new Vector3(x, ((float)count)/10.0f, y);
-		game_object.renderer.material.color = ColourManager.toColor(spell.SpellColour);
+		Indicator script = game_object.GetComponent<Indicator>();
+		script.changeColour(ColourManager.toColor(spell.SpellColour));
 	}
 
 	public void Detonate() {
@@ -66,9 +67,9 @@ public class Trap {
 		if (x == GameTools.Player.Map_position_x && y == GameTools.Player.Map_position_y) {
 			GameTools.Player.GetHitByMagic(spell);
 		}
-		//~Play animation please~
+		Indicator script = game_object.transform.GetComponent<Indicator>();
+		script.TriggerAnimation();
 		DetonateNeighbours();
-		Destroy ();
 	}
 
 	public void Destroy() {

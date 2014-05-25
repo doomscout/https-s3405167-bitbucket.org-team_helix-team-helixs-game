@@ -15,7 +15,7 @@ public class Player : Entity {
 		spellIndicator.link(PlayerCastIndicator);
 
 		GameTools.Player = this;
-		SpellGenerator.GetInstance().PrintAllSpells();
+		//SpellGenerator.GetInstance().PrintAllSpells();
 	}
 
 	protected override void InitStats() {
