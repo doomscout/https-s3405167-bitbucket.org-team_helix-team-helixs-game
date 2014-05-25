@@ -6,7 +6,7 @@ public class Player : Entity {
 	public ItemManager deckManager;
 	private Animator playerAnimation;
 	private bool castedSpell = false;
-	private SpellIndicator spellIndicator;
+	public SpellIndicator spellIndicator;
 	private CastRangeIndicator PlayerCastIndicator;
 
 	public Player() : base(){

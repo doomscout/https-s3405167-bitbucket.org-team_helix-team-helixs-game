@@ -12,6 +12,7 @@ public class InventoryGUI : MonoBehaviour {
     string s;
     Inventory inventory;
     ItemManager deck;
+	bool IsSpellSelected = false;
     void Update()
     {    
 
@@ -31,7 +32,7 @@ public class InventoryGUI : MonoBehaviour {
 		if (!GuiManager.isShowInventory) {
 			return;
 		}
-     GUI.skin = skin01;
+     	GUI.skin = skin01;
         GUI.skin.box.fontSize = 12;
 		if (GameTools.Player != null) {
             //DeckGUI
@@ -43,8 +44,15 @@ public class InventoryGUI : MonoBehaviour {
 
             if (i == 2)
                 {
-            GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.24f*i,Screen.width * 0.1f,150f),"Current Spell:\n"
-                    + "\nColour: " + deck.peekTopSpell().SpellColour.ToString() + "\nPower: " + deck.getDeckSpell(0).Power);
+					if (GameTools.Player.spellIndicator.IsShowingIndicator) {
+						GUI.skin = skin02;
+						GUI.skin.box.fontSize = 12;
+					}
+            GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.24f*i,Screen.width * 0.1f,220f),
+					        "Current Spell:\n" + 
+					        "\nColour: " + deck.peekTopSpell().SpellColour.ToString() + 
+					        "\nPower: " + deck.getDeckSpell(0).Power + 
+					        "\nCastRange " + deck.deck[0].CastRange);
                      
                     shapeArray = deck.getDeckSpell(0).Shape.shapeIntArray;
                     s = "";
@@ -54,23 +62,25 @@ public class InventoryGUI : MonoBehaviour {
                         {
                             if (shapeArray[l,m] == 1)
                             {
-                                s += "*"; 
+                                s += "* "; 
                             }
                             else if (shapeArray[l,m] == 0)
                             {
-                                s += " ";
+                                s += "  ";
                             }
                             else if (shapeArray[l, m] == -1)
                             {
-                                s+="P";
+                                s+="P ";
                             }
                             else {
-                                s+= "M";
+                                s+= "M ";
                             }
                         }
                         s+= "\n";
                     }
-                    GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.6f,Screen.width * 0.1f,100f), "Shape:\n" + s);
+                    GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.59f,Screen.width * 0.1f,120f), "Shape:\n" + s);
+					GUI.skin = skin01;
+					GUI.skin.box.fontSize = 12;
                 }
 
                 else
@@ -83,31 +93,33 @@ public class InventoryGUI : MonoBehaviour {
                         {
                             if (shapeArray[l,m] == 1)
                             {
-                                s += "*"; 
+                                s += "* "; 
                             }
                             else if (shapeArray[l,m] == 0)
                             {
-                                s += " ";
+                                s += "  ";
                             }
                             else if (shapeArray[l, m] == -1)
                             {
-                                s+="P";
+                                s+="P ";
                             }
                             else {
-                                s+= "M";
+                                s+= "M ";
                             }
                         }
                         s+= "\n";
                     }
-                    GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.24f * i ,Screen.width * 0.1f,150f),
-                        "\nColour: " + deck.getDeckSpell(2-i).SpellColour.ToString() + "\nPower: " + deck.getDeckSpell(2-i).Power);
+                    GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.24f * i ,Screen.width * 0.1f,190f),
+                        	"Colour: " + deck.getDeckSpell(2-i).SpellColour.ToString() + 
+					        "\nPower: " + deck.getDeckSpell(2-i).Power + 
+					        "\nCastRange " + deck.deck[0].CastRange);
                     if (i == 1)
                     {
-                    GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.32f,Screen.width * 0.1f,100f), "Shape:\n" + s);
+                    GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.32f,Screen.width * 0.1f,120f), "Shape:\n" + s);
                     }
                     else
                     {
-                        GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.08f,Screen.width * 0.1f,100f), "Shape:\n" + s);
+                        GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.08f,Screen.width * 0.1f,120f), "Shape:\n" + s);
                     }
                 }
             }

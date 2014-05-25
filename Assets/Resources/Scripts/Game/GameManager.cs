@@ -193,6 +193,7 @@ public class GameManager : MonoBehaviour{
 
 	void actionPlayExit() {
 		GuiManager.IsShowHealthBar = false;
+		GuiManager.isShowInventory = false;
 		GuiManager.IsShowBattleLog = false;
 	}
 
