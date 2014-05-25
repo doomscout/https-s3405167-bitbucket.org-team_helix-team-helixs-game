@@ -55,6 +55,11 @@ public class PlayerBase : Entity {
 		game_object.transform.position = new Vector3(Map_position_x, 0.1f, Map_position_y);
 	}
 
+	protected override void InitStats() {
+		Max_Health = 100.0f;
+		Health = Max_Health;
+	}
+
 	public void LoadIntoGame() {
 		InitMapPosition();
 		InitGameObject();

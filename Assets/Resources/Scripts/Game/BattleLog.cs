@@ -9,11 +9,15 @@ public class BattleLog {
 	public int MaxSize {get; set;}
 
 	private BattleLog() {
+		MaxSize = 16;
+		Restart();
+	}
+
+	public void Restart() {
 		Log = new Queue<string>();
-		for (int i = 0; i < 15; i++) {
+		for (int i = 0; i < MaxSize - 1; i++) {
 			Log.Enqueue("");
 		}
-		MaxSize = 16;
 	}
 
 	public static BattleLog GetInstance() {

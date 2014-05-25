@@ -43,7 +43,7 @@ public class ProjectileManager : Cleanable{
 		for (int i = 0; i < count; i++) {
 			GameObject.Destroy(projectiles[i]);
 		}
-		GameTools.GameCamera.moveCameraNormal();
+		//GameTools.GameCamera.moveCameraNormal();
 
 		init();
 	}
@@ -63,12 +63,12 @@ public class ProjectileManager : Cleanable{
 		}
 		if (projectiles.Count == 0) {
 			init();
-			GameTools.GameCamera.moveCameraNormal();
+			//GameTools.GameCamera.moveCameraNormal();
 		} else {
 			totalTime -= Time.deltaTime;
 			if (totalTime < 0) {
 				init ();
-				GameTools.GameCamera.moveCameraNormal();
+				//GameTools.GameCamera.moveCameraNormal();
 			}
 		}
 	}

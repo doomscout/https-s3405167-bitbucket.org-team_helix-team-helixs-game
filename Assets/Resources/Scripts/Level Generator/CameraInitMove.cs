@@ -66,6 +66,10 @@ public class CameraInitMove : MonoBehaviour {
 		}
 	}
 
+	public void MoveCameraToPlayer() {
+		transform.position = new Vector3(GameTools.Player.Map_position_x, 10f, GameTools.Player.Map_position_y);
+	}
+
 	public void moveCameraProjectiles(Vector3 minV, Vector3 maxV) {
 		newPosition = (minV + maxV)/2.0f;
 		float y = (maxV.z-newPosition.z)/ Mathf.Tan((camera.fieldOfView/2.0f) * Mathf.PI / 180.0f);

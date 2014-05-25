@@ -173,6 +173,8 @@ public class GameManager : MonoBehaviour{
 			Base = new PlayerBase();
 		}
 		turn_manager = new GameInstance(player, Base);
+		BattleLog.GetInstance().Restart();
+		GameTools.GameCamera.MoveCameraToPlayer();
 		Debug.Log("actionMenuExit");
 		//TODO Temp placement of generate level
 	}
@@ -216,6 +218,8 @@ public class GameManager : MonoBehaviour{
 		turn_manager = new GameInstance(player, Base);
 		GoNextLevel = false;
 		player.ReloadSpell();
+		BattleLog.GetInstance().Restart();
+		GameTools.GameCamera.MoveCameraToPlayer();
         Debug.Log("actionWinExit");
 	}
 
@@ -295,7 +299,7 @@ public class GameManager : MonoBehaviour{
 
 	bool conditionLose() {
 		//return  Input.GetKeyDown("down");
-		return turn_manager.IsAnimationDone && GameTools.Player.IsDead();
+		return turn_manager.IsAnimationDone && GameTools.Player.IsDead() || GameTools.Base.IsDead();
 	}
 
     bool conditionTrue() {
