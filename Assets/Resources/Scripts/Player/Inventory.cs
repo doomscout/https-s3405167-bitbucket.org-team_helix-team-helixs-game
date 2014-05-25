@@ -18,10 +18,11 @@ public class Inventory : List<Spell> {
 }
 
 public class Deck : List<Spell> {
-
+    public int size;
 	public Deck() {
 		for(int i = 0; i < 10; i++) {
 			this.Add(new Spell(ShapeType.PCG_FAR));
+            size++;
 		}
 	}
 
