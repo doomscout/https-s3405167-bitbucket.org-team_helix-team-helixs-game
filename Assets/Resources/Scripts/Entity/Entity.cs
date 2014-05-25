@@ -30,6 +30,16 @@ public abstract class Entity : Cleanable {
 	public GameObject game_object {get; protected set;}
 
 	protected Entity() {
+		InitAll();
+	}
+
+	protected Entity(int x, int y) {
+		Map_position_x = x;
+		Map_position_y = y;
+		InitAll();
+	}
+
+	private void InitAll() {
 		//Stats
 		InitStats();
 		//Animation

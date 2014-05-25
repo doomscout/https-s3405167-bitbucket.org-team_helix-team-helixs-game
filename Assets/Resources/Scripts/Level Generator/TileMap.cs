@@ -28,6 +28,8 @@ public class TileMap : MonoBehaviour, Cleanable {
 	public List<Trap>[,] TrapData {get; set;}
 	public int[,] PassableMapData {get; private set;}
 	public int[,] WeightedMap {get; private set;}
+	public EnemySpawner[,] SpawnerMap {get;set;}
+	public List<EnemySpawner> Spawners {get;set;}
 
 	// Use this for initialization
 	void Start () {
@@ -39,6 +41,8 @@ public class TileMap : MonoBehaviour, Cleanable {
 			map_unit_occupy = new Unit[size_x,size_z];
 			TileMapData = new TileType[size_x,size_z];
 			WeightedMap =  new int[size_x, size_z];
+			SpawnerMap = new EnemySpawner[size_x,size_z];
+			Spawners = new List<EnemySpawner>();
 			this.transform.Translate(0, 0, size_z);
 			this.transform.Translate(-0.5f, 0f, -0.5f);
 			GameTools.Map = this;
@@ -47,6 +51,7 @@ public class TileMap : MonoBehaviour, Cleanable {
 			BuildMesh();
 			GenerateBonusTiles();
 			InitTrapMap();
+			InitSpawners();
 		}
 	}
 
@@ -81,6 +86,24 @@ public class TileMap : MonoBehaviour, Cleanable {
 		for (int i = 0; i < size_x; i++) {
 			for (int j = 0; j < size_z; j++) {
 				TrapData[i,j] = new List<Trap>();
+			}
+		}
+	}
+
+	private void InitSpawners() {
+		int SpawnerCount = 10;
+
+		while (SpawnerCount > 0) {
+			int randX = Random.Range(0, size_x);
+			int randY = Random.Range(0, size_z);
+			if (TileTools.IsLand(TileMapData[randX, randY])) {
+				if (BonusTileData[randX, randY] == null && 
+				    SpawnerMap[randX, randY] == null) {
+					SpawnerCount--;
+					EnemySpawner e = new EnemySpawner(randX, randY);
+					SpawnerMap[randX, randY] = e;
+					Spawners.Add(e);
+				}
 			}
 		}
 	}

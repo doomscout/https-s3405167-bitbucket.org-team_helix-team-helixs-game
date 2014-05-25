@@ -82,13 +82,14 @@ public class Spell {
 		int[,] coordinates = Shape.toCoords(origin, position);
 		bool isTrap = true;
 
-
 		for (int i = 0; i < coordinates.GetLength(0); i++) {
+
 			if (MapTools.IsOutOfBounds(coordinates[i,0], coordinates[i,1])) {
 				continue;
 			}
 			isTrap = true;
 			if (GameTools.Map.map_unit_occupy[coordinates[i,0], coordinates[i,1]] != null) {
+
 				GameTools.Map.map_unit_occupy[coordinates[i,0], coordinates[i,1]].GetHitByMagic(this);
 				isTrap = false;
 			}

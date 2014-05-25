@@ -60,6 +60,11 @@ public class PlayerBase : Entity {
 		Health = Max_Health;
 	}
 
+	protected override void InitMagic () {
+		base.InitMagic ();
+		MainSpell.Shape.CastRange = 15;
+	}
+
 	public void LoadIntoGame() {
 		InitMapPosition();
 		InitGameObject();
@@ -90,12 +95,15 @@ public class PlayerBase : Entity {
 	public void logic_tick() {
 		//flush buffered spells
 		BufferedSpells = new List<Spell>();
-		int castRange = 5;
+		int castRange = 15;
 		if (RechargeTime >= MaxRechargeTime) {
 			for (int i = -castRange; i <= castRange; i++) {
 				for (int j = castRange - Mathf.Abs(i); j >= -(castRange - Mathf.Abs(i)); j--) {
 					if (!MapTools.IsOutOfBounds (Map_position_x + i, Map_position_y + j) && GameTools.Map.map_unit_occupy[Map_position_x +  i,Map_position_y + j] != null) {
-						GameTools.Map.map_unit_occupy[Map_position_x + i, Map_position_y + j].GetHitByMagic(MainSpell);
+						MainSpell.loadInfo(	new int[2]{ Map_position_x, Map_position_y},
+											new int[2] {Map_position_x + i, Map_position_y + j});
+						ProjectileManager.getInstance().queueProjectile(MainSpell, 	game_object.transform.position, 
+						                                                			GameTools.Map.map_unit_occupy[Map_position_x +  i,Map_position_y + j].game_object.transform.position);
 						RechargeTime = 0;
 						i = castRange + 1;
 						j = castRange + 1;
