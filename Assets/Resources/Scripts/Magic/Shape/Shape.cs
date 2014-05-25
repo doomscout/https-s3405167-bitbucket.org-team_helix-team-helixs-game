@@ -5,7 +5,7 @@ public enum ShapeType {Line, Circle, Single, Cone, PCG_NEAR, PCG_FAR }
 
 public class Shape {
 	public ShapeType SpellShape {get; private set;}
-	public int CastRange {get; private set;}
+	public int CastRange {get; set;}
 	public bool IsPlayerCentered;
 	public int numberOfOnes;
 	public int[,] shapeIntArray;

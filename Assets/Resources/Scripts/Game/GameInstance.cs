@@ -152,7 +152,6 @@ public class GameInstance : Cleanable {
 
 	void actionPlayerEntry() {
 		player.Prelogic_tick();
-		Base.logic_tick();
 	}
 	                        
     void actionPlayerRunning() {
@@ -190,7 +189,7 @@ public class GameInstance : Cleanable {
 		player.FinishedAnimation = false;
         validInput = false;
 		NumberOfTurnsUntilWin--;
-		Debug.Log ("NumberOfTurnsUntilWin: " + NumberOfTurnsUntilWin);
+		Base.logic_tick();
     }
 
 	void actionAnimationEntry() {
