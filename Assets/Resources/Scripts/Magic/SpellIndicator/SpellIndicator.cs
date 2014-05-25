@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class SpellIndicator : Cleanable{
 	private GameObject[] pool;
@@ -8,10 +9,13 @@ public class SpellIndicator : Cleanable{
 	private int max_pool_size;
 	private CastRangeIndicator RangeIndicator;
 
+	private List<int> TilesToAnimate;
+
 	public SpellIndicator(int maxPoolSize) {
 		max_pool_size = maxPoolSize;
 		initSpellIndicator();
 		CleanTools.GetInstance().SubscribeCleanable(this, true);
+		TilesToAnimate = new List<int>();
 	}
 
 	public void CleanUp() {
@@ -29,7 +33,14 @@ public class SpellIndicator : Cleanable{
 
 	public void showCastAnimation() {
 		for (int i = 0; i < refill; i++) {
-			GameObject.Destroy(pool[i]);
+			if (TilesToAnimate.Contains(i)) {
+				Indicator script = pool[i].transform.GetComponent<Indicator>();
+				script.TriggerAnimation();
+				TilesToAnimate.Remove(i);
+				Debug.Log ("Animating");
+			} else {
+				GameObject.Destroy(pool[i]);
+			}
 		}
 		refillPool();
 		IsShowingIndicator = false;
@@ -87,6 +98,20 @@ public class SpellIndicator : Cleanable{
 			pool[i].transform.position = new Vector3(coordinates[i,0], 0.02f, coordinates[i,1]);
 			Indicator script = pool[i].GetComponent<Indicator>();
 			script.changeColour(ColourManager.toColor(spell.SpellColour));
+
+			if (!MapTools.IsOutOfBounds(coordinates[i,0], coordinates[i,1]) &&
+			    (GameTools.Map.map_unit_occupy[coordinates[i,0], coordinates[i,1]] != null ||
+			    (GameTools.Player.Map_position_x == coordinates[i,0] && GameTools.Player.Map_position_y == coordinates[i,1]) ||
+			    GameTools.Base.IsWithinBase(coordinates[i,0], coordinates[i,1]))) {
+			
+				if (!TilesToAnimate.Contains(i)) {
+					TilesToAnimate.Add (i);
+				}
+			} else {
+				if (TilesToAnimate.Contains(i)) {
+					TilesToAnimate.Remove(i);
+				}
+			}
 		}
 		if (coordinates.GetLength(0) != 0) {
 			refill = coordinates.GetLength(0);

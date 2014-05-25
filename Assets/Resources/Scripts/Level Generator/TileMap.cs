@@ -252,7 +252,6 @@ public class TileMap : MonoBehaviour, Cleanable {
 
 		//Figure out which is ocrean water and which tiles is pool water
 		int count = GraphSearch.fromPosition(0, 0).DepthFirstFlood(tempIntMap, new CheckPassable(GraphSearch.DefaultNotPassable), new ActionOnVisit(MarkAsOceanWater)).CountedTiles;
-		Debug.Log("counted  " + count);
 		for (int i = 0; i < size_x; i++) {
 			for (int j = 0; j < size_z; j++) {
 				if (tempIntMap[i,j] == -1) {

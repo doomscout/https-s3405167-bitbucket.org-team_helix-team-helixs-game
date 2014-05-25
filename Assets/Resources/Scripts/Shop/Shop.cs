@@ -12,7 +12,6 @@ public class Shop : Cleanable {
 		RefreshStock();
 		GameTools.Shop = this;
 		CleanTools.GetInstance().SubscribeCleanable(this);
-		Debug.Log ("inited shop");
 	}
 
 	public void RefreshStock() {

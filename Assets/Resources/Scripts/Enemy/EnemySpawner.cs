@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemySpawner {
+public class EnemySpawner : Cleanable{
 
 	int x;
 	int y;
@@ -19,6 +19,11 @@ public class EnemySpawner {
 		RechargeTime = MaxRechargeTime;
 		game_object = Object.Instantiate(Resources.Load("Prefabs/FlatCube", typeof(GameObject))) as GameObject;
 		game_object.transform.position = new Vector3(x, 0.01f, y);
+		CleanTools.GetInstance().SubscribeCleanable(this);
+	}
+
+	public void CleanUp() {
+		GameObject.Destroy(game_object);
 	}
 
 	public void Tick() {

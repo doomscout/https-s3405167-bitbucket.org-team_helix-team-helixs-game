@@ -254,6 +254,7 @@ public class GameManager : MonoBehaviour{
 		CleanTools.GetInstance().CleanRemoveAll();
 		turn_manager = null;
 		player = null;
+		Base = null;
 		Debug.Log("actionLoseExit");
 
 	}

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class CastRangeIndicator {
+public class CastRangeIndicator : Cleanable{
 
     private List<GameObject> Pool;
     private Dictionary<Pair, int> CoOrds;
@@ -13,6 +13,8 @@ public class CastRangeIndicator {
         this.CoOrds = new Dictionary<Pair, int>();
         this.Pool = new List<GameObject>();
 		this.ToggledEntities = new List<Entity>();
+
+		CleanTools.GetInstance().SubscribeCleanable(this);
     }
 
     public void ShowIndicators() {
@@ -41,6 +43,12 @@ public class CastRangeIndicator {
             count++;
         }
     }
+
+	public void CleanUp() {
+		for (int i = 0; i < Pool.Count; i++) {
+			GameObject.Destroy(Pool[i]);
+		}
+	}
 
 	public void updateSpellCoOrds(int[,] sc) {
 		if (sc.GetLength(0) != 0) {

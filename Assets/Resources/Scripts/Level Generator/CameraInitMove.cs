@@ -73,6 +73,9 @@ public class CameraInitMove : MonoBehaviour {
 	public void moveCameraProjectiles(Vector3 minV, Vector3 maxV) {
 		newPosition = (minV + maxV)/2.0f;
 		float y = (maxV.z-newPosition.z)/ Mathf.Tan((camera.fieldOfView/2.0f) * Mathf.PI / 180.0f);
+		if (float.IsNaN(y)) {
+			return;
+		}
 		if (y > oldPosition.y) {
 			newPosition.y = y + 2.0f;
 		} else {

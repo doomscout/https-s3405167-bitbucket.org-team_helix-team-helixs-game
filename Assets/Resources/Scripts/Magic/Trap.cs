@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Trap {
+public class Trap : Cleanable{
 
 	public Spell spell;
 	public int x;
@@ -41,6 +41,7 @@ public class Trap {
 		GameTools.Map.TrapData[x,y].Add (this);
 
 		InitGameObject();
+		CleanTools.GetInstance().SubscribeCleanable(this);
 	}
 
 	private void InitGameObject() {
@@ -69,10 +70,15 @@ public class Trap {
 		}
 		Indicator script = game_object.transform.GetComponent<Indicator>();
 		script.TriggerAnimation();
+		GameTools.Map.TrapData[x,y] = null;
 		DetonateNeighbours();
 	}
 
 	public void Destroy() {
+		GameObject.Destroy(game_object);
+	}
+
+	public void CleanUp() {
 		GameObject.Destroy(game_object);
 	}
 
