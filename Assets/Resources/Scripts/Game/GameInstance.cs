@@ -152,10 +152,10 @@ public class GameInstance : Cleanable {
 		int poz = GameTools.Mouse.Pos_z;
 
 		Base.game_object.transform.position = new Vector3(pox, 2, poz);
-		Debug.Log (GameTools.Mouse.ClickedOnMap + " " + " " + !GameTools.Mouse.ClickedOnEnemy
-		           + "  " + Base.IsPlacedOnLand(pox, poz));
+
+		bool temp = Base.IsPlacedOnLand(pox, poz);
 		if (GameTools.Mouse.ClickedOnMap && !GameTools.Mouse.ClickedOnEnemy
-		    && Base.IsPlacedOnLand(pox, poz)) {
+		    && temp) {
 			Base.PlaceBase(pox, poz);
 		}
 	}

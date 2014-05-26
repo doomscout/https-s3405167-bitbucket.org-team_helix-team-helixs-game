@@ -59,19 +59,18 @@ public class PlayerBase : Entity {
 		if (MapTools.IsOutOfBounds(x,y)) {
 			return false;
 		}
-		if (TileTools.IsLand(GameTools.Map.TileMapData[x, y])) {
-			bool isPlaceable = true;
-			for (int k = -1; k < 2; k++) {
-				for (int l = -1; l < 2; l++) {
-					if (MapTools.IsOutOfBounds(x+k, y+l)) {
-						return false;
-					}
-					if (!TileTools.IsLand (GameTools.Map.TileMapData[x+k, y+l])) {
-						return false;
-					}
+		for (int k = -1; k < 2; k++) {
+			for (int l = -1; l < 2; l++) {
+				if (MapTools.IsOutOfBounds(x+k, y+l)) {
+					return false;
+				}
+				if (!TileTools.IsLand (GameTools.Map.TileMapData[x+k, y+l])) {
+					return false;
+				} else {
 				}
 			}
 		}
+
 		return true;
 	}
 
