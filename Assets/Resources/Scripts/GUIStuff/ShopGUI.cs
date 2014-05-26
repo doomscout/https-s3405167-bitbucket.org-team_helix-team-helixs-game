@@ -36,7 +36,7 @@ public class ShopGUI : MonoBehaviour {
         for(int i = 0; i < shop.SpellStock.Count; i++)
         {
             spellColour = shop.SpellStock[i].SpellColour.ToString();
-            GUI.Box(new Rect(Screen.width * 0.6f, Screen.height * 0.1f * j, 150f, 55f ), 
+            GUI.Box(new Rect(Screen.width * 0.6f, Screen.height * 0.1f * j, 150f, 110f ), 
 			        "Spell " + spellColour + 
 			        "\nPower: " + shop.SpellStock[i].Power +
 			        "\nCast Range: " + shop.SpellStock[i].CastRange);
@@ -104,7 +104,7 @@ public class ShopGUI : MonoBehaviour {
                 }
                 s+= "\n";
             }
-            GUI.Box(new Rect(Screen.width * 0.08f, Screen.height * 0.1f * j, 200f, 55f ), 
+            GUI.Box(new Rect(Screen.width * 0.08f, Screen.height * 0.1f * j, 200f, 110f ), 
 			        "Spell: " + spellColour + 
 			        "\nPower: " + deck.getDeckSpell(k).Power +
 			        "\nCast Range: " + deck.deck[k].CastRange);
