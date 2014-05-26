@@ -14,7 +14,6 @@ public class GameInstance : Cleanable {
 	Player player;
 	PlayerBase Base;
 	GameObject tileMapPrefab;
-	Shop shop;
 	public int NumberOfTurnsUntilWin {get; private set;}
 
 
@@ -32,7 +31,6 @@ public class GameInstance : Cleanable {
     public GameInstance(Player player, PlayerBase Base) {
 		this.player = player;
 		this.Base = Base;
-		this.shop = new Shop();
 
         list_live_units = new List<Unit>();
 		list_dead_units = new List<Unit>();
@@ -67,6 +65,10 @@ public class GameInstance : Cleanable {
 	public void loadEntities() {
 		Base.LoadIntoGame();
 		player.LoadIntoGame();
+
+		int playerlevel = player.CalculateLevel();
+		Debug.Log ("Player level " + playerlevel);
+		GameTools.Map.InitSpawners(playerlevel);
 
 		//populate map with enemies
 	}

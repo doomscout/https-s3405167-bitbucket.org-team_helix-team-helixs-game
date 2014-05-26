@@ -51,7 +51,6 @@ public class TileMap : MonoBehaviour, Cleanable {
 			BuildMesh();
 			GenerateBonusTiles();
 			InitTrapMap();
-			InitSpawners();
 		}
 	}
 
@@ -90,17 +89,22 @@ public class TileMap : MonoBehaviour, Cleanable {
 		}
 	}
 
-	private void InitSpawners() {
+	public void InitSpawners(int level) {
 		int SpawnerCount = 10;
 
 		while (SpawnerCount > 0) {
 			int randX = Random.Range(0, size_x);
 			int randY = Random.Range(0, size_z);
+			if (GraphSearch.fromPosition(randX, randY)
+			    	.manhattanDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) <= 10) {
+
+				continue;
+			}
 			if (TileTools.IsLand(TileMapData[randX, randY])) {
 				if (BonusTileData[randX, randY] == null && 
 				    SpawnerMap[randX, randY] == null) {
 					SpawnerCount--;
-					EnemySpawner e = new EnemySpawner(randX, randY);
+					EnemySpawner e = new EnemySpawner(randX, randY, level);
 					SpawnerMap[randX, randY] = e;
 					Spawners.Add(e);
 				}

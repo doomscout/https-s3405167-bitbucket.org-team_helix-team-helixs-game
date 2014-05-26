@@ -70,7 +70,7 @@ public class Trap : Cleanable{
 		}
 		Indicator script = game_object.transform.GetComponent<Indicator>();
 		script.TriggerAnimation();
-		GameTools.Map.TrapData[x,y] = null;
+		GameTools.Map.TrapData[x,y].Remove(this);
 		DetonateNeighbours();
 	}
 

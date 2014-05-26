@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour{
 
 	Player player;
 	PlayerBase Base;
+	Shop shop;
 
     public bool GameStart;
 	public bool ResumeGame;
@@ -152,10 +153,21 @@ public class GameManager : MonoBehaviour{
 	void actionMenuEntry() {
 		//Display Menu GUI
 		Debug.Log("actionMenuEntry");
+		if (player == null) {
+			player = new Player();
+		}
+		if (Base == null) {
+			Base = new PlayerBase();
+		}
+		if (shop == null) {
+			shop = new Shop();
+		}
+		shop.RefreshStock(player.CalculateLevel());
 		this.ResetBools();
 		GuiManager.Reset();
 		GuiManager.IsShowMainMenu = true;
 		GuiManager.IsShowHelp = true;
+		GuiManager.IsStillMenu = true;
 	}
 
 	void actionMenuRunning() {
@@ -166,12 +178,8 @@ public class GameManager : MonoBehaviour{
 	void actionMenuExit() {
 		//cleanup menu
 		GameStart = false;
-		if (player == null) {
-			player = new Player();
-		}
-		if (Base == null) {
-			Base = new PlayerBase();
-		}
+		GuiManager.IsStillMenu = false;
+
 		turn_manager = new GameInstance(player, Base);
 		BattleLog.GetInstance().Restart();
 		GameTools.GameCamera.MoveCameraToPlayer();
@@ -201,6 +209,7 @@ public class GameManager : MonoBehaviour{
 		//Display Win GUI
 		GuiManager.IsShowWin = true;
 		GuiManager.IsShowHelp = false;
+		shop.RefreshStock(player.CalculateLevel());
 		if (numberOfWins == 0) {
 			turn_manager.saveData();
 		}

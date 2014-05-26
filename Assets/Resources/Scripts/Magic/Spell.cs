@@ -27,6 +27,7 @@ public class Spell {
 	public Spell (ShapeType shape) : this() {
 		Shape = new Shape(shape);
 		CastRange = Shape.CastRange;
+		SpellRating = calculateRating();
 	}
 
 	public Spell (Colour c) : this() {
@@ -50,8 +51,8 @@ public class Spell {
 
 		/* Direct damage weights */
 		float powerWeight = 1.0f;
-		float castRangeWeight = 1.2f;
-		float affectedTilesWeight = 1.2f;
+		float castRangeWeight = 2.0f;
+		float affectedTilesWeight = 2.0f;
 		/* status weights */
 		float tickCountWeight = 1.0f;
 		float statusPowerWeight = 1.5f;
@@ -62,12 +63,12 @@ public class Spell {
 		float rating = 0;
 		/* Direct damage */
 		rating += 	((Power * powerWeight) + 
-					(CastRange * castRangeWeight) + 
-		            (Shape.numberOfOnes *affectedTilesWeight)) * powerModifier;
+		            (CastRange * CastRange * castRangeWeight) + 
+		            (Shape.numberOfOnes * affectedTilesWeight)) * powerModifier;
 
 		/* status */
-		rating += 	((SpellEffect.TickCount * tickCountWeight) *
-		            (SpellEffect.Power * statusPowerWeight)) * statusEffectModifier;
+//		rating += 	((SpellEffect.TickCount * tickCountWeight) *
+//		            (SpellEffect.Power * statusPowerWeight)) * statusEffectModifier;
 
 		return rating;
 	}

@@ -20,9 +20,8 @@ public class Inventory : List<Spell> {
 public class Deck : List<Spell> {
     public int size;
 	public Deck() {
-		for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < 3; i++) {
 			this.Add(SpellGenerator.GetInstance().GetClosestSpell(5));
-
             size++;
 		}
 	}

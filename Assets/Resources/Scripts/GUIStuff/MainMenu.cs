@@ -16,8 +16,8 @@ public class MainMenu : MonoBehaviour {
         GUI.skin = skin01;
 		if ( GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height /2 ,200,20), "Start")){
             Debug.Log("StartButton Pressed");
-			GameTools.GM.GameStart = true;
 			GuiManager.IsShowMainMenu = false;
+			GuiManager.IsShowShop = true;
             }
 		if ( GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height /2+25 ,200,20), "Exit")){
 			Debug.Log("ExitButton Pressed");

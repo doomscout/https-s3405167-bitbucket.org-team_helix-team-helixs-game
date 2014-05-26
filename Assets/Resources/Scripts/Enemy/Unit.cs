@@ -19,10 +19,16 @@ public class Unit : Entity{
 		game_object.name = i + "";
 	}
 
-	public Unit(int x, int y) : base(x,y) {
+	public Unit(int x, int y, int level) : base(x,y) {
 		brain = new SimpleAI(this);
 		Map_position_x = x;
 		Map_position_y = y;
+
+		Max_Health = ((float)level)/2.0f;
+		Health = Max_Health;
+
+		MainSpell = SpellGenerator.GetInstance().GetClosestSingleSpell(level/2);
+		Debug.Log ("enemy dmg " + MainSpell.Power + " and range " + MainSpell.CastRange + " num ones" + MainSpell.Shape.numberOfOnes + " with rating " + MainSpell.SpellRating);
 	}
 
 	protected override void InitMapPosition() {

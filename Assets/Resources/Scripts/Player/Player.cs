@@ -14,8 +14,9 @@ public class Player : Entity {
 		PlayerCastIndicator = new CastRangeIndicator();
 		spellIndicator.link(PlayerCastIndicator);
 
+		SpellGenerator.GetInstance().PrintAllSpells();
 		GameTools.Player = this;
-		//SpellGenerator.GetInstance().PrintAllSpells();
+		Money = 20;
 	}
 
 	protected override void InitStats() {
@@ -54,6 +55,19 @@ public class Player : Entity {
 	public void LoadIntoGame() {
 		InitMapPosition();
 		InitGameObject();
+	}
+
+	public int CalculateLevel() {
+		float PlayerRating = 0;
+		int i;
+		for (i = 0; i < deckManager.deck.Count; i++) {
+			PlayerRating += deckManager.deck[i].SpellRating;
+		}
+		PlayerRating /= i;
+
+		Debug.Log ("Player rating " + PlayerRating);
+
+		return (int)PlayerRating;
 	}
 	
 	public new void CleanUp() {

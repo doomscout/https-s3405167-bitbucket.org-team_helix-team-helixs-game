@@ -87,6 +87,9 @@ public class CameraInitMove : MonoBehaviour {
 		moveCamera = true;
 		oldPosition = transform.position;
 		totalDistance = Vector3.Distance(newPosition, transform.position);
+		if (totalDistance == 0) {
+			return;
+		}
 		timeTravelled = 0.0f;
 	}
 

@@ -5,22 +5,22 @@ using System.Collections.Generic;
 
 public class Shop : Cleanable {
 
-	public int SpellStockMaxLevel = 4;
+	public int SpellStockMaxLevel = 10;
 	public List<Spell> SpellStock {get; private set;}
 
 	public Shop() {
-		RefreshStock();
 		GameTools.Shop = this;
 		CleanTools.GetInstance().SubscribeCleanable(this);
 	}
 
-	public void RefreshStock() {
+	public void RefreshStock(int playerrating) {
 		SpellStock = new List<Spell>();
 		for (int i = 0; i < SpellStockMaxLevel; i++) {
-			SpellStock.Add(new Spell());
+			SpellStock.Add(SpellGenerator.GetInstance().GetClosestSpell(playerrating+i));
 		}
 	}
 
+	/* 
 	public void ReplenishStock() {
 		if (SpellStock == null) {
 			RefreshStock();
@@ -31,6 +31,7 @@ public class Shop : Cleanable {
 			SpellStock.Add(new Spell());
 		}
 	}
+	*/
 
 	//Sell a spell to player
 	public bool TryToSellSpell(Player p, Spell s) {

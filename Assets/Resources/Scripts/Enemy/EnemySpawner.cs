@@ -8,12 +8,13 @@ public class EnemySpawner : Cleanable{
 	int MaxRechargeTime;
 	int RechargeTime;
 
-	int LevelSpawner = 1;
+	int LevelSpawner;
 	public GameObject game_object;
 
-	public EnemySpawner(int x, int y) {
+	public EnemySpawner(int x, int y, int level) {
 		this.x = x;
 		this.y = y;
+		this.LevelSpawner = level;
 
 		MaxRechargeTime = 10;
 		RechargeTime = MaxRechargeTime;
@@ -32,7 +33,7 @@ public class EnemySpawner : Cleanable{
 				return;
 			}
 			RechargeTime = MaxRechargeTime;
-			GameTools.GI.list_live_units.Add (new Unit(x, y));
+			GameTools.GI.list_live_units.Add (new Unit(x, y, LevelSpawner));
 		} else {
 			RechargeTime--;
 		}
