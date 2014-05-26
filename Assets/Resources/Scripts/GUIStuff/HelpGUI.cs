@@ -22,10 +22,15 @@ public class HelpGUI : MonoBehaviour {
         }
         if (helpOn == true)
         {
-            GUI.Box(new Rect(0, 120, 250, 100), "Help Content" +
+            GUI.Box(new Rect(0, 120, 350, 250), "Help Content" +
                 "\nMovement - WASD keys" +
                 "\nPress 1 and select Area- to Cast Spell"
-                 +"\n Space Bar - Skip Turn" + "\n Press 'i' for Inventory"   );
+                 +"\n Space Bar - Skip Turn" + 
+                 "\n\n Objective: \nDefend the Base until the number of turns is zero" 
+                    +"\n\nTile Effect:" + "\nRed Tiles: Heals Player"
+                    +"\nYellow Tiles: Gain Money"
+                    +"\nCircle: Step to gain Money or health"
+                    + "\nSquare: Stand kill to gain Money or Health");
         }
        
     }
