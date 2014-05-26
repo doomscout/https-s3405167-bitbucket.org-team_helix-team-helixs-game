@@ -162,7 +162,7 @@ public class GameManager : MonoBehaviour{
 		if (shop == null) {
 			shop = new Shop();
 		}
-		shop.RefreshStock(player.CalculateLevel());
+		shop.RefreshStock(player);
 		this.ResetBools();
 		GuiManager.Reset();
 		GuiManager.IsShowMainMenu = true;
@@ -182,7 +182,7 @@ public class GameManager : MonoBehaviour{
 
 		turn_manager = new GameInstance(player, Base);
 		BattleLog.GetInstance().Restart();
-		GameTools.GameCamera.MoveCameraToPlayer();
+		GameTools.GameCamera.MoveToCenter();
 		Debug.Log("actionMenuExit");
 		//TODO Temp placement of generate level
 	}
@@ -209,7 +209,7 @@ public class GameManager : MonoBehaviour{
 		//Display Win GUI
 		GuiManager.IsShowWin = true;
 		GuiManager.IsShowHelp = false;
-		shop.RefreshStock(player.CalculateLevel());
+		shop.RefreshStock(player);
 		if (numberOfWins == 0) {
 			turn_manager.saveData();
 		}
@@ -230,7 +230,7 @@ public class GameManager : MonoBehaviour{
 		GoNextLevel = false;
 		player.ReloadSpell();
 		BattleLog.GetInstance().Restart();
-		GameTools.GameCamera.MoveCameraToPlayer();
+		GameTools.GameCamera.MoveToCenter();
         Debug.Log("actionWinExit");
 	}
 

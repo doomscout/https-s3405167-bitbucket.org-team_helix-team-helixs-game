@@ -76,6 +76,7 @@ public class Unit : Entity{
 	public override void death_tick () {
 		enemyAnimation.SetBool ("Death", true);
 		base.death_tick();
+		this.ShowText("+" + Money + " gold", Color.yellow, -2);
 		GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = null;
 	}
 	

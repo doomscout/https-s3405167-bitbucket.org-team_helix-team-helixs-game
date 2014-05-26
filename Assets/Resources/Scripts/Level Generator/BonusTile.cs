@@ -23,10 +23,10 @@ public class BonusTile : Cleanable{
 
 	public BonusTile(int x, int y) {
 		hp = Random.Range(1, 20);
-		tick = Random.Range(1, 3);
+		tick = 1;//Random.Range(1, 3);
 		amount = (int)hp;
 		MainColour = ColourManager.getRandomColour();
-		Interaction = (TileInteraction)Random.Range (0, 2);
+		Interaction = TileInteraction.Stand;//(TileInteraction)Random.Range (0, 2);
 		Reward = (TileReward)Random.Range(0,2);
 
 		this.x = x;
@@ -75,11 +75,11 @@ public class BonusTile : Cleanable{
 		if (Interaction == TileInteraction.Stand) {
 			if (Reward == TileReward.Money){
 				p.Money += amount;
-				ShowText("+" + amount, Color.yellow, 0);
+				ShowText("+" + amount + " gold", Color.yellow, 0);
 				Debug.Log ("Gained money tick");
 			} else {
 				p.Health += amount;
-				ShowText("+" + amount, Color.red, 0);
+				ShowText("+" + amount + " HP", Color.red, 0);
 				Debug.Log ("Gained health tick");
 			}
 		}

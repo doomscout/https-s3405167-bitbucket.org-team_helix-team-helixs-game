@@ -96,7 +96,7 @@ public class TileMap : MonoBehaviour, Cleanable {
 			int randX = Random.Range(0, size_x);
 			int randY = Random.Range(0, size_z);
 			if (GraphSearch.fromPosition(randX, randY)
-			    	.manhattanDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) <= 10) {
+			    	.manhattanDistanceFromTarget(GameTools.Player.Map_position_x, GameTools.Player.Map_position_y) <= 25) {
 
 				continue;
 			}

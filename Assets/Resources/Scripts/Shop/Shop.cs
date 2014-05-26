@@ -13,10 +13,12 @@ public class Shop : Cleanable {
 		CleanTools.GetInstance().SubscribeCleanable(this);
 	}
 
-	public void RefreshStock(int playerrating) {
+	public void RefreshStock(Player p) {
+		int playerrating = p.CalculateLevel();
+		float playermoney = p.Money;
 		SpellStock = new List<Spell>();
 		for (int i = 0; i < SpellStockMaxLevel; i++) {
-			SpellStock.Add(SpellGenerator.GetInstance().GetClosestSpell(playerrating+i));
+			SpellStock.Add(SpellGenerator.GetInstance().GetClosestSpell(playerrating+(i*2)+((int)(playermoney/10.0f))));
 		}
 	}
 
