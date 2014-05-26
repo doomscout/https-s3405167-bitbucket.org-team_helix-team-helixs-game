@@ -135,7 +135,7 @@ public class InventoryGUI : MonoBehaviour {
             */
             //Displays Player Money
             GUI.Box(new Rect(Screen.width * 0.4f,Screen.height * 0.0f, 115f, 35f), "Money: " + GameTools.Player.Money);
-           GUI.skin = skin02;
+          /* GUI.skin = skin02;
             if (inventoryEnabled){
                 //Debug.Log("pressed i");
                 if (inventory.size != 0)
@@ -176,6 +176,7 @@ public class InventoryGUI : MonoBehaviour {
                 
                 }
 		}
+  */      
 
     }
 }
