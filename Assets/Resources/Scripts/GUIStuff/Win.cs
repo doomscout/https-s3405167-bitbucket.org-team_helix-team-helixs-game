@@ -2,14 +2,15 @@
 using System.Collections;
 
 public class Win : MonoBehaviour {
-
+    public GUISkin skin01;
 	void OnGUI()
     {
 		if (!GuiManager.IsShowWin) {
 			return;
 		}
+        GUI.skin = skin01;
         GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");
-		GUI.Box(new Rect(Screen.width * 0.4f , Screen.height * 0.4f, Screen.width * 0.2f, Screen.height * 0.1f), "YOU WIN"+"\nClick Left Arrow to Continue");
+		GUI.Box(new Rect(Screen.width * 0.4f , Screen.height * 0.4f, Screen.width * 0.2f, Screen.height * 0.1f), "YOU HAVE SURVIVED!");
 
 		ShopButton();
 		NextButton();

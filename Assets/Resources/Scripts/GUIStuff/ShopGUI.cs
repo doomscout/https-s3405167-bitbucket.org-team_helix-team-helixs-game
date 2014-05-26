@@ -28,7 +28,7 @@ public class ShopGUI : MonoBehaviour {
 		if (shapeArray == null) {
 			shapeArray = shop.SpellStock[0].Shape.shapeIntArray;
 		}
-		
+        GUI.skin = skin01;
         //GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");
         GUI.Box(new Rect(Screen.width * 0.5f, 0,Screen.width * 0.5f, Screen.height ), "Shop" );
         //Shop Display
@@ -65,7 +65,7 @@ public class ShopGUI : MonoBehaviour {
                 s+= "\n";
             }
             GUI.Box(new Rect(Screen.width * 0.7f, Screen.height * 0.1f * j, 150f, 90f), s);
-            if (GUI.Button(new Rect(Screen.width * 0.8f, Screen.height * 0.1f * j, 100f, 60f), "Buy Spell("+ shop.SpellStock[i].SpellRating +")"))
+            if (GUI.Button(new Rect(Screen.width * 0.8f, Screen.height * 0.1f * j, 200f, 60f), "Buy Spell("+ shop.SpellStock[i].SpellRating +")"))
             {
                 shop.TryToSellSpell(GameTools.Player, shop.SpellStock[i]);
             }
@@ -75,6 +75,7 @@ public class ShopGUI : MonoBehaviour {
 
         //Display Player's Deck/Inventory
         j = 1;
+        GUI.skin = skin02;
         GUI.Box(new Rect(0, 0, Screen.width * 0.4f, Screen.height), "Deck/Inventory");
 		for(int k = 0; k < deck.deck.Count; k++)
         {
@@ -114,8 +115,10 @@ public class ShopGUI : MonoBehaviour {
             }
             j += 1;
         }
+        GUI.skin = skin01;
         GUI.Box(new Rect(Screen.width * 0.4f, Screen.height * 0.2f, 150f, 100f), "M - Cursor\nP - PLayer \n * - Areas the spell affects");
-		if (GUI.Button(new Rect(Screen.width * 0.4f, Screen.height * 0.4f, 150f, 50f), "Leave Shop") && deck.deck.Count >= 3) {
+        GUI.Box(new Rect(Screen.width * 0.4f, Screen.height * 0.1f, 150f, 30f), "Money: " + GameTools.Player.Money);
+        if (GUI.Button(new Rect(Screen.width * 0.4f, Screen.height * 0.4f, 150f, 50f), "Leave Shop") && deck.deck.Count >= 3) {
 			GuiManager.IsShowShop = false;
 			if (GuiManager.IsStillMenu) {
 				GameTools.GM.GameStart = true;
