@@ -36,7 +36,7 @@ public class ShopGUI : MonoBehaviour {
         for(int i = 0; i < shop.SpellStock.Count; i++)
         {
             spellColour = shop.SpellStock[i].SpellColour.ToString();
-            GUI.Box(new Rect(Screen.width * 0.6f, Screen.height * 0.1f * j, 150f, 55f ), 
+            GUI.Box(new Rect(Screen.width * 0.6f, Screen.height * 0.1f * j, 150f, 110f ), 
 			        "Spell " + spellColour + 
 			        "\nPower: " + shop.SpellStock[i].Power +
 			        "\nCast Range: " + shop.SpellStock[i].CastRange);
@@ -104,7 +104,7 @@ public class ShopGUI : MonoBehaviour {
                 }
                 s+= "\n";
             }
-            GUI.Box(new Rect(Screen.width * 0.08f, Screen.height * 0.1f * j, 200f, 55f ), 
+            GUI.Box(new Rect(Screen.width * 0.08f, Screen.height * 0.1f * j, 200f, 110f ), 
 			        "Spell: " + spellColour + 
 			        "\nPower: " + deck.getDeckSpell(k).Power +
 			        "\nCast Range: " + deck.deck[k].CastRange);
@@ -118,7 +118,7 @@ public class ShopGUI : MonoBehaviour {
         GUI.skin = skin01;
         GUI.Box(new Rect(Screen.width * 0.4f, Screen.height * 0.2f, 150f, 100f), "M - Cursor\nP - PLayer \n * - Areas the spell affects");
         GUI.Box(new Rect(Screen.width * 0.4f, Screen.height * 0.1f, 150f, 30f), "Money: " + GameTools.Player.Money);
-        if (GUI.Button(new Rect(Screen.width * 0.4f, Screen.height * 0.4f, 150f, 50f), "Leave Shop") && deck.deck.Count >= 3) {
+        if (GUI.Button(new Rect(Screen.width * 0.4f, Screen.height * 0.7f, 150f, 50f), "Leave Shop") && deck.deck.Count >= 3) {
 			GuiManager.IsShowShop = false;
 			if (GuiManager.IsStillMenu) {
 				GameTools.GM.GameStart = true;
@@ -126,6 +126,12 @@ public class ShopGUI : MonoBehaviour {
 			} else {
 				GuiManager.IsShowWin = true;
 			}
+		}
+		if (GUI.Button(new Rect(Screen.width * 0.4f, Screen.height * 0.4f, 150f, 50f), "Up Turret (20)")) {
+			Debug.Log ("This button does nothing for now");
+		}
+		if (GUI.Button(new Rect(Screen.width * 0.4f, Screen.height * 0.45f, 150f, 50f), "Repair base (3)")) {
+			Debug.Log ("This button does nothing for now");
 		}
     }
 }

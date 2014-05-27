@@ -76,6 +76,8 @@ public class Unit : Entity{
 	public override void death_tick () {
 		enemyAnimation.SetBool ("Death", true);
 		base.death_tick();
+		this.ShowText("+" + Money + " gold", Color.yellow, -2);
+		GameTools.Player.Money += Money;
 		GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = null;
 	}
 	
@@ -327,28 +329,28 @@ public class Unit : Entity{
 		if ((!MapTools.IsOutOfBounds(newX, newY)) &&
 		    GameTools.Map.WeightedMap[newX, newY] != 0) {
 			orderedList.insert(new DirectionWeight(Direction.Right, GameTools.Map.WeightedMap[newX, newY], newX, newY, 
-			                                       GameTools.Player.Map_position_x, GameTools.Player.Map_position_y));
+			                                       GameTools.Base.Map_position_x, GameTools.Base.Map_position_y));
 		}
 		newX = Map_position_x - 1;
 		newY = Map_position_y;
 		if ((!MapTools.IsOutOfBounds(newX, newY)) &&
 		    GameTools.Map.WeightedMap[newX, newY] != 0) {
 			orderedList.insert(new DirectionWeight(Direction.Left, GameTools.Map.WeightedMap[newX, newY], newX, newY, 
-			                                       GameTools.Player.Map_position_x, GameTools.Player.Map_position_y));
+			                                       GameTools.Base.Map_position_x, GameTools.Base.Map_position_y));
 		}
 		newX = Map_position_x;
 		newY = Map_position_y + 1;
 		if ((!MapTools.IsOutOfBounds(newX, newY)) &&
 		    GameTools.Map.WeightedMap[newX, newY] != 0) {
 			orderedList.insert(new DirectionWeight(Direction.Up, GameTools.Map.WeightedMap[newX, newY], newX, newY, 
-			                                        GameTools.Player.Map_position_x, GameTools.Player.Map_position_y));
+			                                       GameTools.Base.Map_position_x, GameTools.Base.Map_position_y));
 		}
 		newX = Map_position_x;
 		newY = Map_position_y - 1;
 		if ((!MapTools.IsOutOfBounds(newX, newY)) &&
 		    GameTools.Map.WeightedMap[newX, newY] != 0) {
 			orderedList.insert(new DirectionWeight(Direction.Down, GameTools.Map.WeightedMap[newX, newY], newX, newY, 
-			                                       GameTools.Player.Map_position_x, GameTools.Player.Map_position_y));
+			                                       GameTools.Base.Map_position_x, GameTools.Base.Map_position_y));
 		}
 
 
@@ -395,6 +397,7 @@ public class Unit : Entity{
 
 	public override void OnClickAction() {		
 		GameTools.GI.ToggleUnitIndicator(this);
+		Heap<DirectionWeight> orderedList = new Heap<DirectionWeight>(new DirectionWeightComparer());
 	}
 	
 }

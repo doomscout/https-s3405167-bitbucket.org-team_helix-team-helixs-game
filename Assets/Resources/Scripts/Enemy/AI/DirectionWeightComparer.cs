@@ -10,7 +10,7 @@ public class DirectionWeightComparer : Comparer<DirectionWeight>{
 		float d2 = (GraphSearch.fromPosition(y.x, y.y).euclidianDistanceFromTarget(y.goalX, y.goalY));
 		if (d1 < d2) {
 			val = -1;
-		} else if (d2 > d1) {
+		} else if (d1 > d2) {
 			val = 1;
 		} else {
 			val = 0;

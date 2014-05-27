@@ -16,7 +16,7 @@ public class EnemySpawner : Cleanable{
 		this.y = y;
 		this.LevelSpawner = level;
 
-		MaxRechargeTime = 10;
+		MaxRechargeTime = 20;
 		RechargeTime = MaxRechargeTime;
 		game_object = Object.Instantiate(Resources.Load("Prefabs/FlatCube", typeof(GameObject))) as GameObject;
 		game_object.transform.position = new Vector3(x, 0.01f, y);

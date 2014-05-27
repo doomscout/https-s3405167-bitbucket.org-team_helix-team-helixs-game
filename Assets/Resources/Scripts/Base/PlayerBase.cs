@@ -6,6 +6,7 @@ public class PlayerBase : Entity {
 
 	private int width;
 	private int height;
+	public bool HasPlacedBase;
 
 	public int MaxRechargeTime {get;set;}
 	private int RechargeTime;
@@ -16,7 +17,8 @@ public class PlayerBase : Entity {
 		BufferedSpells = new List<Spell>();
 		width = 3;
 		height = 3;
-		MaxRechargeTime = 5;
+		MaxRechargeTime = 7;
+		HasPlacedBase = false;
 	}
 
 	protected override void InitCleanable() {
@@ -27,32 +29,13 @@ public class PlayerBase : Entity {
 		if (GameTools.Map == null) {
 			return;
 		}
-		for (int i = 0; i < GameTools.Map.size_z; i++) {
-			for (int j = 0; j < GameTools.Map.size_x; j++) {
-				if (TileTools.IsLand(GameTools.Map.TileMapData[j, i])) {
-					bool isPlaceable = true;
-					for (int k = -1; k < 2; k++) {
-						for (int l = -1; l < 2; l++) {
-							if (!TileTools.IsLand (GameTools.Map.TileMapData[j+k, i+l])) {
-								isPlaceable = false;
-							}
-						}
-					}
-					if (isPlaceable) {
-						Map_position_x = j;
-						Map_position_y = i;
-						break;
-					}
-				}
-			}
-		}
 	}
 	
 	protected override void InitGameObject() {
 		if (base.game_object == null) {
 			base.game_object = Object.Instantiate(Resources.Load("Prefabs/Base", typeof(GameObject))) as GameObject;
 		}
-		game_object.transform.position = new Vector3(Map_position_x, 0.1f, Map_position_y);
+
 	}
 
 	protected override void InitStats() {
@@ -63,6 +46,32 @@ public class PlayerBase : Entity {
 	protected override void InitMagic () {
 		base.InitMagic ();
 		MainSpell.Shape.CastRange = 15;
+	}
+
+	public void PlaceBase(int x, int y) {
+		HasPlacedBase = true;
+		Map_position_x = x;
+		Map_position_y = y;
+		game_object.transform.position = new Vector3(Map_position_x, 0.1f, Map_position_y);
+	}
+
+	public bool IsPlacedOnLand(int x, int y) {
+		if (MapTools.IsOutOfBounds(x,y)) {
+			return false;
+		}
+		for (int k = -1; k < 2; k++) {
+			for (int l = -1; l < 2; l++) {
+				if (MapTools.IsOutOfBounds(x+k, y+l)) {
+					return false;
+				}
+				if (!TileTools.IsLand (GameTools.Map.TileMapData[x+k, y+l])) {
+					return false;
+				} else {
+				}
+			}
+		}
+
+		return true;
 	}
 
 	public void LoadIntoGame() {

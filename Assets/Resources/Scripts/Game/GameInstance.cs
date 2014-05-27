@@ -64,7 +64,6 @@ public class GameInstance : Cleanable {
 
 	public void loadEntities() {
 		Base.LoadIntoGame();
-		player.LoadIntoGame();
 
 		int playerlevel = player.CalculateLevel();
 		Debug.Log ("Player level " + playerlevel);
@@ -114,7 +113,7 @@ public class GameInstance : Cleanable {
         animation2enemy.Trigger_condition = new TriggerCondition(conditionFinishedPlayerAnimation);
         enemy2animation.Trigger_condition = new TriggerCondition(conditionDeterminedActions);
         animation2player.Trigger_condition = new TriggerCondition(conditionFinishedEnemyAnimation);
-		start2player.Trigger_condition = new TriggerCondition(conditionTrue);
+		start2player.Trigger_condition = new TriggerCondition(conditionPlacedBase);
 
         player2animation.Target_state = state_animation;
         animation2enemy.Target_state = state_enemy;
@@ -128,6 +127,7 @@ public class GameInstance : Cleanable {
         state_animation.addTransition(animation2player);
 		state_start.addTransition(start2player);
 
+		state_start.addAction(new Action(actionStartRunning));
 		state_player.Entry_action = new Action(actionPlayerEntry);
         state_player.addAction(new Action(actionPlayerRunning));
         state_player.Exit_action = new Action(actionPlayerExit);
@@ -143,8 +143,26 @@ public class GameInstance : Cleanable {
 
     //Actions
 
-	void actionStartExit() {
+	void actionStartEntry() {
 
+	}
+
+	void actionStartRunning() {
+		int pox = GameTools.Mouse.Pos_x;
+		int poz = GameTools.Mouse.Pos_z;
+
+		Base.game_object.transform.position = new Vector3(pox, 2, poz);
+
+		bool temp = Base.IsPlacedOnLand(pox, poz);
+		if (GameTools.Mouse.ClickedOnMap && !GameTools.Mouse.ClickedOnEnemy
+		    && temp) {
+			Base.PlaceBase(pox, poz);
+		}
+	}
+
+	void actionStartExit() {
+		player.LoadIntoGame();
+		Base.HasPlacedBase = false;
 	}
 
 	void actionPlayerEntry() {
@@ -176,9 +194,6 @@ public class GameInstance : Cleanable {
 
     void actionPlayerExit() {
 		player.showIndicatorAnimation();
-		if (GameTools.Map.BonusTileData[player.Map_position_x, player.Map_position_y] != null) {
-			GameTools.Map.BonusTileData[player.Map_position_x, player.Map_position_y].TickDown(player);
-		}
 		UnitCastIndicator.ResetIndicators();
 		GameTools.Map.UpdateWeightMap();
         turn_player = false;
@@ -243,7 +258,9 @@ public class GameInstance : Cleanable {
 	void actionAnimationExit() {
 		//Clear the dead units so we don't animate them again
 		list_dead_units = new List<Unit>();
-
+		if (GameTools.Map.BonusTileData[player.Map_position_x, player.Map_position_y] != null) {
+			GameTools.Map.BonusTileData[player.Map_position_x, player.Map_position_y].TickDown(player);
+		}
 	}
 
     void actionEnemyEntry() {
@@ -293,5 +310,9 @@ public class GameInstance : Cleanable {
 
 	bool conditionTrue() {
 		return true;
+	}
+
+	bool conditionPlacedBase() {
+		return Base.HasPlacedBase;
 	}
 }

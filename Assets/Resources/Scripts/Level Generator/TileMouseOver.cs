@@ -18,6 +18,8 @@ using System.Collections;
 	public int Pos_x {get;set;}
 	public int Pos_z {get;set;}
 	public bool IsOnMap {get;set;}
+	public bool ClickedOnMap {get;set;}
+	public bool ClickedOnEnemy {get;set;}
 
 	// Use this for initialization
 	void Start () {
@@ -53,11 +55,19 @@ using System.Collections;
 				IsOnMap = false;
 			}
 		}
+		if (Input.GetMouseButtonUp(0) && IsOnMap) {
+			ClickedOnMap = true;
+		} else {
+			ClickedOnMap = false;
+		}
 		if (HasClickedOnUnit()) {
 			if (GameTools.Map != null) {
 				Entity e = GameTools.Map.map_unit_occupy[GameTools.Mouse.Pos_x, GameTools.Mouse.Pos_z];
 				e.OnClickAction();
+				ClickedOnEnemy = true;
 			}
+		} else {
+			ClickedOnEnemy = false;
 		}
 		if (HasRightClikedTrap()) {
 			if (GameTools.Map != null) {

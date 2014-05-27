@@ -30,6 +30,7 @@ public static class TileTools {
 			}
 		}
 		return found && i > 1;
+
 	}
 
 	public static bool IsLand(int t) {

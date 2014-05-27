@@ -14,7 +14,7 @@ public class CastRangeIndicator : Cleanable{
         this.Pool = new List<GameObject>();
 		this.ToggledEntities = new List<Entity>();
 
-		CleanTools.GetInstance().SubscribeCleanable(this);
+		CleanTools.GetInstance().SubscribeCleanable(this, true);
     }
 
     public void ShowIndicators() {

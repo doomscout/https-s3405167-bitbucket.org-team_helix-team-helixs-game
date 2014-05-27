@@ -80,7 +80,7 @@ public abstract class Entity : Cleanable {
 	}
 
 	protected virtual void InitMoney() {
-		Money = Random.Range(7, 12);
+		Money = Random.Range(3, 5);
 	}
 	
 	public void CleanUp() {
