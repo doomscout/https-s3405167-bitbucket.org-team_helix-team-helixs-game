@@ -243,7 +243,7 @@ public class TileMap : MonoBehaviour, Cleanable {
 			bestMap1 = testMaps(list_of_generated_maps);
 		}
 
-		bestMap1 = new DataTileMap(size_x, size_z, percentAreTile);
+		//bestMap1 = new DataTileMap(size_x, size_z, percentAreTile);
 		GenerateHeightMap(bestMap1);
 		BuildTexture();
 		//PrintDebug();

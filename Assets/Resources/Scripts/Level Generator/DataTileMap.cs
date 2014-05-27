@@ -28,6 +28,7 @@ public class DataTileMap {
 		//MakeTile();
 		RandomFillMap();
 		MakeTile();
+		trim();
 		countLandTiles();
 		//GeneratorColorTile();
 //		PrintDebug();
@@ -35,6 +36,31 @@ public class DataTileMap {
 
 	public int GetTileAt(int x, int y) {
 		return Map_data_passable[x,y];
+	}
+
+	public void trim() {
+		GraphSearch.fromPosition(Size_x/2, Size_y/2)
+			.DepthFirstFlood(Map_data_passable, GraphSearch.DefaultPassable, new ActionOnVisit(MarkOneAsTwo));
+		for (int i = 0; i < Size_x; i++) {
+			for (int j = 0; j < Size_y; j++) {
+				if (Map_data_passable[i,j] == 1) {
+					Map_data_passable[i,j] = 0;
+				}
+			}
+		}
+		for (int i = 0; i < Size_x; i++) {
+			for (int j = 0; j < Size_y; j++) {
+				if (Map_data_passable[i,j] == 2) {
+					Map_data_passable[i,j] = 1;
+				}
+			}
+		}
+	}
+
+	private void MarkOneAsTwo(int[,] graph, GraphNode currNode) {
+		if (graph[currNode.x, currNode.y] == 1) {
+			graph[currNode.x, currNode.y] = 2;
+		}
 	}
 
 	public void countLandTiles() {
