@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour{
 		Instantiate(Resources.Load("Prefabs/Gui/HealthBarPrefab"));
 		Instantiate(Resources.Load("Prefabs/Gui/BattleLogPrefab"));
 		Instantiate(Resources.Load("Prefabs/Gui/PlaceBaseTitlePrefab"));
+        Instantiate(Resources.Load("Prefabs/Gui/Stats"));
 	}
 
 	void ResetBools() {
@@ -199,6 +200,7 @@ public class GameManager : MonoBehaviour{
 	void actionPlayExit() {
 		GuiManager.IsShowHealthBar = false;
 		GuiManager.isShowInventory = false;
+        GuiManager.IsShowStat = false;
 
 	}
 
