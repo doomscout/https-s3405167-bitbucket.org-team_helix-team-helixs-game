@@ -25,11 +25,6 @@ public class ShopGUI : MonoBehaviour {
         GUI.Box(new Rect(Screen.width * 0.5f, 0,Screen.width * 0.5f, Screen.height ), "Shop" );
         //Shop Display
         float j =1;
-		if (GameTools.Shop == null) {
-			Debug.Log ("nulled");
-		} else if (GameTools.Shop.SpellStock == null) {
-			Debug.Log ("this is null");
-		}
 		for(int i = 0; i < GameTools.Shop.SpellStock.Count; i++)
         {
 			spellColour = GameTools.Shop.SpellStock[i].SpellColour.ToString();
@@ -101,15 +96,19 @@ public class ShopGUI : MonoBehaviour {
                 }
                 s+= "\n";
             }
-            GUI.Box(new Rect(Screen.width * 0.08f, Screen.height * 0.1f * j, 200f, 110f ), 
+            GUI.Box(new Rect(Screen.width * 0.06f, Screen.height * 0.1f * j, 200f, 110f ), 
 			        "Spell: " + spellColour + 
 			        "\nPower: " + GameTools.Player.deckManager.getDeckSpell(k).Power +
 			        "\nCast Range: " + GameTools.Player.deckManager.deck[k].CastRange);
-            GUI.Box(new Rect(Screen.width * 0.225f, Screen.height * 0.1f * j, 100, 100f), "" + s);
-			if (GUI.Button(new Rect(Screen.width * 0.3f, Screen.height * 0.1f * j, 100f, 50f), "Sell Spell") && GameTools.Player.deckManager.deck.Count > 3)
-            {
+            GUI.Box(new Rect(Screen.width * 0.18f, Screen.height * 0.1f * j, 100, 100f), "" + s);
+			if (GUI.Button(new Rect(Screen.width * 0.25f, Screen.height * 0.1f * j, 260f, 30f), "Sell Spell") && GameTools.Player.deckManager.deck.Count > 3)
+           	{
 				GameTools.Shop.TryToBuySpell(GameTools.Player, GameTools.Player.deckManager.getDeckSpell(k));
             }
+			if (GUI.Button(new Rect(Screen.width * 0.25f, Screen.height * 0.1f * j + 30, 260f, 30f), "Load Turret with this spell") && GameTools.Player.deckManager.deck.Count > 3)
+			{
+				GameTools.Base.GetSpellFromPlayer(GameTools.Player.deckManager.deck[k], GameTools.Player);
+			}
             j += 1;
         }
         GUI.skin = skin01;

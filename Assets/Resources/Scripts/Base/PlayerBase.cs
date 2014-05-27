@@ -51,6 +51,7 @@ public class PlayerBase : Entity {
 	protected override void InitMagic () {
 		base.InitMagic ();
 		MainSpell.Shape.CastRange = CastRange;
+		MainSpell.CastRange = CastRange;
 	}
 
 	public void PlaceBase(int x, int y) {
@@ -99,6 +100,17 @@ public class PlayerBase : Entity {
 
 	public override bool IsEntityAbleToMoveHere (Entity e) {
 		return e.GetType() == typeof(Player);
+	}
+
+	public void GetSpellFromPlayer(Spell s, Player p) {
+		if (!p.deckManager.deck.Contains(s)) {
+			Debug.Log ("Player does not have that spell to give");
+		}
+		p.deckManager.deck.Remove(s);
+		MainSpell = s;
+		MainSpell.Shape.ChangeIntoMouse();
+		MainSpell.Shape.CastRange = CastRange;
+		MainSpell.CastRange = CastRange;
 	}
 
 	public bool IsWithinBase(int x, int y) {

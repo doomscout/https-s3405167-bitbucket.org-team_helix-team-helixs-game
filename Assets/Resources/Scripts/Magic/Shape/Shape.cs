@@ -20,6 +20,18 @@ public class Shape {
 		init ();
 	}
 
+	public void ChangeIntoMouse() {
+		for (int i = 0; i < shapeIntArray.GetLength(0); i++) {
+			for (int j = 0; j < shapeIntArray.GetLength(1); j++) {
+				if (shapeIntArray[i,j] == ShapeInt.P) {
+					shapeIntArray[i,j] = ShapeInt.M;
+				}
+			}
+		}
+		SetNumberOfOnes(shapeIntArray);
+		numberOfOnes--;
+	}
+
 	private void init() {
 		if (SpellShape == ShapeType.Single || SpellShape == ShapeType.Circle) {
 			CastRange = Random.Range(1, 10);
@@ -104,7 +116,7 @@ public class Shape {
 		int x_offset = !IsPlayerCentered? (intShape.GetLength(1)/2):0;
 		for (int i = 0; i < intShape.GetLength(0); i++) {
 			for (int j = 0; j < intShape.GetLength(1); j++) {
-				if (intShape[i, j] == 1) {	
+				if (intShape[i, j] == 1) {
 					coordArray[count,0] = j - x_offset;
 					coordArray[count,1] = i - (intShape.GetLength(0)/2); /* Center around origin */
 					count++;
@@ -151,7 +163,6 @@ public class Shape {
 				coordArray[i,1] += mouse[1];
 			}
 		}
-		
 		return coordArray;
 	}
 

@@ -5,7 +5,7 @@ public class Spell {
 	public Shape Shape {get; private set;}
 	public Colour SpellColour {get; private set;}
 	public float Power {get; private set;}
-    public int CastRange {get; private set;}
+    public int CastRange {get; set;}
 	public Effect SpellEffect {get; private set;}
 	public float SpellRating {get; private set;}
 
@@ -82,13 +82,13 @@ public class Spell {
 	public void cast(int[] origin, int[] position) {
 		int[,] coordinates = Shape.toCoords(origin, position);
 		bool isTrap = true;
-
 		for (int i = 0; i < coordinates.GetLength(0); i++) {
 
 			if (MapTools.IsOutOfBounds(coordinates[i,0], coordinates[i,1])) {
 				continue;
 			}
 			isTrap = true;
+
 			if (GameTools.Map.map_unit_occupy[coordinates[i,0], coordinates[i,1]] != null) {
 				GameTools.Map.map_unit_occupy[coordinates[i,0], coordinates[i,1]].GetHitByMagic(this);
 				isTrap = false;
