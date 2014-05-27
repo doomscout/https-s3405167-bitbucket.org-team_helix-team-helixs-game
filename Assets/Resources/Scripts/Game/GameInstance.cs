@@ -14,7 +14,7 @@ public class GameInstance : Cleanable {
 	Player player;
 	PlayerBase Base;
 	GameObject tileMapPrefab;
-	public int NumberOfTurnsUntilWin {get; private set;}
+    public int NumberOfTurnsUntilWin {get; private set;}
 
 
     private bool validInput = false;
