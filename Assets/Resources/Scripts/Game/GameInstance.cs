@@ -169,6 +169,7 @@ public class GameInstance : Cleanable {
 		GuiManager.IsShowHealthBar = true;
 		GuiManager.isShowInventory = true;
 		GuiManager.IsShowBattleLog = true;
+		GuiManager.IsShowStat = true;
 	}
 	
 	void actionPlayerEntry() {
