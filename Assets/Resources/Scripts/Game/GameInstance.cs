@@ -158,13 +158,18 @@ public class GameInstance : Cleanable {
 		    && temp) {
 			Base.PlaceBase(pox, poz);
 		}
+		GuiManager.IsPlaceBaseTitle = true;
 	}
 
 	void actionStartExit() {
 		player.LoadIntoGame();
 		Base.HasPlacedBase = false;
+		GuiManager.IsPlaceBaseTitle = false;
+		GuiManager.IsShowHealthBar = true;
+		GuiManager.isShowInventory = true;
+		GuiManager.IsShowBattleLog = true;
 	}
-
+	
 	void actionPlayerEntry() {
 		player.Prelogic_tick();
 	}

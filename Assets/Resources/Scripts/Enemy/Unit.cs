@@ -24,11 +24,13 @@ public class Unit : Entity{
 		Map_position_x = x;
 		Map_position_y = y;
 
-		Max_Health = ((float)level)/2.0f;
+		Max_Health = level - ((float)level)/1.2f + 1;
 		Health = Max_Health;
+		Money += level/2;
 
 		MainSpell = SpellGenerator.GetInstance().GetClosestSingleSpell(level/2);
-		Debug.Log ("enemy dmg " + MainSpell.Power + " and range " + MainSpell.CastRange + " num ones" + MainSpell.Shape.numberOfOnes + " with rating " + MainSpell.SpellRating);
+		Debug.Log ("enemy hp: " + Max_Health + MainSpell.ToString());
+
 	}
 
 	protected override void InitMapPosition() {

@@ -160,11 +160,6 @@ public abstract class Entity : Cleanable {
 			//The spell is weak against our colour
 			modifier = ColourManager.WeaknessModifier;
 		}
-		// Status modifier (reduced defence)
-		// Entity takes extra damage from spells when under this debuff
-		for (int i = 0; i < TickedStatus[(int)StatusType.ReducedDefence].Count; i++) {
-			modifier += TickedStatus[(int)StatusType.ReducedDefence][i].Power * 5.0f;
-		}
 		//status modifier (ensnare)
 		// Entity will be unable to move unless the ensare is destroyed by magic
 		// The ensare hp is its power

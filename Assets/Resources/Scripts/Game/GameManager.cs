@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour{
 		Instantiate(Resources.Load("Prefabs/Gui/InventoryPrefab"));
 		Instantiate(Resources.Load("Prefabs/Gui/HealthBarPrefab"));
 		Instantiate(Resources.Load("Prefabs/Gui/BattleLogPrefab"));
+		Instantiate(Resources.Load("Prefabs/Gui/PlaceBaseTitlePrefab"));
 	}
 
 	void ResetBools() {
@@ -190,9 +191,6 @@ public class GameManager : MonoBehaviour{
 
 	void actionPlayRunning() {
         turn_manager.tick();
-		GuiManager.IsShowHealthBar = true;
-        GuiManager.isShowInventory = true;
-		GuiManager.IsShowBattleLog = true;
 	}
 
 	void actionPlayExit() {
@@ -213,7 +211,6 @@ public class GameManager : MonoBehaviour{
 	void actionWinRunning() {
 		//Remove previous level
 		//Load next level
-		Debug.Log("actionWinRunning");
 	}
 
 	void actionWinExit() {

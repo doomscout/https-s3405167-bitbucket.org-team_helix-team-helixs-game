@@ -16,10 +16,10 @@ public class Spell {
 	public Spell () {
 		SpellColour = ColourManager.getRandomColour();
 		Shape = new Shape();
-		Power = Random.Range(1, 10);
-		SpellEffect = new StatusEffect (	0, //Random.Range(0, 10), /* tick count */
+		Power = Random.Range(1, 20);
+		SpellEffect = new StatusEffect (	Random.Range(0, 10), /* tick count */
 		                   					Random.Range(1, 5),  /* power */
-		                                	(StatusType)Random.Range(0, System.Enum.GetNames(typeof(StatusType)).Length - 1)); //TODO:No reduced defence for now
+		                                	(StatusType)Random.Range(0, System.Enum.GetNames(typeof(StatusType)).Length));
 		CastRange = Shape.CastRange;
 		SpellRating = calculateRating();
 	}
@@ -51,14 +51,14 @@ public class Spell {
 
 		/* Direct damage weights */
 		float powerWeight = 1.0f;
-		float castRangeWeight = 2.0f;
+		float castRangeWeight = 0.5f;
 		float affectedTilesWeight = 2.0f;
 		/* status weights */
 		float tickCountWeight = 1.0f;
 		float statusPowerWeight = 1.5f;
 		/* additional modifiers */
 		float powerModifier = 1.0f;
-		float statusEffectModifier = 0.50f;
+		float statusEffectModifier = 1.50f;
 
 		float rating = 0;
 		/* Direct damage */
@@ -67,8 +67,8 @@ public class Spell {
 		            (Shape.numberOfOnes * affectedTilesWeight)) * powerModifier;
 
 		/* status */
-//		rating += 	((SpellEffect.TickCount * tickCountWeight) *
-//		            (SpellEffect.Power * statusPowerWeight)) * statusEffectModifier;
+		rating += 	((SpellEffect.TickCount * tickCountWeight) *
+		            (SpellEffect.Power * statusPowerWeight)) * statusEffectModifier;
 
 		return rating;
 	}
@@ -121,4 +121,7 @@ public class Spell {
 		return false;
 	}
 
+	public override string ToString () {
+		return string.Format ("[Spell: Shape={0}, SpellColour={1}, Power={2}, CastRange={3}, SpellEffect={4}, EffectTick={5}SpellRating={6}]", Shape, SpellColour, Power, CastRange, SpellEffect.EffectName(), SpellEffect.TickCount, SpellRating);
+	}
 }

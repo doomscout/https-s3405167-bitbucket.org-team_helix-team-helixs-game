@@ -76,7 +76,7 @@ public class Player : Entity {
 
 	public void GetMoney(float amount) {
 		Money += amount;
-		MoneyGained = amount;
+		MoneyGained += amount;
 	}
 	
 	public new void CleanUp() {

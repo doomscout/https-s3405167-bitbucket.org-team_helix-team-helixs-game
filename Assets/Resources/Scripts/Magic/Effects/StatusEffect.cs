@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum StatusType {Poison, Ensnare, ReducedDefence}
+public enum StatusType {None, Poison, Ensnare}
 
 public class StatusEffect : Effect{
 	public StatusType Status {get; protected set;}
