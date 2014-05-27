@@ -14,8 +14,9 @@ public class GameInstance : Cleanable {
 	Player player;
 	PlayerBase Base;
 	GameObject tileMapPrefab;
-	public int NumberOfTurnsUntilWin {get; private set;}
 
+	public int NumberOfTurnsUntilWin {get; private set;}
+	public int DifficultyChange = 0;
 
     private bool validInput = false;
 	private bool showDamageIndicators = true;

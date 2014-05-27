@@ -21,6 +21,9 @@ public class GameManager : MonoBehaviour{
     TileMap map;
 	public int NumberOfWins = 0;
 
+	private float PlayerStartHP;
+	private float PlayerEndHP;
+
 	// Use this for initialization
 	void Start () {
 		initSM();
@@ -181,7 +184,7 @@ public class GameManager : MonoBehaviour{
 		BattleLog.GetInstance().Restart();
 		GameTools.GameCamera.MoveToCenter();
 		Debug.Log("actionMenuExit");
-		//TODO Temp placement of generate level
+		PlayerStartHP = GameTools.Player.Health;
 	}
 
 	void actionTransitionClickedPlay() {
@@ -203,6 +206,7 @@ public class GameManager : MonoBehaviour{
 		//Display Win GUI
 		GuiManager.IsShowWin = true;
 		GuiManager.IsShowHelp = false;
+		PlayerEndHP = GameTools.Player.Health;
 		shop.RefreshStock(player);
 		NumberOfWins++;
 		Debug.Log("actionWinEntry");
@@ -216,11 +220,17 @@ public class GameManager : MonoBehaviour{
 	void actionWinExit() {
 		//Cleanup menu
 		CleanTools.GetInstance().CleanRemoveLevel();
+
+		//create new game instance
+		if ((PlayerStartHP - PlayerEndHP)/PlayerStartHP < 0.5f) {
+			//If player lost more than 50% of his hp this round, it must be too hard.
+		}
 		turn_manager = new GameInstance(player, Base);
 		GoNextLevel = false;
 		player.ReloadSpell();
 		BattleLog.GetInstance().Restart();
 		GameTools.GameCamera.MoveToCenter();
+		PlayerStartHP = GameTools.Player.Health;
         Debug.Log("actionWinExit");
 	}
 
