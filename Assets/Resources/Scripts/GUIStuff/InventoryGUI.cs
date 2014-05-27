@@ -48,11 +48,14 @@ public class InventoryGUI : MonoBehaviour {
 						GUI.skin = skin02;
 						GUI.skin.box.fontSize = 12;
 					}
-            GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.24f*i,Screen.width * 0.1f,220f),
+            GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.24f*i,Screen.width * 0.1f,240f),
 					        "Current Spell:\n" + 
 					        "\nColour: " + deck.peekTopSpell().SpellColour.ToString() + 
 					        "\nPower: " + deck.getDeckSpell(0).Power + 
-					        "\nCastRange " + deck.deck[0].CastRange);
+					        "\nCastRange " + deck.deck[0].CastRange +
+					        "\nEffect " + deck.deck[0].SpellEffect.EffectName() + 
+					        (deck.deck[0].SpellEffect.EffectName()!="None"?
+					 		"\nTicks: " + deck.deck[0].SpellEffect.TickCount:""));
                      
                     shapeArray = deck.getDeckSpell(0).Shape.shapeIntArray;
                     s = "";
@@ -78,7 +81,7 @@ public class InventoryGUI : MonoBehaviour {
                         }
                         s+= "\n";
                     }
-                    GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.59f,Screen.width * 0.1f,120f), "Shape:\n" + s);
+                    GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.612f,Screen.width * 0.1f,120f), "Shape:\n" + s);
 					GUI.skin = skin01;
 					GUI.skin.box.fontSize = 12;
                 }
@@ -109,17 +112,20 @@ public class InventoryGUI : MonoBehaviour {
                         }
                         s+= "\n";
                     }
-                    GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.24f * i ,Screen.width * 0.1f,190f),
+                    GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.24f * i ,Screen.width * 0.1f,210f),
                         	"Colour: " + deck.getDeckSpell(2-i).SpellColour.ToString() + 
 					        "\nPower: " + deck.getDeckSpell(2-i).Power + 
-					        "\nCastRange " + deck.deck[0].CastRange);
+					        "\nCastRange " + deck.deck[2-i].CastRange +
+					        "\nEffect " + deck.deck[2-i].SpellEffect.EffectName() + 
+					        (deck.deck[2-i].SpellEffect.EffectName()!="None"?
+					 		"\nTicks: " + deck.deck[2-i].SpellEffect.TickCount:""));
                     if (i == 1)
                     {
-                    GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.32f,Screen.width * 0.1f,120f), "Shape:\n" + s);
+                    GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.34f,Screen.width * 0.1f,120f), "Shape:\n" + s);
                     }
                     else
                     {
-                        GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.08f,Screen.width * 0.1f,120f), "Shape:\n" + s);
+                        GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.10f,Screen.width * 0.1f,120f), "Shape:\n" + s);
                     }
                 }
             }

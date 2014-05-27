@@ -17,7 +17,7 @@ public class Spell {
 		SpellColour = ColourManager.getRandomColour();
 		Shape = new Shape();
 		Power = Random.Range(1, 20);
-		SpellEffect = new StatusEffect (	Random.Range(0, 10), /* tick count */
+		SpellEffect = new StatusEffect (	Random.Range(1, 10), /* tick count */
 		                   					Random.Range(1, 5),  /* power */
 		                                	(StatusType)Random.Range(0, System.Enum.GetNames(typeof(StatusType)).Length));
 		CastRange = Shape.CastRange;

@@ -29,6 +29,9 @@ public abstract class Entity : Cleanable {
 	//GameObject
 	public GameObject game_object {get; protected set;}
 
+	//ensare balance because its super borken
+	private int EnsnareImmunity;
+
 	protected Entity() {
 		PreInit();
 		InitAll();
@@ -137,6 +140,7 @@ public abstract class Entity : Cleanable {
 			dmg += TickedStatus[(int)StatusType.Poison][i].Power;
 			ShowText("Poisoned " + dmg, Color.green, i - 2);
 		}
+		EnsnareImmunity--;
 		Health -= dmg;
 	}
 
@@ -148,7 +152,15 @@ public abstract class Entity : Cleanable {
 		/* Receive status effects */
 		if (taken_spell.SpellEffect.TickCount > 0 && taken_spell.SpellEffect.GetType() == typeof(StatusEffect)) {
 			StatusEffect se = (StatusEffect)taken_spell.SpellEffect;
-			ListStatus.Add(new StatusEffect(se.TickCount, se.Power, se.Status));
+			//Ugle if statements to check for the broken ensnare effect
+			if (se.EffectName() == "Ensnare") {
+				if (EnsnareImmunity <= 0) {
+					EnsnareImmunity = 10;
+					ListStatus.Add(new StatusEffect(se.TickCount, se.Power, se.Status));
+				} 
+			} else {
+				ListStatus.Add(new StatusEffect(se.TickCount, se.Power, se.Status));
+			}
 		}
 	}
 
