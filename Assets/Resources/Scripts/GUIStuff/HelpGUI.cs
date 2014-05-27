@@ -29,8 +29,10 @@ public class HelpGUI : MonoBehaviour {
                  "\n\n Objective: \nDefend the Base until the number of turns is zero" 
                     +"\n\nTile Effect:" + "\nRed Tiles: Heals Player"
                     +"\nYellow Tiles: Gain Money"
+                    +"\nWhite: Enemy Slimes Spawns from this"
                     +"\nCircle: Step to gain Money or health"
-                    + "\nSquare: Stand kill to gain Money or Health");
+                    + "\nSquare: Stand and kill an enemy to gain Money or Health"
+                    );
         }
        
     }
