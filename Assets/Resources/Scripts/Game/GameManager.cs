@@ -181,7 +181,7 @@ public class GameManager : MonoBehaviour{
 		GameStart = false;
 		GuiManager.IsStillMenu = false;
 
-		turn_manager = new GameInstance(player, Base);
+		turn_manager = new GameInstance(player, Base, 0);
 		BattleLog.GetInstance().Restart();
 		GameTools.GameCamera.MoveToCenter();
 		Debug.Log("actionMenuExit");
@@ -224,10 +224,9 @@ public class GameManager : MonoBehaviour{
 		CleanTools.GetInstance().CleanRemoveLevel();
 
 		//create new game instance
-		if ((PlayerStartHP - PlayerEndHP)/PlayerStartHP < 0.5f) {
-			//If player lost more than 50% of his hp this round, it must be too hard.
-		}
-		turn_manager = new GameInstance(player, Base);
+		float change_diff = (PlayerEndHP - PlayerStartHP)/PlayerStartHP * 10;
+		turn_manager = new GameInstance(player, Base, (int)change_diff);
+
 		GoNextLevel = false;
 		player.ReloadSpell();
 		BattleLog.GetInstance().Restart();

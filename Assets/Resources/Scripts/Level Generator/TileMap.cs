@@ -89,9 +89,14 @@ public class TileMap : MonoBehaviour, Cleanable {
 		}
 	}
 
-	public void InitSpawners(int level) {
-		int SpawnerCount = 10;
-
+	public void InitSpawners(int playerlevel, int difficultyChange) {
+		int SpawnerCount = 10 - difficultyChange;
+		if (SpawnerCount < 5) {
+			SpawnerCount = 5;
+		}
+		if (SpawnerCount > 20) {
+			SpawnerCount = 20;
+		}
 		while (SpawnerCount > 0) {
 			int randX = Random.Range(0, size_x);
 			int randY = Random.Range(0, size_z);
@@ -104,7 +109,7 @@ public class TileMap : MonoBehaviour, Cleanable {
 				if (BonusTileData[randX, randY] == null && 
 				    SpawnerMap[randX, randY] == null) {
 					SpawnerCount--;
-					EnemySpawner e = new EnemySpawner(randX, randY, level);
+					EnemySpawner e = new EnemySpawner(randX, randY, playerlevel, difficultyChange);
 					SpawnerMap[randX, randY] = e;
 					Spawners.Add(e);
 				}

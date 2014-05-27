@@ -27,6 +27,9 @@ public class Unit : Entity{
 		Map_position_y = y;
 
 		Max_Health = level - ((float)level)/1.2f + 1;
+		if (Max_Health < 0) {
+			Max_Health = 1;
+		}
 		Health = Max_Health;
 		Money += level/2;
 		name = MainColour.ToString() + " unit";

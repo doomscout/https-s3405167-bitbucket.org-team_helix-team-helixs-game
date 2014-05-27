@@ -29,9 +29,10 @@ public class GameInstance : Cleanable {
 	private State state_enemy;
 	private State state_start;
 
-    public GameInstance(Player player, PlayerBase Base) {
+    public GameInstance(Player player, PlayerBase Base, int adaptive_difficulty) {
 		this.player = player;
 		this.Base = Base;
+		this.DifficultyChange = adaptive_difficulty;
 
         list_live_units = new List<Unit>();
 		list_dead_units = new List<Unit>();
@@ -66,9 +67,14 @@ public class GameInstance : Cleanable {
 	public void loadEntities() {
 		Base.LoadIntoGame();
 
-		int playerlevel = player.CalculateLevel();
+		Debug.Log ("Diffifulty change: " + DifficultyChange + "PlayerLevel: " + player.CalculateLevel());
+		int playerlevel = (int)(player.CalculateLevel() * ((float)DifficultyChange)/10.0f);
+		if (playerlevel == 0) {
+			playerlevel = player.CalculateLevel();
+		}
+		Debug.Log("New player level " + playerlevel);
 		Debug.Log ("Player level " + playerlevel);
-		GameTools.Map.InitSpawners(playerlevel);
+		GameTools.Map.InitSpawners(playerlevel, DifficultyChange);
 
 		//populate map with enemies
 	}
