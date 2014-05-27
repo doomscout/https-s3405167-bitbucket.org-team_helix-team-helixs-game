@@ -162,6 +162,7 @@ public class GameInstance : Cleanable {
 
 	void actionStartExit() {
 		player.LoadIntoGame();
+		Base.HasPlacedBase = false;
 	}
 
 	void actionPlayerEntry() {

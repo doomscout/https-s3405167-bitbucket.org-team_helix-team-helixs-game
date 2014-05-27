@@ -17,7 +17,7 @@ public class PlayerBase : Entity {
 		BufferedSpells = new List<Spell>();
 		width = 3;
 		height = 3;
-		MaxRechargeTime = 5;
+		MaxRechargeTime = 7;
 		HasPlacedBase = false;
 	}
 

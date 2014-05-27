@@ -118,7 +118,7 @@ public class ShopGUI : MonoBehaviour {
         GUI.skin = skin01;
         GUI.Box(new Rect(Screen.width * 0.4f, Screen.height * 0.2f, 150f, 100f), "M - Cursor\nP - PLayer \n * - Areas the spell affects");
         GUI.Box(new Rect(Screen.width * 0.4f, Screen.height * 0.1f, 150f, 30f), "Money: " + GameTools.Player.Money);
-        if (GUI.Button(new Rect(Screen.width * 0.4f, Screen.height * 0.4f, 150f, 50f), "Leave Shop") && deck.deck.Count >= 3) {
+        if (GUI.Button(new Rect(Screen.width * 0.4f, Screen.height * 0.7f, 150f, 50f), "Leave Shop") && deck.deck.Count >= 3) {
 			GuiManager.IsShowShop = false;
 			if (GuiManager.IsStillMenu) {
 				GameTools.GM.GameStart = true;
@@ -126,6 +126,12 @@ public class ShopGUI : MonoBehaviour {
 			} else {
 				GuiManager.IsShowWin = true;
 			}
+		}
+		if (GUI.Button(new Rect(Screen.width * 0.4f, Screen.height * 0.4f, 150f, 50f), "Up Turret (20)")) {
+			Debug.Log ("This button does nothing for now");
+		}
+		if (GUI.Button(new Rect(Screen.width * 0.4f, Screen.height * 0.45f, 150f, 50f), "Repair base (3)")) {
+			Debug.Log ("This button does nothing for now");
 		}
     }
 }
