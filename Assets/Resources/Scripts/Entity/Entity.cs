@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 public abstract class Entity : Cleanable {
+	//general stuff
+	public string name;
+
 	//Stats
 	public float Max_Health {get;set;}
 	public float Health {get;set;}
@@ -62,7 +65,7 @@ public abstract class Entity : Cleanable {
 	}
 
 	protected virtual void PreInit() {
-
+		name = "";
 	}
 
 	protected virtual void InitAnimation() {
@@ -138,6 +141,7 @@ public abstract class Entity : Cleanable {
 				Debug.LogError("Poison tick error");
 			}
 			dmg += TickedStatus[(int)StatusType.Poison][i].Power;
+			BattleLog.GetInstance().AddMessage("[Turn " + GameTools.GI.NumberOfTurnsUntilWin +"] " + name + " poisoned for " + dmg + " damage.");
 			ShowText("Poisoned " + dmg, Color.green, i - 2);
 		}
 		EnsnareImmunity--;

@@ -27,6 +27,7 @@ public class Player : Entity {
 		base.InitStats();
 		Max_Health = 200.0f;
 		Health = Max_Health;
+		name = "Player";
 	}
 
 	protected override void InitMapPosition() {
@@ -95,7 +96,7 @@ public class Player : Entity {
 		} else {
 			Health -= dmg;
 			base.ShowText("-" + dmg + "Player HP", Color.red, 0);
-			BattleLog.GetInstance().AddMessage("[Turn " + GameTools.GI.NumberOfTurnsUntilWin +"] Player took " + dmg + " damage.");
+			BattleLog.GetInstance().AddMessage("[Turn " + GameTools.GI.NumberOfTurnsUntilWin +"] " + name + " took " + dmg + " damage.");
 		}
 		return dmg;
 	}

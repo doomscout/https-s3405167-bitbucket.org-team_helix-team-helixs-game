@@ -31,7 +31,10 @@ public class ShopGUI : MonoBehaviour {
             GUI.Box(new Rect(Screen.width * 0.6f, Screen.height * 0.1f * j, 150f, 110f ), 
 			        "Spell " + spellColour + 
 			        "\nPower: " + GameTools.Shop.SpellStock[i].Power +
-			        "\nCast Range: " + GameTools.Shop.SpellStock[i].CastRange);
+			        "\nCast Range: " + GameTools.Shop.SpellStock[i].CastRange +
+			        "\nEffect " + GameTools.Shop.SpellStock[i].SpellEffect.EffectName() + 
+             		(GameTools.Shop.SpellStock[i].SpellEffect.EffectName()!="None"?
+                   	"\nTicks: " + GameTools.Shop.SpellStock[i].SpellEffect.TickCount:""));
 			shapeArray = GameTools.Shop.SpellStock[i].Shape.shapeIntArray;
             s = "";
             for(int k = 0;k < shapeArray.GetLength(0); k++)
@@ -99,7 +102,10 @@ public class ShopGUI : MonoBehaviour {
             GUI.Box(new Rect(Screen.width * 0.06f, Screen.height * 0.1f * j, 200f, 110f ), 
 			        "Spell: " + spellColour + 
 			        "\nPower: " + GameTools.Player.deckManager.getDeckSpell(k).Power +
-			        "\nCast Range: " + GameTools.Player.deckManager.deck[k].CastRange);
+			        "\nCast Range: " + GameTools.Player.deckManager.deck[k].CastRange+
+			        "\nEffect " + GameTools.Player.deckManager.deck[k].SpellEffect.EffectName() + 
+			        (GameTools.Player.deckManager.deck[k].SpellEffect.EffectName()!="None"?
+		 			"\nTicks: " + GameTools.Player.deckManager.deck[k].SpellEffect.TickCount:""));
             GUI.Box(new Rect(Screen.width * 0.18f, Screen.height * 0.1f * j, 100, 100f), "" + s);
 			if (GUI.Button(new Rect(Screen.width * 0.25f, Screen.height * 0.1f * j, 260f, 30f), "Sell Spell") && GameTools.Player.deckManager.deck.Count > 3)
            	{

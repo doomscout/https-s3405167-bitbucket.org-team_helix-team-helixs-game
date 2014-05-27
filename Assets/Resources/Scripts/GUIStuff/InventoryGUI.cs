@@ -48,7 +48,7 @@ public class InventoryGUI : MonoBehaviour {
 						GUI.skin = skin02;
 						GUI.skin.box.fontSize = 12;
 					}
-            GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.24f*i,Screen.width * 0.1f,240f),
+            GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.24f*i,Screen.width * 0.1f,245f),
 					        "Current Spell:\n" + 
 					        "\nColour: " + deck.peekTopSpell().SpellColour.ToString() + 
 					        "\nPower: " + deck.getDeckSpell(0).Power + 
@@ -81,7 +81,7 @@ public class InventoryGUI : MonoBehaviour {
                         }
                         s+= "\n";
                     }
-                    GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.612f,Screen.width * 0.1f,120f), "Shape:\n" + s);
+                    GUI.Box(new Rect((Screen.width * 0.85f),Screen.height * 0.616f,Screen.width * 0.1f,120f), "Shape:\n" + s);
 					GUI.skin = skin01;
 					GUI.skin.box.fontSize = 12;
                 }

@@ -13,10 +13,12 @@ public class Unit : Entity{
 	
 	public Unit() : base(){
 		brain = new SimpleAI(this);
+		name = "Unit";
 	}
 
 	public Unit(int i) : this(){
 		game_object.name = i + "";
+		name = "Unit " + i;
 	}
 
 	public Unit(int x, int y, int level) : base(x,y) {
@@ -27,6 +29,7 @@ public class Unit : Entity{
 		Max_Health = level - ((float)level)/1.2f + 1;
 		Health = Max_Health;
 		Money += level/2;
+		name = MainColour.ToString() + " unit";
 
 		MainSpell = SpellGenerator.GetInstance().GetClosestSingleSpell(level/2);
 		Debug.Log ("enemy hp: " + Max_Health + MainSpell.ToString());
@@ -144,7 +147,7 @@ public class Unit : Entity{
 		float dmg = base.GetHitByMagic(taken_spell);
 		Health -= dmg;
 		base.ShowText("-" + dmg, Color.black, 0);
-		BattleLog.GetInstance().AddMessage("[Turn " + GameTools.GI.NumberOfTurnsUntilWin +"] Unit took " + dmg + " damage.");
+		BattleLog.GetInstance().AddMessage("[Turn " + GameTools.GI.NumberOfTurnsUntilWin +"] " + name + " took " + dmg + " damage.");
 		IsAggroed = true;
 		GameTools.Player.DamageDealt += dmg;
 		return dmg;

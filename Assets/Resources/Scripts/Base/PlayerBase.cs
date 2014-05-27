@@ -24,6 +24,7 @@ public class PlayerBase : Entity {
 		MaxRechargeTime = 7;
 		CastRange = 10;
 		HasPlacedBase = false;
+		name = "Base";
 	}
 
 	protected override void InitCleanable() {
@@ -93,7 +94,7 @@ public class PlayerBase : Entity {
 		}
 		Health -= dmg;
 		base.ShowText("-" + dmg + " base hp", Color.red,2);
-		BattleLog.GetInstance().AddMessage("[Turn " + GameTools.GI.NumberOfTurnsUntilWin +"] Base took " + dmg + " damage.");
+		BattleLog.GetInstance().AddMessage("[Turn " + GameTools.GI.NumberOfTurnsUntilWin +"] " + name + " took " + dmg + " damage.");
 		BufferedSpells.Add(taken_spell);
 		return dmg;
 	}
