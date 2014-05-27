@@ -16,7 +16,7 @@ public class Lose : MonoBehaviour {
 			GameTools.GM.QuitGame = true;
 		}
 		GUI.Box(new Rect(Screen.width * 0.45f, Screen.height * 0.55f,Screen.width * 0.1f, Screen.height * 0.15f), 
-		        "Stats: " + 
+		        "Total stats this game: " + 
 		        "\nKill Count: " +  GameTools.Player.KillCount +
 		        "\nDamage Dealt: " + GameTools.Player.DamageDealt +
 		        "\nMoney Collected: " + GameTools.Player.MoneyGained);
