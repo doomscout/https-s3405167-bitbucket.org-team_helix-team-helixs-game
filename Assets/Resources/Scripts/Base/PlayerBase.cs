@@ -9,15 +9,20 @@ public class PlayerBase : Entity {
 	public bool HasPlacedBase;
 
 	public int MaxRechargeTime {get;set;}
+	public int CastRange{get;set;}
 	private int RechargeTime;
 	private List<Spell> BufferedSpells;
 
 	public PlayerBase() : base() {
 		GameTools.Base = this;
+	}
+
+	protected override void PreInit () {
 		BufferedSpells = new List<Spell>();
 		width = 3;
 		height = 3;
 		MaxRechargeTime = 7;
+		CastRange = 10;
 		HasPlacedBase = false;
 	}
 
@@ -45,7 +50,7 @@ public class PlayerBase : Entity {
 
 	protected override void InitMagic () {
 		base.InitMagic ();
-		MainSpell.Shape.CastRange = 15;
+		MainSpell.Shape.CastRange = CastRange;
 	}
 
 	public void PlaceBase(int x, int y) {
@@ -104,7 +109,7 @@ public class PlayerBase : Entity {
 	public void logic_tick() {
 		//flush buffered spells
 		BufferedSpells = new List<Spell>();
-		int castRange = 15;
+		int castRange = MainSpell.CastRange;
 		if (RechargeTime >= MaxRechargeTime) {
 			for (int i = -castRange; i <= castRange; i++) {
 				for (int j = castRange - Mathf.Abs(i); j >= -(castRange - Mathf.Abs(i)); j--) {

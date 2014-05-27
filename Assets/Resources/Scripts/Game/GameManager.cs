@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour{
 	public bool GoNextLevel;
 
     TileMap map;
-	int numberOfWins = 0;
+	public int NumberOfWins = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -153,15 +153,11 @@ public class GameManager : MonoBehaviour{
 	void actionMenuEntry() {
 		//Display Menu GUI
 		Debug.Log("actionMenuEntry");
-		if (player == null) {
-			player = new Player();
-		}
-		if (Base == null) {
-			Base = new PlayerBase();
-		}
-		if (shop == null) {
-			shop = new Shop();
-		}
+		player = new Player();
+		Base = new PlayerBase();
+		shop = new Shop();
+		NumberOfWins = 0;
+
 		shop.RefreshStock(player);
 		this.ResetBools();
 		GuiManager.Reset();
@@ -202,7 +198,7 @@ public class GameManager : MonoBehaviour{
 	void actionPlayExit() {
 		GuiManager.IsShowHealthBar = false;
 		GuiManager.isShowInventory = false;
-		GuiManager.IsShowBattleLog = false;
+
 	}
 
 	void actionWinEntry() {
@@ -210,10 +206,7 @@ public class GameManager : MonoBehaviour{
 		GuiManager.IsShowWin = true;
 		GuiManager.IsShowHelp = false;
 		shop.RefreshStock(player);
-		if (numberOfWins == 0) {
-			turn_manager.saveData();
-		}
-		numberOfWins++;
+		NumberOfWins++;
 		Debug.Log("actionWinEntry");
 	}
 
@@ -256,6 +249,7 @@ public class GameManager : MonoBehaviour{
 		//Display Lose GUI
 		Debug.Log("actionLoseEntry");
 		GuiManager.IsShowLose = true;
+
 	}
 
 	void actionLoseExit() {
@@ -264,6 +258,7 @@ public class GameManager : MonoBehaviour{
 		turn_manager = null;
 		player = null;
 		Base = null;
+		shop = null;
 		Debug.Log("actionLoseExit");
 
 	}
@@ -286,7 +281,7 @@ public class GameManager : MonoBehaviour{
 	}
 	
 	bool conditionPressedEsc() {
-		return Input.GetKeyDown("escape");
+		return Input.GetKeyUp("escape");
 	}
 
 	bool conditionClickedQuit() {
@@ -311,7 +306,7 @@ public class GameManager : MonoBehaviour{
 
 	bool conditionLose() {
 		//return  Input.GetKeyDown("down");
-		return turn_manager.IsAnimationDone && GameTools.Player.IsDead() || GameTools.Base.IsDead();
+		return Input.GetKeyDown("right") || (turn_manager.IsAnimationDone && GameTools.Player.IsDead() || GameTools.Base.IsDead());
 	}
 
     bool conditionTrue() {

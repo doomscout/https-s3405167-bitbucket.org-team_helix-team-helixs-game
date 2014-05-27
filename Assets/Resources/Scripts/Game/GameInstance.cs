@@ -59,7 +59,7 @@ public class GameInstance : Cleanable {
 		script.init ();
 		loadEntities();
 
-		NumberOfTurnsUntilWin = 100;
+		NumberOfTurnsUntilWin = 2;
 	}
 
 	public void loadEntities() {

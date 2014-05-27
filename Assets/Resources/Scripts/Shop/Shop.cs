@@ -10,7 +10,7 @@ public class Shop : Cleanable {
 
 	public Shop() {
 		GameTools.Shop = this;
-		CleanTools.GetInstance().SubscribeCleanable(this);
+		CleanTools.GetInstance().SubscribeCleanable(this, true);
 	}
 
 	public void RefreshStock(Player p) {
@@ -18,22 +18,9 @@ public class Shop : Cleanable {
 		float playermoney = p.Money;
 		SpellStock = new List<Spell>();
 		for (int i = 0; i < SpellStockMaxLevel; i++) {
-			SpellStock.Add(SpellGenerator.GetInstance().GetClosestSpell(playerrating+(i*2)+((int)(playermoney/10.0f))));
+			SpellStock.Add(SpellGenerator.GetInstance().GetClosestSpell(playerrating+(i*2)+((int)(playermoney/3.0f))));
 		}
 	}
-
-	/* 
-	public void ReplenishStock() {
-		if (SpellStock == null) {
-			RefreshStock();
-			return;
-		}
-		int originalSpellLevel = SpellStock.Count;
-		for (int i = 0; i < originalSpellLevel; i++) {
-			SpellStock.Add(new Spell());
-		}
-	}
-	*/
 
 	//Sell a spell to player
 	public bool TryToSellSpell(Player p, Spell s) {

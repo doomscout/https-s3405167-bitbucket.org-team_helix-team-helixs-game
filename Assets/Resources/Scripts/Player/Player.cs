@@ -4,9 +4,13 @@ using System.Collections.Generic;
 
 public class Player : Entity {
 	public ItemManager deckManager;
+	public SpellIndicator spellIndicator;
+	public int KillCount = 0;
+	public float DamageDealt = 0;
+	public float MoneyGained = 0;
+
 	private Animator playerAnimation;
 	private bool castedSpell = false;
-	public SpellIndicator spellIndicator;
 	private CastRangeIndicator PlayerCastIndicator;
 
 	public Player() : base(){
@@ -68,6 +72,11 @@ public class Player : Entity {
 		Debug.Log ("Player rating " + PlayerRating);
 
 		return (int)PlayerRating;
+	}
+
+	public void GetMoney(float amount) {
+		Money += amount;
+		MoneyGained = amount;
 	}
 	
 	public new void CleanUp() {

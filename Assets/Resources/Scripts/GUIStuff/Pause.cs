@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class Pause : MonoBehaviour {
-
     void Start(){
 
     }
@@ -12,18 +11,23 @@ public class Pause : MonoBehaviour {
 		if (!GuiManager.IsPause) {
 			return;
 		}
-        GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");
-        GUI.Box(new Rect(Screen.width/2,Screen.height/2,120,120), "Pause");
+		GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");
+		GUI.Box(new Rect(Screen.width * 0.45f,Screen.height * 0.45f, Screen.width * 0.1f,Screen.height * 0.1f), "Pause");
 
-        if (GUI.Button(new Rect(Screen.width/2, Screen.height/2 + 30, 120, 30), "Resume")){
+		if (GUI.Button(new Rect(Screen.width * 0.45f, Screen.height * 0.45f + 30f, Screen.width * 0.1f, 30f), "Resume")){
 			GameTools.GM.ResumeGame = true;
 			GuiManager.IsPause = false;
         }
 
-        if (GUI.Button(new Rect(Screen.width/2, Screen.height/2 + 60, 120, 30), "Quit")){
+        if (GUI.Button(new Rect(Screen.width * 0.45f, Screen.height* 0.45f + 60f, Screen.width * 0.1f, 30f), "Quit")){
 			GameTools.GM.QuitGame = true;
 			GuiManager.IsPause = false;
         }
+
+		if (Input.GetKeyUp("escape")) {
+			GuiManager.IsPause = false;
+			GameTools.GM.ResumeGame = true;
+		}
     }
 }
 	

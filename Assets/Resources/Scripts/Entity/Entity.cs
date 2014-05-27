@@ -30,12 +30,14 @@ public abstract class Entity : Cleanable {
 	public GameObject game_object {get; protected set;}
 
 	protected Entity() {
+		PreInit();
 		InitAll();
 	}
 
 	protected Entity(int x, int y) {
 		Map_position_x = x;
 		Map_position_y = y;
+		PreInit();
 		InitAll();
 	}
 
@@ -54,6 +56,10 @@ public abstract class Entity : Cleanable {
 		InitGameObject();
 		//InitCleanable
 		InitCleanable();
+	}
+
+	protected virtual void PreInit() {
+
 	}
 
 	protected virtual void InitAnimation() {

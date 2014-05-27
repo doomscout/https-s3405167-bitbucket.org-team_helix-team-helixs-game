@@ -56,7 +56,7 @@ public class BonusTile : Cleanable{
 	public bool IsDead() {
 		if (hp <= 0) {
 			if (Reward == TileReward.Money){
-				GameTools.Player.Money += amount;
+				GameTools.Player.GetMoney(amount);
 				ShowText("+" + amount, Color.yellow, 0);
 				Debug.Log ("Gained Money");
 			} else {
@@ -74,7 +74,7 @@ public class BonusTile : Cleanable{
 		tick--;
 		if (Interaction == TileInteraction.Stand) {
 			if (Reward == TileReward.Money){
-				p.Money += amount;
+				GameTools.Player.GetMoney(amount);
 				ShowText("+" + amount + " gold", Color.yellow, 0);
 				Debug.Log ("Gained money tick");
 			} else {

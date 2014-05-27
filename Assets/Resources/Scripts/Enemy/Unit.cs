@@ -77,7 +77,8 @@ public class Unit : Entity{
 		enemyAnimation.SetBool ("Death", true);
 		base.death_tick();
 		this.ShowText("+" + Money + " gold", Color.yellow, -2);
-		GameTools.Player.Money += Money;
+		GameTools.Player.GetMoney(Money);
+		GameTools.Player.KillCount++;
 		GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = null;
 	}
 	
@@ -143,6 +144,7 @@ public class Unit : Entity{
 		base.ShowText("-" + dmg, Color.black, 0);
 		BattleLog.GetInstance().AddMessage("[Turn " + GameTools.GI.NumberOfTurnsUntilWin +"] Unit took " + dmg + " damage.");
 		IsAggroed = true;
+		GameTools.Player.DamageDealt += dmg;
 		return dmg;
 	}
 

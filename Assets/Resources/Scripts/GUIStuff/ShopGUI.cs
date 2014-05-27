@@ -2,8 +2,6 @@
 using System.Collections;
 
 public class ShopGUI : MonoBehaviour {
-    public Shop shop;
-    ItemManager deck;
     public int[,] shapeArray;
     public string spellColour;
     public GUISkin skin01;
@@ -19,28 +17,27 @@ public class ShopGUI : MonoBehaviour {
 		if (!GuiManager.IsShowShop) {
 			return;
 		}
-		if (shop == null) {
-			shop = GameTools.Shop;
-		}
-		if (deck == null) {
-			deck = GameTools.Player.deckManager;
-		}
 		if (shapeArray == null) {
-			shapeArray = shop.SpellStock[0].Shape.shapeIntArray;
+			shapeArray = GameTools.Shop.SpellStock[0].Shape.shapeIntArray;
 		}
         GUI.skin = skin01;
         //GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");
         GUI.Box(new Rect(Screen.width * 0.5f, 0,Screen.width * 0.5f, Screen.height ), "Shop" );
         //Shop Display
         float j =1;
-        for(int i = 0; i < shop.SpellStock.Count; i++)
+		if (GameTools.Shop == null) {
+			Debug.Log ("nulled");
+		} else if (GameTools.Shop.SpellStock == null) {
+			Debug.Log ("this is null");
+		}
+		for(int i = 0; i < GameTools.Shop.SpellStock.Count; i++)
         {
-            spellColour = shop.SpellStock[i].SpellColour.ToString();
+			spellColour = GameTools.Shop.SpellStock[i].SpellColour.ToString();
             GUI.Box(new Rect(Screen.width * 0.6f, Screen.height * 0.1f * j, 150f, 110f ), 
 			        "Spell " + spellColour + 
-			        "\nPower: " + shop.SpellStock[i].Power +
-			        "\nCast Range: " + shop.SpellStock[i].CastRange);
-            shapeArray = shop.SpellStock[i].Shape.shapeIntArray;
+			        "\nPower: " + GameTools.Shop.SpellStock[i].Power +
+			        "\nCast Range: " + GameTools.Shop.SpellStock[i].CastRange);
+			shapeArray = GameTools.Shop.SpellStock[i].Shape.shapeIntArray;
             s = "";
             for(int k = 0;k < shapeArray.GetLength(0); k++)
             {
@@ -65,9 +62,9 @@ public class ShopGUI : MonoBehaviour {
                 s+= "\n";
             }
             GUI.Box(new Rect(Screen.width * 0.7f, Screen.height * 0.1f * j, 150f, 90f), s);
-            if (GUI.Button(new Rect(Screen.width * 0.8f, Screen.height * 0.1f * j, 200f, 60f), "Buy Spell("+ shop.SpellStock[i].SpellRating +")"))
+			if (GUI.Button(new Rect(Screen.width * 0.8f, Screen.height * 0.1f * j, 200f, 60f), "Buy Spell("+ GameTools.Shop.SpellStock[i].SpellRating +")"))
             {
-                shop.TryToSellSpell(GameTools.Player, shop.SpellStock[i]);
+				GameTools.Shop.TryToSellSpell(GameTools.Player, GameTools.Shop.SpellStock[i]);
             }
            
             j += 1;
@@ -77,10 +74,10 @@ public class ShopGUI : MonoBehaviour {
         j = 1;
         GUI.skin = skin02;
         GUI.Box(new Rect(0, 0, Screen.width * 0.4f, Screen.height), "Deck/Inventory");
-		for(int k = 0; k < deck.deck.Count; k++)
+		for(int k = 0; k < GameTools.Player.deckManager.deck.Count; k++)
         {
-            spellColour = deck.getDeckSpell(k).SpellColour.ToString();
-            shapeArray = deck.getDeckSpell(k).Shape.shapeIntArray;
+			spellColour = GameTools.Player.deckManager.getDeckSpell(k).SpellColour.ToString();
+			shapeArray = GameTools.Player.deckManager.getDeckSpell(k).Shape.shapeIntArray;
             s = "";
             for(int l = 0;l < shapeArray.GetLength(0); l++)
             {
@@ -106,19 +103,19 @@ public class ShopGUI : MonoBehaviour {
             }
             GUI.Box(new Rect(Screen.width * 0.08f, Screen.height * 0.1f * j, 200f, 110f ), 
 			        "Spell: " + spellColour + 
-			        "\nPower: " + deck.getDeckSpell(k).Power +
-			        "\nCast Range: " + deck.deck[k].CastRange);
+			        "\nPower: " + GameTools.Player.deckManager.getDeckSpell(k).Power +
+			        "\nCast Range: " + GameTools.Player.deckManager.deck[k].CastRange);
             GUI.Box(new Rect(Screen.width * 0.225f, Screen.height * 0.1f * j, 100, 100f), "" + s);
-            if (GUI.Button(new Rect(Screen.width * 0.3f, Screen.height * 0.1f * j, 100f, 50f), "Sell Spell") && deck.deck.Count > 3)
+			if (GUI.Button(new Rect(Screen.width * 0.3f, Screen.height * 0.1f * j, 100f, 50f), "Sell Spell") && GameTools.Player.deckManager.deck.Count > 3)
             {
-                shop.TryToBuySpell(GameTools.Player, deck.getDeckSpell(k));
+				GameTools.Shop.TryToBuySpell(GameTools.Player, GameTools.Player.deckManager.getDeckSpell(k));
             }
             j += 1;
         }
         GUI.skin = skin01;
         GUI.Box(new Rect(Screen.width * 0.4f, Screen.height * 0.2f, 150f, 100f), "M - Cursor\nP - PLayer \n * - Areas the spell affects");
         GUI.Box(new Rect(Screen.width * 0.4f, Screen.height * 0.1f, 150f, 30f), "Money: " + GameTools.Player.Money);
-        if (GUI.Button(new Rect(Screen.width * 0.4f, Screen.height * 0.7f, 150f, 50f), "Leave Shop") && deck.deck.Count >= 3) {
+		if (GUI.Button(new Rect(Screen.width * 0.4f, Screen.height * 0.7f, 150f, 50f), "Leave Shop") && GameTools.Player.deckManager.deck.Count >= 3) {
 			GuiManager.IsShowShop = false;
 			if (GuiManager.IsStillMenu) {
 				GameTools.GM.GameStart = true;
