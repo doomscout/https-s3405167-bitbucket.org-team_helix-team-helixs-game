@@ -26,12 +26,19 @@ public class Unit : Entity{
 		Map_position_x = x;
 		Map_position_y = y;
 
+		if (level < 0) {
+			level = 0;
+		}
+
 		Max_Health = level - ((float)level)/1.2f + 1;
 		if (Max_Health < 0) {
 			Max_Health = 1;
 		}
 		Health = Max_Health;
 		Money = level/2;
+		if (Money < 1) {
+			Money = 12;
+		}
 		name = MainColour.ToString() + " unit";
 
 		MainSpell = SpellGenerator.GetInstance().GetClosestSingleSpell(level/4);
