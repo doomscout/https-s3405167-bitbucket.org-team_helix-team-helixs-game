@@ -122,7 +122,7 @@ public class PlayerBase : Entity {
 	}
 
 	public bool UpgradeTurret() {
-		if (MaxRechargeTime <= 1) {
+		if (MaxRechargeTime <= 2) {
 			return false;
 		}
 		MaxRechargeTime--;

@@ -21,15 +21,19 @@ public class Shape {
 	}
 
 	public void ChangeIntoMouse() {
+		bool found = false;
 		for (int i = 0; i < shapeIntArray.GetLength(0); i++) {
 			for (int j = 0; j < shapeIntArray.GetLength(1); j++) {
 				if (shapeIntArray[i,j] == ShapeInt.P) {
 					shapeIntArray[i,j] = ShapeInt.M;
+					found  = true;
 				}
 			}
 		}
 		SetNumberOfOnes(shapeIntArray);
-		numberOfOnes--;
+		if (found) {
+			numberOfOnes--;
+		}
 	}
 
 	private void init() {

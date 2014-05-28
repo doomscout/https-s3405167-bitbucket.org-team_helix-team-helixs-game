@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour{
 
     TileMap map;
 	public int NumberOfWins = 0;
+	public int ModeOffset = -10;
 
 	private float PlayerStartHP;
 	private float PlayerEndHP;
@@ -181,7 +182,7 @@ public class GameManager : MonoBehaviour{
 		GameStart = false;
 		GuiManager.IsStillMenu = false;
 
-		turn_manager = new GameInstance(player, Base, -10);
+		turn_manager = new GameInstance(player, Base, ModeOffset);
 		BattleLog.GetInstance().Restart();
 		GameTools.GameCamera.MoveToCenter();
 		Debug.Log("actionMenuExit");
