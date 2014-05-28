@@ -207,7 +207,7 @@ public abstract class Entity : Cleanable {
 	public virtual void death_tick() {
 		//display death animation (if any)
 		float errorpopupindebug = 0;
-		GameObject.Destroy(game_object, 2.0f);
+		GameObject.Destroy(game_object, 0.5f);
 		FinishedAnimation = true;			//temp no animation, just return immediately
 	}
 

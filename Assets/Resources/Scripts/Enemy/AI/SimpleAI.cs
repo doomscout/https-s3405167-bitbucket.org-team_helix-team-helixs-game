@@ -95,7 +95,7 @@ public class SimpleAI {
 		unit.CastMainSpell();
 	}
 
-	int temp = 2;
+	int temp = 4;
 	void actionFollowRunning() {
 		List<Entity> neighbourhood = new List<Entity>();
 		for(int i = -temp; i <= temp; i++) {
@@ -118,7 +118,7 @@ public class SimpleAI {
 	}
 
     void actionHaltRunning() {
-		//unit.MoveRandomly();
+		unit.MoveRandomly();
     }
 
     void actionDieRunning() {
@@ -128,8 +128,7 @@ public class SimpleAI {
     }
 
     bool transitionInSeekRange() {
-		return true;
-		//return  unit.IsAggroed;
+		return  unit.IsAggroed;
 
 				/*AStar
 				.fromPosition(unit.Map_position_x, unit.Map_position_y)

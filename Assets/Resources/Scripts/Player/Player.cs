@@ -164,7 +164,8 @@ public class Player : Entity {
 				validInput = false;
 			} else {
 				if ((GameTools.Map.map_unit_occupy[newX, newY] != null &&
-				     !GameTools.Map.map_unit_occupy[newX, newY].IsEntityAbleToMoveHere(this))||
+				    !GameTools.Map.map_unit_occupy[newX, newY].IsEntityAbleToMoveHere(this))||
+				    GameTools.Base.IsMovingOnTurret(newX, newY) ||
 				    (!TileTools.IsLand(GameTools.Map.TileMapData[newX, newY]))) {
 					current_target = Direction.None;
 					validInput = false;
@@ -180,6 +181,7 @@ public class Player : Entity {
 			} else {
 				if ((GameTools.Map.map_unit_occupy[newX, newY] != null &&
 				     !GameTools.Map.map_unit_occupy[newX, newY].IsEntityAbleToMoveHere(this))||
+				    GameTools.Base.IsMovingOnTurret(newX, newY) ||
 				    (!TileTools.IsLand(GameTools.Map.TileMapData[newX, newY]))) {
 					current_target = Direction.None;
 					validInput = false;
@@ -195,6 +197,7 @@ public class Player : Entity {
 				} else {
 				if ((GameTools.Map.map_unit_occupy[newX, newY] != null &&
 				     !GameTools.Map.map_unit_occupy[newX, newY].IsEntityAbleToMoveHere(this))||
+				    GameTools.Base.IsMovingOnTurret(newX, newY) ||
 				    (!TileTools.IsLand(GameTools.Map.TileMapData[newX, newY]))) {
 							current_target = Direction.None;
 							validInput = false;
@@ -210,6 +213,7 @@ public class Player : Entity {
 			} else {
 				if ((GameTools.Map.map_unit_occupy[newX, newY] != null &&
 				     !GameTools.Map.map_unit_occupy[newX, newY].IsEntityAbleToMoveHere(this))||
+				    GameTools.Base.IsMovingOnTurret(newX, newY)||
 				    (!TileTools.IsLand(GameTools.Map.TileMapData[newX, newY]))) {
 					current_target = Direction.None;
 					validInput = false;

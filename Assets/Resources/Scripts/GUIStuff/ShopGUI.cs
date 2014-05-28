@@ -6,7 +6,7 @@ public class ShopGUI : MonoBehaviour {
     public string spellColour;
     public GUISkin skin01;
     public GUISkin skin02;
-   string s;
+   	string s;
 	void Start()
     {
         
@@ -129,11 +129,15 @@ public class ShopGUI : MonoBehaviour {
 				GuiManager.IsShowWin = true;
 			}
 		}
-		if (GUI.Button(new Rect(Screen.width * 0.4f, Screen.height * 0.4f, 150f, 50f), "Up Turret (20)")) {
-			Debug.Log ("This button does nothing for now");
+		if (GUI.Button(new Rect(Screen.width * 0.4f, Screen.height * 0.4f, 200f, 80f), 
+		               "Up Turret (" + GameTools.Shop.TurretPrice + ")" + 
+		               "\nRecharge time: " + GameTools.Base.MaxRechargeTime)) {
+			GameTools.Shop.TryToUpgradeTurret();
 		}
-		if (GUI.Button(new Rect(Screen.width * 0.4f, Screen.height * 0.45f, 150f, 50f), "Repair base (3)")) {
-			Debug.Log ("This button does nothing for now");
+		if (GUI.Button(new Rect(Screen.width * 0.4f, Screen.height * 0.50f, 200f, 80f), 
+		               "Repair base (" + GameTools.Shop.RepairPrice + ")" + 
+		               "\nCurrent HP: " + GameTools.Base.Health)) {
+			GameTools.Shop.TryToRepairBase();
 		}
     }
 }

@@ -41,7 +41,11 @@ public class BonusTile : Cleanable{
 			if (Interaction == TileInteraction.Damage) {
 				game_object = Object.Instantiate(Resources.Load("Prefabs/FlatCube", typeof(GameObject))) as GameObject;
 			} else {
-				game_object = Object.Instantiate(Resources.Load("Prefabs/Circle", typeof(GameObject))) as GameObject;
+				if (Reward == TileReward.Money) {
+					game_object = Object.Instantiate(Resources.Load("Prefabs/CoinPrefab", typeof(GameObject))) as GameObject;
+				} else {
+					game_object = Object.Instantiate(Resources.Load("Prefabs/HeartPrefab", typeof(GameObject))) as GameObject;
+				}
 			}
 		}
 		game_object.transform.position = new Vector3(x, 0.01f, y);

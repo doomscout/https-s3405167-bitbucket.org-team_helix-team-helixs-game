@@ -59,6 +59,7 @@ public class PlayerBase : Entity {
 		HasPlacedBase = true;
 		Map_position_x = x;
 		Map_position_y = y;
+		Debug.Log ("Place base at " + x + ", " + y + " Recharge time " + MaxRechargeTime);
 		game_object.transform.position = new Vector3(Map_position_x, 0.1f, Map_position_y);
 	}
 
@@ -100,7 +101,32 @@ public class PlayerBase : Entity {
 	}
 
 	public override bool IsEntityAbleToMoveHere (Entity e) {
-		return e.GetType() == typeof(Player);
+		return true;
+	}
+
+	public bool IsMovingOnTurret(int x, int y) {
+		return x == Map_position_x && y == Map_position_y;
+		//return false;
+	}
+
+	public bool RepairBase() {
+		if (Health == Max_Health) {
+			Debug.Log ("Too full");
+			return false;
+		}
+		Health += 3;
+		if (Health > Max_Health) {
+			Health = Max_Health;
+		}
+		return true;
+	}
+
+	public bool UpgradeTurret() {
+		if (MaxRechargeTime <= 1) {
+			return false;
+		}
+		MaxRechargeTime--;
+		return true;
 	}
 
 	public void GetSpellFromPlayer(Spell s, Player p) {

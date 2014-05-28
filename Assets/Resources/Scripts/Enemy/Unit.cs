@@ -31,10 +31,10 @@ public class Unit : Entity{
 			Max_Health = 1;
 		}
 		Health = Max_Health;
-		Money += level/2;
+		Money = level/2;
 		name = MainColour.ToString() + " unit";
 
-		MainSpell = SpellGenerator.GetInstance().GetClosestSingleSpell(level/2);
+		MainSpell = SpellGenerator.GetInstance().GetClosestSingleSpell(level/4);
 		Debug.Log ("enemy hp: " + Max_Health + MainSpell.ToString());
 
 	}
@@ -298,6 +298,7 @@ public class Unit : Entity{
 
 	public void MoveRandomly() {
 		int newX = 0, newY = 0;
+		list_directions = new List<Direction>();
 		for (int i = 0; i < 10; i++) {
 			Direction d = (Direction)Random.Range(1, 5);
 			switch (d) {
@@ -321,9 +322,15 @@ public class Unit : Entity{
 				Debug.LogError("Defaulted");
 				break;
 			}
-			if (GameTools.Map.map_unit_occupy[newX, newY] == null &&
-			    (GameTools.Player.Map_position_x != newX || GameTools.Player.Map_position_y != newY)) {
+			if (!MapTools.IsOutOfBounds(newX, newY) &&
+			    (GameTools.Map.map_unit_occupy[newX, newY] == null &&
+			    (GameTools.Player.Map_position_x != newX || GameTools.Player.Map_position_y != newY) &&
+			    TileTools.IsLand(GameTools.Map.TileMapData[newX, newY]))) {
 				list_directions.Add(d);
+				GameTools.Map.map_unit_occupy[Map_position_x, Map_position_y] = null;
+				GameTools.Map.map_unit_occupy[newX, newY] = this;
+				Map_position_x = newX;
+				Map_position_y = newY;
 				break;
 			}
 		}

@@ -7,6 +7,9 @@ public class Shop : Cleanable {
 
 	public int SpellStockMaxLevel = 10;
 	public List<Spell> SpellStock {get; private set;}
+	public int RepairPrice = 2;
+	public int TurretPrice = 20;
+
 
 	public Shop() {
 		GameTools.Shop = this;
@@ -39,8 +42,29 @@ public class Shop : Cleanable {
 
 	//Buy a spell from player
 	public bool TryToBuySpell(Player p, Spell s) {
-
 		return p.SellSpell(s);
+	}
+
+	//Repair base
+	public void TryToRepairBase() {
+		if (GameTools.Player.Money < RepairPrice) {
+			return;
+		}
+		if (GameTools.Base.RepairBase()) {
+			GameTools.Player.Money -= RepairPrice;
+			RepairPrice++;
+		}
+	}
+
+	public void TryToUpgradeTurret() {
+		if (GameTools.Player.Money < TurretPrice) {
+			return;
+		}
+		if (GameTools.Base.UpgradeTurret()) {
+			GameTools.Player.Money -= TurretPrice;
+			TurretPrice += 10;
+		}
+
 	}
 
 	public void CleanUp() {

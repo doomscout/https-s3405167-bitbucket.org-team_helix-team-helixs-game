@@ -9,6 +9,8 @@ public class EnemySpawner : Cleanable{
 	int RechargeTime;
 	int difficultychange;
 
+	int ChanceToSpawnAngry = 5;
+
 	int LevelSpawner;
 	public GameObject game_object;
 
@@ -20,7 +22,7 @@ public class EnemySpawner : Cleanable{
 
 		MaxRechargeTime = 20/playerlevel + 10;
 		RechargeTime = MaxRechargeTime;
-		game_object = Object.Instantiate(Resources.Load("Prefabs/FlatCube", typeof(GameObject))) as GameObject;
+		game_object = Object.Instantiate(Resources.Load("Prefabs/TeleporterPrefab", typeof(GameObject))) as GameObject;
 		game_object.transform.position = new Vector3(x, 0.01f, y);
 		CleanTools.GetInstance().SubscribeCleanable(this);
 	}
@@ -41,7 +43,15 @@ public class EnemySpawner : Cleanable{
 				return;
 			}
 			RechargeTime = MaxRechargeTime;
-			GameTools.GI.list_live_units.Add (new Unit(x, y, LevelSpawner));
+			Unit u = new Unit(x, y, LevelSpawner);
+			if (Random.Range (1, 100) < ChanceToSpawnAngry) {
+				u.IsAggroed = true;
+				ChanceToSpawnAngry += 5;
+				Debug.Log("Spawned angry at " + x + ", " + y);
+			} else {
+				ChanceToSpawnAngry += 10;
+			}
+			GameTools.GI.list_live_units.Add (u);
 		} else {
 			RechargeTime--;
 		}
