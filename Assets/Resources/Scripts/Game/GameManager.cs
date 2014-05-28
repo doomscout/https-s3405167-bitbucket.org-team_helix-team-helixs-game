@@ -181,7 +181,7 @@ public class GameManager : MonoBehaviour{
 		GameStart = false;
 		GuiManager.IsStillMenu = false;
 
-		turn_manager = new GameInstance(player, Base, 0);
+		turn_manager = new GameInstance(player, Base, -10);
 		BattleLog.GetInstance().Restart();
 		GameTools.GameCamera.MoveToCenter();
 		Debug.Log("actionMenuExit");

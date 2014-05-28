@@ -90,13 +90,15 @@ public class TileMap : MonoBehaviour, Cleanable {
 	}
 
 	public void InitSpawners(int playerlevel, int difficultyChange) {
-		int SpawnerCount = 10 - difficultyChange;
+		Debug.Log ("Difficulty change " + difficultyChange);
+		int SpawnerCount = 10 + difficultyChange;
 		if (SpawnerCount < 5) {
 			SpawnerCount = 5;
 		}
 		if (SpawnerCount > 20) {
 			SpawnerCount = 20;
 		}
+		Debug.Log ("SpawnerCount " + SpawnerCount);
 		while (SpawnerCount > 0) {
 			int randX = Random.Range(0, size_x);
 			int randY = Random.Range(0, size_z);

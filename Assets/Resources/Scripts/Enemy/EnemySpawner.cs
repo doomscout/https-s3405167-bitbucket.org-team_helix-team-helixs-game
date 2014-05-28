@@ -33,7 +33,7 @@ public class EnemySpawner : Cleanable{
 
 	public void Tick() {
 		if (GameTools.GI.NumberOfTurnsUntilWin % 25 == 0) {
-			MaxRechargeTime = (int)((float)MaxRechargeTime/1.5f) + difficultychange;
+			MaxRechargeTime = (int)((float)MaxRechargeTime/1.5f) - difficultychange;
 			if (MaxRechargeTime <= 1) {
 				MaxRechargeTime = 2;
 			}
