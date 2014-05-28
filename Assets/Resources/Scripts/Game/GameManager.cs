@@ -226,6 +226,7 @@ public class GameManager : MonoBehaviour{
 
 		//create new game instance
 		float change_diff = (PlayerEndHP - PlayerStartHP)/PlayerStartHP * 10;
+		change_diff += NumberOfWins;
 		turn_manager = new GameInstance(player, Base, (int)change_diff);
 
 		GoNextLevel = false;
