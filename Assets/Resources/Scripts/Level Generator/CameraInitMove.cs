@@ -54,7 +54,7 @@ public class CameraInitMove : MonoBehaviour {
 				oldPosition = transform.position;
 			}
 			if (Input.GetAxis("Mouse ScrollWheel") < 0) {
-				if (camera.orthographicSize < 15.0f) {
+				if (camera.orthographicSize < 30.0f) {
 					camera.orthographicSize -=(Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * scrollWheelSpeed);
 				}
 			} else if (Input.GetAxis("Mouse ScrollWheel") > 0) {
